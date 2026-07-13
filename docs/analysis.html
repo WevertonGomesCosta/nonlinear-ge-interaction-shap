@@ -520,15 +520,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreedf27105fc7be04b2c8773bf17df1be37a7fe8bd9targetblankdf27105a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreedf4cac44f4cb704beeb87a9a107011acabfc89d4targetblankdf4cac4a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/df27105fc7be04b2c8773bf17df1be37a7fe8bd9" target="_blank">df27105</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/df4cac44f4cb704beeb87a9a107011acabfc89d4" target="_blank">df4cac4</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreedf27105fc7be04b2c8773bf17df1be37a7fe8bd9targetblankdf27105a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreedf4cac44f4cb704beeb87a9a107011acabfc89d4targetblankdf4cac4a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -538,7 +538,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/df27105fc7be04b2c8773bf17df1be37a7fe8bd9" target="_blank">df27105</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/df4cac44f4cb704beeb87a9a107011acabfc89d4" target="_blank">df4cac4</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -554,7 +554,6 @@ were generated:
 <pre><code>
 Ignored files:
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
     Ignored:    code/Codigo_SHAP_GE_10_07_23.txt
     Ignored:    data/Manuscript_MN_NE_ACCN.docx
 
@@ -601,6 +600,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/df4cac44f4cb704beeb87a9a107011acabfc89d4/analysis/analysis.Rmd" target="_blank">df4cac4</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+<td>
+Add AMMI decomposition and interaction biplot
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/95e3343d7ec5425ef90cb0beb27e0ec54353c3cb/docs/analysis.html" target="_blank">95e3343</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1216,6 +1249,43 @@ p_shap &lt;- ggplot(
 
 print(p_shap)</code></pre>
 <p><img src="figure/analysis.Rmd/shap-genotype-profiles-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-shap-genotype-profiles-1">
+Past versions of shap-genotype-profiles-1.png
+</button>
+</p>
+<div id="fig-shap-genotype-profiles-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/95e3343d7ec5425ef90cb0beb27e0ec54353c3cb/docs/figure/analysis.Rmd/shap-genotype-profiles-1.png" target="_blank">95e3343</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="ammi-analysis" class="section level1">
@@ -1223,23 +1293,242 @@ print(p_shap)</code></pre>
 <div id="genotype-by-environment-interaction-matrix"
 class="section level2">
 <h2>Genotype-by-environment interaction matrix</h2>
-<p>The interaction matrix is obtained after removing genotype and
-environment main effects.</p>
+<p>The genotype-by-environment interaction effects are obtained after
+removing the genotype and environment main effects from the mean
+grain-yield observations.</p>
+<pre class="r"><code>grand_mean &lt;- mean(
+  df_results$GY,
+  na.rm = TRUE
+)
+
+env_effects &lt;- df_results %&gt;%
+  group_by(ENV) %&gt;%
+  summarise(
+    m_env = mean(GY, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  )
+
+gen_effects &lt;- df_results %&gt;%
+  group_by(GEN) %&gt;%
+  summarise(
+    m_gen = mean(GY, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  )
+
+df_int &lt;- df_results %&gt;%
+  left_join(
+    env_effects,
+    by = &quot;ENV&quot;
+  ) %&gt;%
+  left_join(
+    gen_effects,
+    by = &quot;GEN&quot;
+  ) %&gt;%
+  mutate(
+    GE_effect = GY - m_env - m_gen + grand_mean
+  )
+
+mat_int &lt;- df_int %&gt;%
+  select(
+    GEN,
+    ENV,
+    GE_effect
+  ) %&gt;%
+  pivot_wider(
+    names_from = ENV,
+    values_from = GE_effect
+  ) %&gt;%
+  tibble::column_to_rownames(&quot;GEN&quot;) %&gt;%
+  as.matrix()</code></pre>
 </div>
 <div id="singular-value-decomposition" class="section level2">
 <h2>Singular value decomposition</h2>
 <p>Singular value decomposition is applied to the
-genotype-by-environment interaction matrix.</p>
+genotype-by-environment interaction matrix. The squared singular values
+are used to calculate the percentage of interaction variation
+represented by each component.</p>
+<pre class="r"><code>svd_ammi &lt;- svd(mat_int)
+
+lambda &lt;- svd_ammi$d
+
+var_explained &lt;- (
+  lambda^2 / sum(lambda^2)
+) * 100
+
+ipca1_pct &lt;- round(
+  var_explained[1],
+  2
+)
+
+ipca2_pct &lt;- round(
+  var_explained[2],
+  2
+)
+
+data.frame(
+  Component = paste0(
+    &quot;IPCA&quot;,
+    seq_along(var_explained)
+  ),
+  Explained_variation = round(
+    var_explained,
+    2
+  )
+)</code></pre>
+<pre><code>  Component Explained_variation
+1     IPCA1               56.20
+2     IPCA2               15.10
+3     IPCA3               10.44
+4     IPCA4                8.62
+5     IPCA5                4.95
+6     IPCA6                2.76
+7     IPCA7                1.01
+8     IPCA8                0.92
+9     IPCA9                0.00</code></pre>
 </div>
 <div id="interaction-principal-components" class="section level2">
 <h2>Interaction principal components</h2>
-<p>The first two interaction principal components are extracted for
-genotypes and environments.</p>
+<p>The scores of the first two interaction principal components are
+obtained separately for genotypes and environments.</p>
+<pre class="r"><code>scores_gen &lt;- as.data.frame(
+  svd_ammi$u[, 1:2] %*%
+    diag(
+      sqrt(lambda[1:2])
+    )
+)
+
+colnames(scores_gen) &lt;- c(
+  &quot;IPCA1&quot;,
+  &quot;IPCA2&quot;
+)
+
+scores_gen$GEN &lt;- as.factor(
+  rownames(mat_int)
+)
+
+scores_env &lt;- as.data.frame(
+  svd_ammi$v[, 1:2] %*%
+    diag(
+      sqrt(lambda[1:2])
+    )
+)
+
+colnames(scores_env) &lt;- c(
+  &quot;IPCA1&quot;,
+  &quot;IPCA2&quot;
+)
+
+scores_env$ENV &lt;- as.factor(
+  colnames(mat_int)
+)</code></pre>
 </div>
 <div id="ammi-biplot" class="section level2">
 <h2>AMMI biplot</h2>
 <p>The AMMI biplot represents genotype scores and environmental vectors
-for the first two interaction principal components.</p>
+for the first two interaction principal components. The percentages
+shown on the axes correspond to the interaction variation represented by
+each component.</p>
+<pre class="r"><code>p_ammi &lt;- ggplot() +
+  geom_vline(
+    xintercept = 0,
+    linetype = &quot;dashed&quot;,
+    color = &quot;gray60&quot;,
+    linewidth = 0.4
+  ) +
+  geom_hline(
+    yintercept = 0,
+    linetype = &quot;dashed&quot;,
+    color = &quot;gray60&quot;,
+    linewidth = 0.4
+  ) +
+  geom_segment(
+    data = scores_env,
+    aes(
+      x = 0,
+      y = 0,
+      xend = IPCA1,
+      yend = IPCA2
+    ),
+    arrow = arrow(
+      length = grid::unit(
+        0.18,
+        &quot;cm&quot;
+      )
+    ),
+    color = &quot;gray30&quot;,
+    alpha = 0.6,
+    linewidth = 0.5
+  ) +
+  geom_text(
+    data = scores_env,
+    aes(
+      x = IPCA1,
+      y = IPCA2,
+      label = ENV
+    ),
+    vjust = 1.4,
+    color = &quot;gray20&quot;,
+    size = 3
+  ) +
+  geom_point(
+    data = scores_gen,
+    aes(
+      x = IPCA1,
+      y = IPCA2,
+      color = GEN
+    ),
+    size = 3.5,
+    alpha = 0.9
+  ) +
+  geom_text(
+    data = scores_gen,
+    aes(
+      x = IPCA1,
+      y = IPCA2,
+      label = GEN
+    ),
+    vjust = -1.2,
+    fontface = &quot;bold&quot;,
+    size = 3.5,
+    show.legend = FALSE
+  ) +
+  scale_color_viridis_d(
+    option = &quot;viridis&quot;
+  ) +
+  theme_classic(
+    base_size = 12
+  ) +
+  labs(
+    x = paste0(
+      &quot;IPCA1 (&quot;,
+      ipca1_pct,
+      &quot;%)&quot;
+    ),
+    y = paste0(
+      &quot;IPCA2 (&quot;,
+      ipca2_pct,
+      &quot;%)&quot;
+    ),
+    color = &quot;Genotypes&quot;
+  ) +
+  theme(
+    axis.title = element_text(
+      face = &quot;plain&quot;,
+      size = 11
+    ),
+    axis.text = element_text(
+      color = &quot;black&quot;,
+      size = 9
+    ),
+    axis.line = element_line(
+      color = &quot;black&quot;,
+      linewidth = 0.5
+    ),
+    legend.position = &quot;none&quot;
+  )
+
+print(p_ammi)</code></pre>
+<p><img src="figure/analysis.Rmd/ammi-biplot-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="joint-ammi-and-shap-representation" class="section level1">
