@@ -653,25 +653,87 @@ print(figura_final)
 
 ## AMMI Stability Value
 
-The AMMI Stability Value is calculated from the first two interaction principal components.
+The AMMI Stability Value combines the scores of the first two interaction principal components. Lower ASV values indicate greater stability according to the AMMI representation.
+
+```{r ammi-stability-value}
+peso_asv <- var_explained[1] / var_explained[2]
+
+asv_gen <- scores_gen %>%
+  mutate(
+    ASV = sqrt(
+      ((peso_asv * IPCA1)^2) +
+        (IPCA2^2)
+    )
+  ) %>%
+  select(
+    GEN,
+    ASV
+  )
+
+asv_gen
+```
 
 ## SHAP effect and stability
 
-Mean genotype SHAP contribution and the standard deviation of genotype SHAP contributions are summarized for each genotype.
+The mean genotype SHAP contribution represents the average contribution of each genotype across environments. The standard deviation of the genotype SHAP contributions represents the variation of this contribution across environments.
+
+```{r shap-effect-stability}
+tab_shap <- df_results %>%
+  group_by(GEN) %>%
+  summarise(
+    Media_GY = mean(GY),
+    SHAP_Medio = mean(SHAP_GEN),
+    SHAP_SD = sd(SHAP_GEN),
+    .groups = "drop"
+  )
+
+tab_shap
+```
 
 ## Simultaneous Selection Index
 
-The Simultaneous Selection Index combines grain-yield and AMMI stability rankings.
+The Simultaneous Selection Index combines the grain-yield ranking and the AMMI Stability Value ranking. The consolidated data set also includes rankings based on mean SHAP contribution and SHAP variation.
+
+```{r simultaneous-selection-index}
+tabela_comparativa <- left_join(
+  tab_shap,
+  asv_gen,
+  by = "GEN"
+)
+
+dados_resultado <- tabela_comparativa %>%
+  mutate(
+    Rank_Prod = rank(
+      -Media_GY,
+      ties.method = "first"
+    ),
+    Rank_ASV = rank(
+      ASV,
+      ties.method = "first"
+    ),
+    Rank_SSI = rank(
+      Rank_Prod + Rank_ASV,
+      ties.method = "first"
+    ),
+    Rank_SHAP_Eff = rank(
+      -SHAP_Medio,
+      ties.method = "first"
+    ),
+    Rank_SHAP_Stb = rank(
+      SHAP_SD,
+      ties.method = "first"
+    )
+  ) %>%
+  arrange(Rank_Prod)
+```
 
 # Genotype ranking
 
-Genotypes are compared according to:
+Genotypes are compared according to grain yield, AMMI stability, simultaneous selection, mean SHAP contribution, and SHAP stability. In every ranking, position 1 represents the preferred genotype according to the corresponding criterion.
 
-- grain yield;
-- AMMI Stability Value;
-- Simultaneous Selection Index;
-- SHAP effect;
-- SHAP stability.
+```{r genotype-ranking}
+print(dados_resultado)
+```
 
 # Rank dynamics
 
