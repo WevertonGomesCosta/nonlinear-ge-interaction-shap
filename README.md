@@ -44,6 +44,7 @@ nonlinear-ge-interaction-shap/
 ├── analysis/
 │   ├── _site.yml
 │   ├── index.Rmd
+│   ├── analysis.Rmd
 │   ├── about.Rmd
 │   └── license.Rmd
 ├── code/
@@ -55,11 +56,13 @@ nonlinear-ge-interaction-shap/
 └── nonlinear-ge-interaction-shap.Rproj
 ```
 
-The complete analytical page will be added as:
+The complete analytical pipeline is organized in:
 
 ```text
 analysis/analysis.Rmd
 ```
+
+The page presents the analytical code, results, figures, and computational information in their execution order.
 
 ## Reproducibility
 

@@ -3,11 +3,17 @@ output_dir: "../docs"
 
 navbar:
   title: "Non-Linear G×E Modeling"
+
   left:
     - text: "Home"
       href: index.html
+
+    - text: "Analysis"
+      href: analysis.html
+
     - text: "About"
       href: about.html
+
     - text: "License"
       href: license.html
   right:
