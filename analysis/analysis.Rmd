@@ -1,0 +1,161 @@
+---
+title: "Reproducible Analysis"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: true
+    toc_float: true
+editor_options:
+  chunk_output_type: console
+---
+
+# Overview
+
+This page presents the complete reproducible analytical workflow associated with the study **“Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition.”**
+
+The workflow combines phenotypic evaluation, Random Forest modeling, Shapley Additive Explanations, AMMI decomposition, stability indices, genotype ranking, and rank correlation.
+
+All analytical code is presented directly in this R Markdown document and follows the order required to reproduce the analysis.
+
+# Computational setup
+
+The global chunk options define how code, messages, warnings, tables, and figures are displayed throughout the analysis.
+
+```{r setup}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 9,
+  fig.height = 6
+)
+```
+
+# Required packages
+
+This section loads the packages required for data manipulation, machine learning, model interpretation, statistical analysis, and graphical visualization.
+
+# Data import
+
+This section imports the original maize multi-environment trial data set stored in:
+
+```text
+data/maize.txt
+```
+
+# Data preparation
+
+The original observations are summarized by genotype and environment before the machine-learning and interaction analyses.
+
+# Phenotypic performance
+
+## Grain yield across environments
+
+This section presents the distribution of grain yield across the evaluated environments.
+
+## Grain yield across genotypes
+
+This section presents the distribution of grain yield across the evaluated genotypes.
+
+# Environmental index
+
+The environmental index represents the mean grain-yield performance observed in each environment.
+
+# Random Forest modeling
+
+## Leave-one-environment-out validation
+
+The Random Forest model is evaluated through leave-one-environment-out cross-validation.
+
+## Predictive metrics
+
+Predictive performance is summarized using:
+
+- coefficient of determination;
+- Pearson correlation between observed and predicted values;
+- root mean squared error.
+
+## Final Random Forest model
+
+The final Random Forest model is fitted using the complete analytical data set.
+
+# SHAP decomposition
+
+## Model explainer
+
+A model explainer is created using the DALEX framework.
+
+## SHAP contribution values
+
+SHAP values are obtained for the genotype and environmental-index predictors.
+
+## Genotype response profiles
+
+Genotype-specific SHAP contributions are represented across environments.
+
+# AMMI analysis
+
+## Genotype-by-environment interaction matrix
+
+The interaction matrix is obtained after removing genotype and environment main effects.
+
+## Singular value decomposition
+
+Singular value decomposition is applied to the genotype-by-environment interaction matrix.
+
+## Interaction principal components
+
+The first two interaction principal components are extracted for genotypes and environments.
+
+## AMMI biplot
+
+The AMMI biplot represents genotype scores and environmental vectors for the first two interaction principal components.
+
+# Joint AMMI and SHAP representation
+
+The AMMI biplot and genotype SHAP profiles are combined into a single graphical representation.
+
+# Stability and selection indices
+
+## AMMI Stability Value
+
+The AMMI Stability Value is calculated from the first two interaction principal components.
+
+## SHAP effect and stability
+
+Mean genotype SHAP contribution and the standard deviation of genotype SHAP contributions are summarized for each genotype.
+
+## Simultaneous Selection Index
+
+The Simultaneous Selection Index combines grain-yield and AMMI stability rankings.
+
+# Genotype ranking
+
+Genotypes are compared according to:
+
+- grain yield;
+- AMMI Stability Value;
+- Simultaneous Selection Index;
+- SHAP effect;
+- SHAP stability.
+
+# Rank dynamics
+
+A bump chart represents changes in genotype positions across the evaluated criteria.
+
+# Stability concordance
+
+The relationship between AMMI stability ranking and SHAP stability ranking is represented using a rank-concordance plot.
+
+# Spearman rank correlation
+
+Spearman correlations are calculated among grain yield, AMMI stability, simultaneous selection, SHAP effect, and SHAP stability rankings.
+
+# Session information
+
+The computational environment used to build the analysis is reported below.
+
+```{r session-information}
+sessionInfo()
+```
