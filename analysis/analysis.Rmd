@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 
 # Required packages
 
-The following packages are used for data manipulation, graphical visualization, Random Forest modeling, and SHAP decomposition.
+The following packages are used for data manipulation, graphical visualization, Random Forest modeling, SHAP decomposition, and composite figure construction.
 
 ```{r required-packages, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -38,6 +38,7 @@ library(dplyr)
 library(tidyr)
 library(randomForest)
 library(DALEX)
+library(patchwork)
 ```
 
 # Data import
@@ -628,7 +629,25 @@ print(p_ammi)
 
 # Joint AMMI and SHAP representation
 
-The AMMI biplot and genotype SHAP profiles are combined into a single graphical representation.
+The AMMI biplot and genotype-specific SHAP profiles are combined vertically. Panel A represents the first two interaction principal components, while Panel B represents the genotype SHAP contribution across environments.
+
+```{r joint-ammi-shap, fig.width=10, fig.height=12, fig.align="center", warning=FALSE}
+figura_final <- (
+  p_ammi /
+    p_shap
+) +
+  plot_layout(
+    heights = c(
+      1,
+      1.1
+    )
+  ) +
+  plot_annotation(
+    tag_levels = "A"
+  )
+
+print(figura_final)
+```
 
 # Stability and selection indices
 
