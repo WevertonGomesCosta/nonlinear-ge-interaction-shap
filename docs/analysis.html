@@ -520,15 +520,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreedf4cac44f4cb704beeb87a9a107011acabfc89d4targetblankdf4cac4a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreed4ef88656067beee6ec19ae507d179a7c3f0e822targetblankd4ef886a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/df4cac44f4cb704beeb87a9a107011acabfc89d4" target="_blank">df4cac4</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/d4ef88656067beee6ec19ae507d179a7c3f0e822" target="_blank">d4ef886</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreedf4cac44f4cb704beeb87a9a107011acabfc89d4targetblankdf4cac4a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreed4ef88656067beee6ec19ae507d179a7c3f0e822targetblankd4ef886a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -538,7 +538,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/df4cac44f4cb704beeb87a9a107011acabfc89d4" target="_blank">df4cac4</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/d4ef88656067beee6ec19ae507d179a7c3f0e822" target="_blank">d4ef886</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -600,6 +600,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/d4ef88656067beee6ec19ae507d179a7c3f0e822/analysis/analysis.Rmd" target="_blank">d4ef886</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+<td>
+Add joint AMMI and SHAP representation
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/f321462ab38b55a3e28c36ebf626f6a24a9b0423/docs/analysis.html" target="_blank">f321462</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -783,12 +817,14 @@ and follows the order required to reproduce the analysis.</p>
 <div id="required-packages" class="section level1">
 <h1>Required packages</h1>
 <p>The following packages are used for data manipulation, graphical
-visualization, Random Forest modeling, and SHAP decomposition.</p>
+visualization, Random Forest modeling, SHAP decomposition, and composite
+figure construction.</p>
 <pre class="r"><code>library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(randomForest)
-library(DALEX)</code></pre>
+library(DALEX)
+library(patchwork)</code></pre>
 </div>
 <div id="data-import" class="section level1">
 <h1>Data import</h1>
@@ -1529,12 +1565,67 @@ each component.</p>
 
 print(p_ammi)</code></pre>
 <p><img src="figure/analysis.Rmd/ammi-biplot-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-ammi-biplot-1">
+Past versions of ammi-biplot-1.png
+</button>
+</p>
+<div id="fig-ammi-biplot-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/f321462ab38b55a3e28c36ebf626f6a24a9b0423/docs/figure/analysis.Rmd/ammi-biplot-1.png" target="_blank">f321462</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="joint-ammi-and-shap-representation" class="section level1">
 <h1>Joint AMMI and SHAP representation</h1>
-<p>The AMMI biplot and genotype SHAP profiles are combined into a single
-graphical representation.</p>
+<p>The AMMI biplot and genotype-specific SHAP profiles are combined
+vertically. Panel A represents the first two interaction principal
+components, while Panel B represents the genotype SHAP contribution
+across environments.</p>
+<pre class="r"><code>figura_final &lt;- (
+  p_ammi /
+    p_shap
+) +
+  plot_layout(
+    heights = c(
+      1,
+      1.1
+    )
+  ) +
+  plot_annotation(
+    tag_levels = &quot;A&quot;
+  )
+
+print(figura_final)</code></pre>
+<p><img src="figure/analysis.Rmd/joint-ammi-shap-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
 <div id="stability-and-selection-indices" class="section level1">
 <h1>Stability and selection indices</h1>
@@ -1608,8 +1699,9 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] DALEX_2.5.3          randomForest_4.7-1.2 tidyr_1.3.2         
-[4] dplyr_1.2.1          ggplot2_4.0.3        workflowr_1.7.2     
+[1] patchwork_1.3.2      DALEX_2.5.3          randomForest_4.7-1.2
+[4] tidyr_1.3.2          dplyr_1.2.1          ggplot2_4.0.3       
+[7] workflowr_1.7.2     
 
 loaded via a namespace (and not attached):
  [1] utf8_1.2.6         sass_0.4.10        generics_0.1.4     stringi_1.8.7     
@@ -1624,8 +1716,8 @@ loaded via a namespace (and not attached):
 [37] pkgconfig_2.0.3    callr_3.7.6        pillar_1.11.1      bslib_0.9.0       
 [41] later_1.4.4        gtable_0.3.6       glue_1.8.0         Rcpp_1.1.1        
 [45] xfun_0.54          tibble_3.3.1       tidyselect_1.2.1   rstudioapi_0.17.1 
-[49] knitr_1.50         farver_2.1.2       htmltools_0.5.9    rmarkdown_2.30    
-[53] labeling_0.4.3     compiler_4.5.1     getPass_0.2-4      S7_0.2.1          </code></pre>
+[49] knitr_1.50         farver_2.1.2       htmltools_0.5.9    labeling_0.4.3    
+[53] rmarkdown_2.30     compiler_4.5.1     getPass_0.2-4      S7_0.2.1          </code></pre>
 </div>
 </div>
 </div>
