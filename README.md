@@ -117,7 +117,3 @@ View the local website:
 ```r
 workflowr::wflow_view()
 ```
-
-## Associated manuscript
-
-The original manuscript associated with the analytical workflow is preserved in the `manuscript/` directory without modification.
