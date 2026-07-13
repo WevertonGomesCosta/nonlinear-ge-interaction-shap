@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 
 # Required packages
 
-The following packages are used for data manipulation, graphical visualization, Random Forest modeling, SHAP decomposition, and composite figure construction.
+The following packages are used for data manipulation, graphical visualization, Random Forest modeling, SHAP decomposition, composite figure construction, genotype-rank visualization, and rank-correlation analysis.
 
 ```{r required-packages, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -39,6 +39,9 @@ library(tidyr)
 library(randomForest)
 library(DALEX)
 library(patchwork)
+library(ggrepel)
+library(corrplot)
+library(viridisLite)
 ```
 
 # Data import
@@ -737,12 +740,283 @@ print(dados_resultado)
 
 # Rank dynamics
 
-A bump chart represents changes in genotype positions across the evaluated criteria.
+The rank-dynamics plot represents how the relative position of each genotype changes across grain yield, AMMI stability, simultaneous selection, SHAP stability, and SHAP effect. Rank 1 represents the preferred position under every criterion.
+
+```{r rank-dynamics-data}
+dados_long <- dados_resultado %>%
+  pivot_longer(
+    cols = c(
+      Rank_Prod,
+      Rank_ASV,
+      Rank_SSI,
+      Rank_SHAP_Stb,
+      Rank_SHAP_Eff
+    ),
+    names_to = "Metodologia",
+    values_to = "Posicao"
+  ) %>%
+  mutate(
+    Metodologia = factor(
+      Metodologia,
+      levels = c(
+        "Rank_Prod",
+        "Rank_ASV",
+        "Rank_SSI",
+        "Rank_SHAP_Stb",
+        "Rank_SHAP_Eff"
+      ),
+      labels = c(
+        "Grain Yield",
+        "ASV (Linear)",
+        "SSI (Linear)",
+        "SHAP Stability",
+        "SHAP Effect"
+      )
+    )
+  )
+```
+
+```{r rank-dynamics-plot, fig.width=11, fig.height=7, fig.align="center", warning=FALSE}
+ggplot(
+  dados_long,
+  aes(
+    x = Metodologia,
+    y = Posicao,
+    group = GEN,
+    color = GEN
+  )
+) +
+  geom_line(
+    linewidth = 1.2,
+    alpha = 0.8
+  ) +
+  geom_point(
+    size = 4,
+    shape = 21,
+    fill = "white",
+    stroke = 1.5
+  ) +
+  geom_text(
+    data = subset(
+      dados_long,
+      Metodologia == "Grain Yield"
+    ),
+    aes(label = GEN),
+    hjust = 1.5,
+    fontface = "bold",
+    size = 4
+  ) +
+  geom_text(
+    data = subset(
+      dados_long,
+      Metodologia == "SHAP Effect"
+    ),
+    aes(label = GEN),
+    hjust = -0.5,
+    fontface = "bold",
+    size = 4
+  ) +
+  scale_color_viridis_d(
+    option = "viridis"
+  ) +
+  scale_y_reverse(
+    breaks = 1:9
+  ) +
+  theme_classic(
+    base_size = 13
+  ) +
+  labs(
+    x = "Selection Framework",
+    y = "Genotype Rank (1 = Best)",
+    title = " "
+  ) +
+  theme(
+    legend.position = "none",
+    axis.line = element_blank(),
+    axis.ticks.x = element_blank(),
+    panel.grid.major.y = element_line(
+      color = "gray93",
+      linetype = "dashed"
+    ),
+    panel.grid.major.x = element_line(
+      color = "gray95",
+      linewidth = 8,
+      alpha = 0.4
+    ),
+    plot.margin = ggplot2::margin(
+      t = 10,
+      r = 25,
+      b = 10,
+      l = 25
+    )
+  )
+```
 
 # Stability concordance
 
-The relationship between AMMI stability ranking and SHAP stability ranking is represented using a rank-concordance plot.
+The concordance plot compares the AMMI Stability Value ranking, which represents linear interaction stability, with the SHAP stability ranking, which represents variation in the non-linear genotype contribution across environments.
+
+Each point represents one genotype. Lower ranking values indicate greater stability. Therefore, genotypes in the lower-left region are classified as relatively stable by both approaches. The dotted identity line represents exact agreement between the two stability rankings, while the point fill represents the grain-yield ranking.
+
+```{r stability-concordance, fig.width=9, fig.height=7, fig.align="center", warning=FALSE}
+p_stability_concordance <- ggplot(
+  dados_resultado,
+  aes(
+    x = Rank_ASV,
+    y = Rank_SHAP_Stb,
+    label = GEN
+  )
+) +
+  geom_vline(
+    xintercept = 5,
+    linetype = "dashed",
+    color = "gray60",
+    linewidth = 0.5
+  ) +
+  geom_hline(
+    yintercept = 5,
+    linetype = "dashed",
+    color = "gray60",
+    linewidth = 0.5
+  ) +
+  geom_abline(
+    slope = 1,
+    intercept = 0,
+    linetype = "dotted",
+    color = "red",
+    alpha = 0.6,
+    linewidth = 0.7
+  ) +
+  geom_point(
+    aes(fill = Rank_Prod),
+    size = 5.5,
+    shape = 21,
+    color = "black",
+    stroke = 0.8
+  ) +
+  scale_fill_viridis_c(
+    option = "mako",
+    direction = -1,
+    breaks = c(
+      1,
+      5,
+      9
+    ),
+    labels = c(
+      "High (1)",
+      "Medium (5)",
+      "Low (9)"
+    )
+  ) +
+  ggrepel::geom_text_repel(
+    fontface = "bold",
+    size = 4,
+    box.padding = 0.4,
+    point.padding = 0.3
+  ) +
+  scale_x_continuous(
+    breaks = 1:9,
+    limits = c(
+      0.5,
+      9.5
+    )
+  ) +
+  scale_y_continuous(
+    breaks = 1:9,
+    limits = c(
+      0.5,
+      9.5
+    )
+  ) +
+  theme_classic(
+    base_size = 12
+  ) +
+  labs(
+    x = "Linear Stability Ranking (Rank_ASV)",
+    y = "Non-Linear Stability Ranking (Rank_SHAP_Stb)",
+    fill = "Grain Yield"
+  ) +
+  theme(
+    axis.line = element_line(
+      color = "black",
+      linewidth = 0.5
+    ),
+    axis.text = element_text(
+      color = "black"
+    ),
+    legend.position = "right",
+    legend.title = element_text(
+      face = "bold",
+      size = 10
+    )
+  )
+
+print(p_stability_concordance)
+```
 
 # Spearman rank correlation
 
-Spearman correlations are calculated among grain yield, AMMI stability, simultaneous selection, SHAP effect, and SHAP stability rankings.
+Spearman rank correlations are calculated among the five genotype-selection criteria. Positive correlations indicate that two criteria tend to assign similar positions to the genotypes, whereas negative correlations indicate opposing ranking patterns.
+
+The comparison includes grain yield, AMMI stability, simultaneous selection, mean SHAP effect, and SHAP stability.
+
+## Correlation matrix
+
+```{r spearman-correlation-matrix}
+colunas_rank <- dados_resultado %>%
+  select(
+    Rank_Prod,
+    Rank_ASV,
+    Rank_SSI,
+    Rank_SHAP_Eff,
+    Rank_SHAP_Stb
+  ) %>%
+  as.data.frame()
+
+colnames(colunas_rank) <- c(
+  "Yield",
+  "ASV (Linear)",
+  "SSI (Linear)",
+  "SHAP Effect",
+  "SHAP Stability"
+)
+
+matriz_corr <- cor(
+  colunas_rank,
+  method = "spearman"
+)
+
+round(
+  matriz_corr,
+  2
+)
+```
+
+## Graphical representation
+
+The upper triangular correlation matrix represents the direction and magnitude of the Spearman associations. The numerical coefficients are displayed inside the corresponding cells.
+
+```{r spearman-correlation-plot, fig.width=9, fig.height=8, fig.align="center", warning=FALSE}
+cores_viridis <- viridisLite::viridis(
+  200
+)
+
+corrplot::corrplot(
+  matriz_corr,
+  method = "color",
+  type = "upper",
+  col = cores_viridis,
+  addCoef.col = "black",
+  number.cex = 0.9,
+  tl.col = "black",
+  tl.srt = 45,
+  diag = FALSE,
+  tl.pos = "td",
+  mar = c(
+    1,
+    1,
+    4,
+    1
+  )
+)
+```
