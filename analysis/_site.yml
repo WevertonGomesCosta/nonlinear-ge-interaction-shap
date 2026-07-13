@@ -1,17 +1,22 @@
 name: "nonlinear-ge-interaction-shap"
-output_dir: ../docs
+output_dir: "../docs"
+
 navbar:
-  title: "nonlinear-ge-interaction-shap"
+  title: "Non-Linear G×E Modeling"
   left:
-  - text: Home
-    href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+    - text: "License"
+      href: license.html
+  right:
+    - icon: fa-github
+      href: https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap
+
 output:
   workflowr::wflow_html:
-    toc: yes
-    toc_float: yes
+    toc: true
+    toc_float: true
     theme: cosmo
     highlight: textmate
