@@ -120,8 +120,4 @@ workflowr::wflow_view()
 
 ## Associated manuscript
 
-The original manuscript associated with the analytical workflow will be preserved in the repository without modification.
-
-## License
-
-Except where otherwise indicated, the materials in this repository are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+The original manuscript associated with the analytical workflow is preserved in the `manuscript/` directory without modification.

@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+*.docx
+code/Codigo_SHAP_GE_10_07_23.txt
