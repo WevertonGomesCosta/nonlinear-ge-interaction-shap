@@ -397,19 +397,234 @@ print(p_shap)
 
 ## Genotype-by-environment interaction matrix
 
-The interaction matrix is obtained after removing genotype and environment main effects.
+The genotype-by-environment interaction effects are obtained after removing the genotype and environment main effects from the mean grain-yield observations.
+
+```{r ammi-interaction-matrix}
+grand_mean <- mean(
+  df_results$GY,
+  na.rm = TRUE
+)
+
+env_effects <- df_results %>%
+  group_by(ENV) %>%
+  summarise(
+    m_env = mean(GY, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+gen_effects <- df_results %>%
+  group_by(GEN) %>%
+  summarise(
+    m_gen = mean(GY, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+df_int <- df_results %>%
+  left_join(
+    env_effects,
+    by = "ENV"
+  ) %>%
+  left_join(
+    gen_effects,
+    by = "GEN"
+  ) %>%
+  mutate(
+    GE_effect = GY - m_env - m_gen + grand_mean
+  )
+
+mat_int <- df_int %>%
+  select(
+    GEN,
+    ENV,
+    GE_effect
+  ) %>%
+  pivot_wider(
+    names_from = ENV,
+    values_from = GE_effect
+  ) %>%
+  tibble::column_to_rownames("GEN") %>%
+  as.matrix()
+```
 
 ## Singular value decomposition
 
-Singular value decomposition is applied to the genotype-by-environment interaction matrix.
+Singular value decomposition is applied to the genotype-by-environment interaction matrix. The squared singular values are used to calculate the percentage of interaction variation represented by each component.
+
+```{r ammi-singular-value-decomposition}
+svd_ammi <- svd(mat_int)
+
+lambda <- svd_ammi$d
+
+var_explained <- (
+  lambda^2 / sum(lambda^2)
+) * 100
+
+ipca1_pct <- round(
+  var_explained[1],
+  2
+)
+
+ipca2_pct <- round(
+  var_explained[2],
+  2
+)
+
+data.frame(
+  Component = paste0(
+    "IPCA",
+    seq_along(var_explained)
+  ),
+  Explained_variation = round(
+    var_explained,
+    2
+  )
+)
+```
 
 ## Interaction principal components
 
-The first two interaction principal components are extracted for genotypes and environments.
+The scores of the first two interaction principal components are obtained separately for genotypes and environments.
+
+```{r ammi-interaction-scores}
+scores_gen <- as.data.frame(
+  svd_ammi$u[, 1:2] %*%
+    diag(
+      sqrt(lambda[1:2])
+    )
+)
+
+colnames(scores_gen) <- c(
+  "IPCA1",
+  "IPCA2"
+)
+
+scores_gen$GEN <- as.factor(
+  rownames(mat_int)
+)
+
+scores_env <- as.data.frame(
+  svd_ammi$v[, 1:2] %*%
+    diag(
+      sqrt(lambda[1:2])
+    )
+)
+
+colnames(scores_env) <- c(
+  "IPCA1",
+  "IPCA2"
+)
+
+scores_env$ENV <- as.factor(
+  colnames(mat_int)
+)
+```
 
 ## AMMI biplot
 
-The AMMI biplot represents genotype scores and environmental vectors for the first two interaction principal components.
+The AMMI biplot represents genotype scores and environmental vectors for the first two interaction principal components. The percentages shown on the axes correspond to the interaction variation represented by each component.
+
+```{r ammi-biplot, fig.width=10, fig.height=7, fig.align="center", warning=FALSE}
+p_ammi <- ggplot() +
+  geom_vline(
+    xintercept = 0,
+    linetype = "dashed",
+    color = "gray60",
+    linewidth = 0.4
+  ) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed",
+    color = "gray60",
+    linewidth = 0.4
+  ) +
+  geom_segment(
+    data = scores_env,
+    aes(
+      x = 0,
+      y = 0,
+      xend = IPCA1,
+      yend = IPCA2
+    ),
+    arrow = arrow(
+      length = grid::unit(
+        0.18,
+        "cm"
+      )
+    ),
+    color = "gray30",
+    alpha = 0.6,
+    linewidth = 0.5
+  ) +
+  geom_text(
+    data = scores_env,
+    aes(
+      x = IPCA1,
+      y = IPCA2,
+      label = ENV
+    ),
+    vjust = 1.4,
+    color = "gray20",
+    size = 3
+  ) +
+  geom_point(
+    data = scores_gen,
+    aes(
+      x = IPCA1,
+      y = IPCA2,
+      color = GEN
+    ),
+    size = 3.5,
+    alpha = 0.9
+  ) +
+  geom_text(
+    data = scores_gen,
+    aes(
+      x = IPCA1,
+      y = IPCA2,
+      label = GEN
+    ),
+    vjust = -1.2,
+    fontface = "bold",
+    size = 3.5,
+    show.legend = FALSE
+  ) +
+  scale_color_viridis_d(
+    option = "viridis"
+  ) +
+  theme_classic(
+    base_size = 12
+  ) +
+  labs(
+    x = paste0(
+      "IPCA1 (",
+      ipca1_pct,
+      "%)"
+    ),
+    y = paste0(
+      "IPCA2 (",
+      ipca2_pct,
+      "%)"
+    ),
+    color = "Genotypes"
+  ) +
+  theme(
+    axis.title = element_text(
+      face = "plain",
+      size = 11
+    ),
+    axis.text = element_text(
+      color = "black",
+      size = 9
+    ),
+    axis.line = element_line(
+      color = "black",
+      linewidth = 0.5
+    ),
+    legend.position = "none"
+  )
+
+print(p_ammi)
+```
 
 # Joint AMMI and SHAP representation
 
