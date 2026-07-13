@@ -520,15 +520,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreed4ef88656067beee6ec19ae507d179a7c3f0e822targetblankd4ef886a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreef059a2a562c30e1686c0f1acef9aadd2a72c2a90targetblankf059a2aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/d4ef88656067beee6ec19ae507d179a7c3f0e822" target="_blank">d4ef886</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/f059a2a562c30e1686c0f1acef9aadd2a72c2a90" target="_blank">f059a2a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreed4ef88656067beee6ec19ae507d179a7c3f0e822targetblankd4ef886a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreef059a2a562c30e1686c0f1acef9aadd2a72c2a90targetblankf059a2aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -538,7 +538,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/d4ef88656067beee6ec19ae507d179a7c3f0e822" target="_blank">d4ef886</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/f059a2a562c30e1686c0f1acef9aadd2a72c2a90" target="_blank">f059a2a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -600,6 +600,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/f059a2a562c30e1686c0f1acef9aadd2a72c2a90/analysis/analysis.Rmd" target="_blank">f059a2a</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+<td>
+Add stability indices and genotype rankings
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/03dc0c0c1d96e2982953770d1bed61ddca2c1a27/docs/analysis.html" target="_blank">03dc0c0</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1626,35 +1660,164 @@ across environments.</p>
 
 print(figura_final)</code></pre>
 <p><img src="figure/analysis.Rmd/joint-ammi-shap-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-joint-ammi-shap-1">
+Past versions of joint-ammi-shap-1.png
+</button>
+</p>
+<div id="fig-joint-ammi-shap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/03dc0c0c1d96e2982953770d1bed61ddca2c1a27/docs/figure/analysis.Rmd/joint-ammi-shap-1.png" target="_blank">03dc0c0</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="stability-and-selection-indices" class="section level1">
 <h1>Stability and selection indices</h1>
 <div id="ammi-stability-value" class="section level2">
 <h2>AMMI Stability Value</h2>
-<p>The AMMI Stability Value is calculated from the first two interaction
-principal components.</p>
+<p>The AMMI Stability Value combines the scores of the first two
+interaction principal components. Lower ASV values indicate greater
+stability according to the AMMI representation.</p>
+<pre class="r"><code>peso_asv &lt;- var_explained[1] / var_explained[2]
+
+asv_gen &lt;- scores_gen %&gt;%
+  mutate(
+    ASV = sqrt(
+      ((peso_asv * IPCA1)^2) +
+        (IPCA2^2)
+    )
+  ) %&gt;%
+  select(
+    GEN,
+    ASV
+  )
+
+asv_gen</code></pre>
+<pre><code>  GEN       ASV
+1   1 109.89080
+2   2  73.04897
+3   3  47.86631
+4   4 147.49554
+5   5  83.25008
+6   6  78.58688
+7   7  39.96620
+8   8 142.48535
+9   9  92.81560</code></pre>
 </div>
 <div id="shap-effect-and-stability" class="section level2">
 <h2>SHAP effect and stability</h2>
-<p>Mean genotype SHAP contribution and the standard deviation of
-genotype SHAP contributions are summarized for each genotype.</p>
+<p>The mean genotype SHAP contribution represents the average
+contribution of each genotype across environments. The standard
+deviation of the genotype SHAP contributions represents the variation of
+this contribution across environments.</p>
+<pre class="r"><code>tab_shap &lt;- df_results %&gt;%
+  group_by(GEN) %&gt;%
+  summarise(
+    Media_GY = mean(GY),
+    SHAP_Medio = mean(SHAP_GEN),
+    SHAP_SD = sd(SHAP_GEN),
+    .groups = &quot;drop&quot;
+  )
+
+tab_shap</code></pre>
+<pre><code># A tibble: 9 × 4
+  GEN   Media_GY SHAP_Medio SHAP_SD
+  &lt;fct&gt;    &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+1 1        4617.     -250.     99.7
+2 2        4603.     -242.    119. 
+3 3        4823.      -44.4    79.1
+4 4        5218.      338.    206. 
+5 5        5247.      375.    176. 
+6 6        5330.      444.     91.8
+7 7        4672.     -192.    135. 
+8 8        4283.     -505.    230. 
+9 9        4930.       69.3    84.3</code></pre>
 </div>
 <div id="simultaneous-selection-index" class="section level2">
 <h2>Simultaneous Selection Index</h2>
-<p>The Simultaneous Selection Index combines grain-yield and AMMI
-stability rankings.</p>
+<p>The Simultaneous Selection Index combines the grain-yield ranking and
+the AMMI Stability Value ranking. The consolidated data set also
+includes rankings based on mean SHAP contribution and SHAP
+variation.</p>
+<pre class="r"><code>tabela_comparativa &lt;- left_join(
+  tab_shap,
+  asv_gen,
+  by = &quot;GEN&quot;
+)
+
+dados_resultado &lt;- tabela_comparativa %&gt;%
+  mutate(
+    Rank_Prod = rank(
+      -Media_GY,
+      ties.method = &quot;first&quot;
+    ),
+    Rank_ASV = rank(
+      ASV,
+      ties.method = &quot;first&quot;
+    ),
+    Rank_SSI = rank(
+      Rank_Prod + Rank_ASV,
+      ties.method = &quot;first&quot;
+    ),
+    Rank_SHAP_Eff = rank(
+      -SHAP_Medio,
+      ties.method = &quot;first&quot;
+    ),
+    Rank_SHAP_Stb = rank(
+      SHAP_SD,
+      ties.method = &quot;first&quot;
+    )
+  ) %&gt;%
+  arrange(Rank_Prod)</code></pre>
 </div>
 </div>
 <div id="genotype-ranking" class="section level1">
 <h1>Genotype ranking</h1>
-<p>Genotypes are compared according to:</p>
-<ul>
-<li>grain yield;</li>
-<li>AMMI Stability Value;</li>
-<li>Simultaneous Selection Index;</li>
-<li>SHAP effect;</li>
-<li>SHAP stability.</li>
-</ul>
+<p>Genotypes are compared according to grain yield, AMMI stability,
+simultaneous selection, mean SHAP contribution, and SHAP stability. In
+every ranking, position 1 represents the preferred genotype according to
+the corresponding criterion.</p>
+<pre class="r"><code>print(dados_resultado)</code></pre>
+<pre><code># A tibble: 9 × 10
+  GEN   Media_GY SHAP_Medio SHAP_SD   ASV Rank_Prod Rank_ASV Rank_SSI
+  &lt;fct&gt;    &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+1 6        5330.      444.     91.8  78.6         1        4        1
+2 5        5247.      375.    176.   83.3         2        5        3
+3 4        5218.      338.    206.  147.          3        9        7
+4 9        4930.       69.3    84.3  92.8         4        6        5
+5 3        4823.      -44.4    79.1  47.9         5        2        2
+6 7        4672.     -192.    135.   40.0         6        1        4
+7 1        4617.     -250.     99.7 110.          7        7        8
+8 2        4603.     -242.    119.   73.0         8        3        6
+9 8        4283.     -505.    230.  142.          9        8        9
+# ℹ 2 more variables: Rank_SHAP_Eff &lt;int&gt;, Rank_SHAP_Stb &lt;int&gt;</code></pre>
 </div>
 <div id="rank-dynamics" class="section level1">
 <h1>Rank dynamics</h1>
