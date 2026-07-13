@@ -520,15 +520,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreef059a2a562c30e1686c0f1acef9aadd2a72c2a90targetblankf059a2aa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreed7f6a52f31b0ba0c6f72e13d5d8af352c13b3b53targetblankd7f6a52a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/f059a2a562c30e1686c0f1acef9aadd2a72c2a90" target="_blank">f059a2a</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/d7f6a52f31b0ba0c6f72e13d5d8af352c13b3b53" target="_blank">d7f6a52</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreef059a2a562c30e1686c0f1acef9aadd2a72c2a90targetblankf059a2aa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreed7f6a52f31b0ba0c6f72e13d5d8af352c13b3b53targetblankd7f6a52a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -538,7 +538,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/f059a2a562c30e1686c0f1acef9aadd2a72c2a90" target="_blank">f059a2a</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/d7f6a52f31b0ba0c6f72e13d5d8af352c13b3b53" target="_blank">d7f6a52</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -600,6 +600,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/d7f6a52f31b0ba0c6f72e13d5d8af352c13b3b53/analysis/analysis.Rmd" target="_blank">d7f6a52</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+<td>
+Complete genotype ranking and stability analyses
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/7a46ba10811a120028baa634efc13a158ac88e88/docs/analysis.html" target="_blank">7a46ba1</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -851,14 +885,18 @@ and follows the order required to reproduce the analysis.</p>
 <div id="required-packages" class="section level1">
 <h1>Required packages</h1>
 <p>The following packages are used for data manipulation, graphical
-visualization, Random Forest modeling, SHAP decomposition, and composite
-figure construction.</p>
+visualization, Random Forest modeling, SHAP decomposition, composite
+figure construction, genotype-rank visualization, and rank-correlation
+analysis.</p>
 <pre class="r"><code>library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(randomForest)
 library(DALEX)
-library(patchwork)</code></pre>
+library(patchwork)
+library(ggrepel)
+library(corrplot)
+library(viridisLite)</code></pre>
 </div>
 <div id="data-import" class="section level1">
 <h1>Data import</h1>
@@ -1821,19 +1859,294 @@ the corresponding criterion.</p>
 </div>
 <div id="rank-dynamics" class="section level1">
 <h1>Rank dynamics</h1>
-<p>A bump chart represents changes in genotype positions across the
-evaluated criteria.</p>
+<p>The rank-dynamics plot represents how the relative position of each
+genotype changes across grain yield, AMMI stability, simultaneous
+selection, SHAP stability, and SHAP effect. Rank 1 represents the
+preferred position under every criterion.</p>
+<pre class="r"><code>dados_long &lt;- dados_resultado %&gt;%
+  pivot_longer(
+    cols = c(
+      Rank_Prod,
+      Rank_ASV,
+      Rank_SSI,
+      Rank_SHAP_Stb,
+      Rank_SHAP_Eff
+    ),
+    names_to = &quot;Metodologia&quot;,
+    values_to = &quot;Posicao&quot;
+  ) %&gt;%
+  mutate(
+    Metodologia = factor(
+      Metodologia,
+      levels = c(
+        &quot;Rank_Prod&quot;,
+        &quot;Rank_ASV&quot;,
+        &quot;Rank_SSI&quot;,
+        &quot;Rank_SHAP_Stb&quot;,
+        &quot;Rank_SHAP_Eff&quot;
+      ),
+      labels = c(
+        &quot;Grain Yield&quot;,
+        &quot;ASV (Linear)&quot;,
+        &quot;SSI (Linear)&quot;,
+        &quot;SHAP Stability&quot;,
+        &quot;SHAP Effect&quot;
+      )
+    )
+  )</code></pre>
+<pre class="r"><code>ggplot(
+  dados_long,
+  aes(
+    x = Metodologia,
+    y = Posicao,
+    group = GEN,
+    color = GEN
+  )
+) +
+  geom_line(
+    linewidth = 1.2,
+    alpha = 0.8
+  ) +
+  geom_point(
+    size = 4,
+    shape = 21,
+    fill = &quot;white&quot;,
+    stroke = 1.5
+  ) +
+  geom_text(
+    data = subset(
+      dados_long,
+      Metodologia == &quot;Grain Yield&quot;
+    ),
+    aes(label = GEN),
+    hjust = 1.5,
+    fontface = &quot;bold&quot;,
+    size = 4
+  ) +
+  geom_text(
+    data = subset(
+      dados_long,
+      Metodologia == &quot;SHAP Effect&quot;
+    ),
+    aes(label = GEN),
+    hjust = -0.5,
+    fontface = &quot;bold&quot;,
+    size = 4
+  ) +
+  scale_color_viridis_d(
+    option = &quot;viridis&quot;
+  ) +
+  scale_y_reverse(
+    breaks = 1:9
+  ) +
+  theme_classic(
+    base_size = 13
+  ) +
+  labs(
+    x = &quot;Selection Framework&quot;,
+    y = &quot;Genotype Rank (1 = Best)&quot;,
+    title = &quot; &quot;
+  ) +
+  theme(
+    legend.position = &quot;none&quot;,
+    axis.line = element_blank(),
+    axis.ticks.x = element_blank(),
+    panel.grid.major.y = element_line(
+      color = &quot;gray93&quot;,
+      linetype = &quot;dashed&quot;
+    ),
+    panel.grid.major.x = element_line(
+      color = &quot;gray95&quot;,
+      linewidth = 8,
+      alpha = 0.4
+    ),
+    plot.margin = ggplot2::margin(
+      t = 10,
+      r = 25,
+      b = 10,
+      l = 25
+    )
+  )</code></pre>
+<p><img src="figure/analysis.Rmd/rank-dynamics-plot-1.png" width="1056" style="display: block; margin: auto;" /></p>
 </div>
 <div id="stability-concordance" class="section level1">
 <h1>Stability concordance</h1>
-<p>The relationship between AMMI stability ranking and SHAP stability
-ranking is represented using a rank-concordance plot.</p>
+<p>The concordance plot compares the AMMI Stability Value ranking, which
+represents linear interaction stability, with the SHAP stability
+ranking, which represents variation in the non-linear genotype
+contribution across environments.</p>
+<p>Each point represents one genotype. Lower ranking values indicate
+greater stability. Therefore, genotypes in the lower-left region are
+classified as relatively stable by both approaches. The dotted identity
+line represents exact agreement between the two stability rankings,
+while the point fill represents the grain-yield ranking.</p>
+<pre class="r"><code>p_stability_concordance &lt;- ggplot(
+  dados_resultado,
+  aes(
+    x = Rank_ASV,
+    y = Rank_SHAP_Stb,
+    label = GEN
+  )
+) +
+  geom_vline(
+    xintercept = 5,
+    linetype = &quot;dashed&quot;,
+    color = &quot;gray60&quot;,
+    linewidth = 0.5
+  ) +
+  geom_hline(
+    yintercept = 5,
+    linetype = &quot;dashed&quot;,
+    color = &quot;gray60&quot;,
+    linewidth = 0.5
+  ) +
+  geom_abline(
+    slope = 1,
+    intercept = 0,
+    linetype = &quot;dotted&quot;,
+    color = &quot;red&quot;,
+    alpha = 0.6,
+    linewidth = 0.7
+  ) +
+  geom_point(
+    aes(fill = Rank_Prod),
+    size = 5.5,
+    shape = 21,
+    color = &quot;black&quot;,
+    stroke = 0.8
+  ) +
+  scale_fill_viridis_c(
+    option = &quot;mako&quot;,
+    direction = -1,
+    breaks = c(
+      1,
+      5,
+      9
+    ),
+    labels = c(
+      &quot;High (1)&quot;,
+      &quot;Medium (5)&quot;,
+      &quot;Low (9)&quot;
+    )
+  ) +
+  ggrepel::geom_text_repel(
+    fontface = &quot;bold&quot;,
+    size = 4,
+    box.padding = 0.4,
+    point.padding = 0.3
+  ) +
+  scale_x_continuous(
+    breaks = 1:9,
+    limits = c(
+      0.5,
+      9.5
+    )
+  ) +
+  scale_y_continuous(
+    breaks = 1:9,
+    limits = c(
+      0.5,
+      9.5
+    )
+  ) +
+  theme_classic(
+    base_size = 12
+  ) +
+  labs(
+    x = &quot;Linear Stability Ranking (Rank_ASV)&quot;,
+    y = &quot;Non-Linear Stability Ranking (Rank_SHAP_Stb)&quot;,
+    fill = &quot;Grain Yield&quot;
+  ) +
+  theme(
+    axis.line = element_line(
+      color = &quot;black&quot;,
+      linewidth = 0.5
+    ),
+    axis.text = element_text(
+      color = &quot;black&quot;
+    ),
+    legend.position = &quot;right&quot;,
+    legend.title = element_text(
+      face = &quot;bold&quot;,
+      size = 10
+    )
+  )
+
+print(p_stability_concordance)</code></pre>
+<p><img src="figure/analysis.Rmd/stability-concordance-1.png" width="864" style="display: block; margin: auto;" /></p>
 </div>
 <div id="spearman-rank-correlation" class="section level1">
 <h1>Spearman rank correlation</h1>
-<p>Spearman correlations are calculated among grain yield, AMMI
-stability, simultaneous selection, SHAP effect, and SHAP stability
-rankings.</p>
+<p>Spearman rank correlations are calculated among the five
+genotype-selection criteria. Positive correlations indicate that two
+criteria tend to assign similar positions to the genotypes, whereas
+negative correlations indicate opposing ranking patterns.</p>
+<p>The comparison includes grain yield, AMMI stability, simultaneous
+selection, mean SHAP effect, and SHAP stability.</p>
+<div id="correlation-matrix" class="section level2">
+<h2>Correlation matrix</h2>
+<pre class="r"><code>colunas_rank &lt;- dados_resultado %&gt;%
+  select(
+    Rank_Prod,
+    Rank_ASV,
+    Rank_SSI,
+    Rank_SHAP_Eff,
+    Rank_SHAP_Stb
+  ) %&gt;%
+  as.data.frame()
+
+colnames(colunas_rank) &lt;- c(
+  &quot;Yield&quot;,
+  &quot;ASV (Linear)&quot;,
+  &quot;SSI (Linear)&quot;,
+  &quot;SHAP Effect&quot;,
+  &quot;SHAP Stability&quot;
+)
+
+matriz_corr &lt;- cor(
+  colunas_rank,
+  method = &quot;spearman&quot;
+)
+
+round(
+  matriz_corr,
+  2
+)</code></pre>
+<pre><code>               Yield ASV (Linear) SSI (Linear) SHAP Effect SHAP Stability
+Yield           1.00         0.02         0.70        0.98           0.23
+ASV (Linear)    0.02         1.00         0.68        0.08           0.48
+SSI (Linear)    0.70         0.68         1.00        0.73           0.57
+SHAP Effect     0.98         0.08         0.73        1.00           0.22
+SHAP Stability  0.23         0.48         0.57        0.22           1.00</code></pre>
+</div>
+<div id="graphical-representation" class="section level2">
+<h2>Graphical representation</h2>
+<p>The upper triangular correlation matrix represents the direction and
+magnitude of the Spearman associations. The numerical coefficients are
+displayed inside the corresponding cells.</p>
+<pre class="r"><code>cores_viridis &lt;- viridisLite::viridis(
+  200
+)
+
+corrplot::corrplot(
+  matriz_corr,
+  method = &quot;color&quot;,
+  type = &quot;upper&quot;,
+  col = cores_viridis,
+  addCoef.col = &quot;black&quot;,
+  number.cex = 0.9,
+  tl.col = &quot;black&quot;,
+  tl.srt = 45,
+  diag = FALSE,
+  tl.pos = &quot;td&quot;,
+  mar = c(
+    1,
+    1,
+    4,
+    1
+  )
+)</code></pre>
+<p><img src="figure/analysis.Rmd/spearman-correlation-plot-1.png" width="864" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1862,25 +2175,27 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] patchwork_1.3.2      DALEX_2.5.3          randomForest_4.7-1.2
-[4] tidyr_1.3.2          dplyr_1.2.1          ggplot2_4.0.3       
-[7] workflowr_1.7.2     
+ [1] viridisLite_0.4.2    corrplot_0.95        ggrepel_0.9.6       
+ [4] patchwork_1.3.2      DALEX_2.5.3          randomForest_4.7-1.2
+ [7] tidyr_1.3.2          dplyr_1.2.1          ggplot2_4.0.3       
+[10] workflowr_1.7.2     
 
 loaded via a namespace (and not attached):
  [1] utf8_1.2.6         sass_0.4.10        generics_0.1.4     stringi_1.8.7     
  [5] digest_0.6.39      magrittr_2.0.4     evaluate_1.0.5     grid_4.5.1        
  [9] RColorBrewer_1.1-3 fastmap_1.2.0      rprojroot_2.1.1    jsonlite_2.0.0    
 [13] processx_3.8.6     whisker_0.4.1      ps_1.9.1           promises_1.5.0    
-[17] httr_1.4.7         purrr_1.2.1        viridisLite_0.4.2  scales_1.4.0      
-[21] jquerylib_0.1.4    cli_3.6.5          rlang_1.1.7        iBreakDown_2.1.2  
-[25] withr_3.0.2        cachem_1.1.0       yaml_2.3.12        otel_0.2.0        
-[29] tools_4.5.1        httpuv_1.6.16      vctrs_0.7.1        R6_2.6.1          
-[33] lifecycle_1.0.5    git2r_0.36.2       stringr_1.6.0      fs_1.6.6          
-[37] pkgconfig_2.0.3    callr_3.7.6        pillar_1.11.1      bslib_0.9.0       
-[41] later_1.4.4        gtable_0.3.6       glue_1.8.0         Rcpp_1.1.1        
-[45] xfun_0.54          tibble_3.3.1       tidyselect_1.2.1   rstudioapi_0.17.1 
-[49] knitr_1.50         farver_2.1.2       htmltools_0.5.9    labeling_0.4.3    
-[53] rmarkdown_2.30     compiler_4.5.1     getPass_0.2-4      S7_0.2.1          </code></pre>
+[17] httr_1.4.7         purrr_1.2.1        scales_1.4.0       jquerylib_0.1.4   
+[21] cli_3.6.5          rlang_1.1.7        iBreakDown_2.1.2   withr_3.0.2       
+[25] cachem_1.1.0       yaml_2.3.12        otel_0.2.0         tools_4.5.1       
+[29] httpuv_1.6.16      vctrs_0.7.1        R6_2.6.1           lifecycle_1.0.5   
+[33] git2r_0.36.2       stringr_1.6.0      fs_1.6.6           pkgconfig_2.0.3   
+[37] callr_3.7.6        pillar_1.11.1      bslib_0.9.0        later_1.4.4       
+[41] gtable_0.3.6       glue_1.8.0         Rcpp_1.1.1         xfun_0.54         
+[45] tibble_3.3.1       tidyselect_1.2.1   rstudioapi_0.17.1  knitr_1.50        
+[49] farver_2.1.2       htmltools_0.5.9    labeling_0.4.3     rmarkdown_2.30    
+[53] compiler_4.5.1     getPass_0.2-4      S7_0.2.1          </code></pre>
+</div>
 </div>
 </div>
 </div>
