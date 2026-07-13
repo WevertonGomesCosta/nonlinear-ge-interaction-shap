@@ -126,21 +126,110 @@ ggplot(df_ml, aes(x = GEN, y = GY, fill = GEN)) +
 
 # Environmental index
 
-The environmental index represents the mean grain-yield performance observed in each environment.
+The environmental index is calculated as the mean grain yield of all genotypes evaluated within each environment. This continuous variable represents the productive potential of each environment.
+
+```{r environmental-index}
+env_indices <- df_ml %>%
+  group_by(ENV) %>%
+  summarise(
+    ENV_INDEX = mean(GY, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+df_ml <- df_ml %>%
+  left_join(env_indices, by = "ENV")
+
+head(env_indices)
+```
 
 # Random Forest modeling
 
 ## Leave-one-environment-out validation
 
-The Random Forest model is evaluated through leave-one-environment-out cross-validation.
+The Random Forest model is evaluated through leave-one-environment-out cross-validation. At each iteration, one environment is reserved for prediction, while the remaining environments are used for model fitting.
+
+```{r random-forest-loeo, message=FALSE, warning=FALSE}
+set.seed(42)
+
+ambientes <- unique(df_ml$ENV)
+predicoes_cv <- data.frame()
+
+cat("Starting leave-one-environment-out cross-validation...\n")
+
+for (env_teste in ambientes) {
+  
+  dados_treino <- df_ml %>%
+    filter(ENV != env_teste)
+  
+  dados_teste <- df_ml %>%
+    filter(ENV == env_teste)
+  
+  rf_fold <- randomForest(
+    GY ~ GEN + ENV_INDEX,
+    data = dados_treino,
+    ntree = 500
+  )
+  
+  dados_teste$Pred_GY <- predict(
+    rf_fold,
+    newdata = dados_teste
+  )
+  
+  predicoes_cv <- bind_rows(
+    predicoes_cv,
+    dados_teste
+  )
+}
+```
 
 ## Predictive metrics
 
-Predictive performance is summarized using:
+Predictive performance is summarized using the cross-validated coefficient of determination, the Pearson correlation between observed and predicted grain yield, and the root mean squared error.
 
-- coefficient of determination;
-- Pearson correlation between observed and predicted values;
-- root mean squared error.
+```{r predictive-metrics}
+ss_res <- sum(
+  (predicoes_cv$GY - predicoes_cv$Pred_GY)^2
+)
+
+ss_tot <- sum(
+  (predicoes_cv$GY - mean(predicoes_cv$GY))^2
+)
+
+r2_cv <- 1 - (ss_res / ss_tot)
+
+rmse_cv <- sqrt(
+  mean(
+    (predicoes_cv$GY - predicoes_cv$Pred_GY)^2
+  )
+)
+
+accuracy_r <- cor(
+  predicoes_cv$GY,
+  predicoes_cv$Pred_GY
+)
+
+cat(
+  "\n=== LEAVE-ONE-ENVIRONMENT-OUT VALIDATION METRICS ===\n"
+)
+
+cat(
+  "Predictive capacity (cross-validated R²): ",
+  round(r2_cv * 100, 2),
+  "%\n"
+)
+
+cat(
+  "Predictive accuracy (r):                  ",
+  round(accuracy_r, 2),
+  "\n"
+)
+
+cat(
+  "Cross-validation RMSE:                   ",
+  round(rmse_cv, 2),
+  " kg ha-1\n"
+)
+```
 
 ## Final Random Forest model
 
