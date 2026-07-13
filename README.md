@@ -50,7 +50,6 @@ nonlinear-ge-interaction-shap/
 ├── data/
 ├── docs/
 ├── output/
-├── LICENSE
 ├── README.md
 ├── _workflowr.yml
 └── nonlinear-ge-interaction-shap.Rproj
