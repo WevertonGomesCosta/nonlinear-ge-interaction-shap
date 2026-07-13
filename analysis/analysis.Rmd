@@ -233,21 +233,165 @@ cat(
 
 ## Final Random Forest model
 
-The final Random Forest model is fitted using the complete analytical data set.
+The final Random Forest model is fitted using the complete analytical data set. Grain yield is modeled as a function of genotype and the continuous environmental index.
+
+```{r final-random-forest, message=FALSE, warning=FALSE}
+set.seed(42)
+
+rf_model <- randomForest(
+  GY ~ GEN + ENV_INDEX,
+  data = df_ml,
+  ntree = 500
+)
+```
 
 # SHAP decomposition
 
 ## Model explainer
 
-A model explainer is created using the DALEX framework.
+The Random Forest model is connected to the DALEX framework using the genotype and environmental-index predictors. The response variable supplied to the explainer is the observed mean grain yield.
+
+```{r dalex-explainer, message=FALSE, warning=FALSE}
+explainer_rf <- explain(
+  model = rf_model,
+  data = df_ml[, c("GEN", "ENV_INDEX")],
+  y = df_ml$GY,
+  label = "Random Forest GxE (Continuous)"
+)
+```
 
 ## SHAP contribution values
 
-SHAP values are obtained for the genotype and environmental-index predictors.
+SHAP contributions are calculated for every genotype-by-environment observation. For each observation, the mean contribution associated with genotype and environmental index is extracted from the SHAP decomposition.
+
+```{r shap-contributions, message=FALSE, warning=FALSE}
+shap_list <- list()
+
+cat("Starting SHAP contribution calculation...\n")
+
+for (i in 1:nrow(df_ml)) {
+  
+  obs <- df_ml[i, c("GEN", "ENV_INDEX")]
+  
+  shap_obs <- predict_parts(
+    explainer = explainer_rf,
+    new_observation = obs,
+    type = "shap",
+    B = 25
+  )
+  
+  val_gen <- shap_obs %>%
+    filter(variable_name == "GEN") %>%
+    summarise(mean(contribution)) %>%
+    pull()
+  
+  val_env <- shap_obs %>%
+    filter(variable_name == "ENV_INDEX") %>%
+    summarise(mean(contribution)) %>%
+    pull()
+  
+  shap_list[[i]] <- data.frame(
+    SHAP_GEN = val_gen,
+    SHAP_ENV = val_env
+  )
+}
+
+df_shap_final <- bind_rows(shap_list)
+
+df_results <- cbind(
+  df_ml,
+  df_shap_final
+)
+
+head(df_results)
+```
 
 ## Genotype response profiles
 
-Genotype-specific SHAP contributions are represented across environments.
+Genotype-specific SHAP contributions are represented across environments. Positive and negative values indicate the direction of the genotype contribution to the Random Forest prediction relative to the model reference value.
+
+```{r shap-genotype-profiles, fig.width=10, fig.height=7, fig.align="center", warning=FALSE}
+df_results$GEN <- as.factor(df_results$GEN)
+df_results$ENV <- as.factor(df_results$ENV)
+
+p_shap <- ggplot(
+  df_results,
+  aes(
+    x = ENV,
+    y = SHAP_GEN,
+    group = GEN,
+    color = GEN
+  )
+) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed",
+    color = "gray60",
+    linewidth = 0.4
+  ) +
+  geom_line(
+    linewidth = 0.8,
+    alpha = 0.85
+  ) +
+  geom_point(
+    size = 2,
+    alpha = 0.9
+  ) +
+  scale_color_viridis_d(
+    option = "viridis"
+  ) +
+  theme_classic(
+    base_size = 12
+  ) +
+  labs(
+    title = "",
+    subtitle = "",
+    x = "Environments",
+    y = expression(
+      paste(
+        "Genotype SHAP Value (G",
+        times,
+        "E Effect) in kg ",
+        ha^-1
+      )
+    ),
+    color = "Genotypes"
+  ) +
+  theme(
+    plot.title = element_text(
+      face = "bold",
+      size = 13,
+      hjust = 0
+    ),
+    plot.subtitle = element_text(
+      size = 10,
+      color = "gray30",
+      margin = ggplot2::margin(b = 12)
+    ),
+    axis.title = element_text(
+      face = "plain",
+      size = 11
+    ),
+    axis.text = element_text(
+      color = "black",
+      size = 9
+    ),
+    legend.position = "bottom",
+    legend.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    legend.text = element_text(
+      size = 9
+    ),
+    axis.line = element_line(
+      color = "black",
+      linewidth = 0.5
+    )
+  )
+
+print(p_shap)
+```
 
 # AMMI analysis
 
