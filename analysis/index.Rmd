@@ -8,4 +8,62 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+# Non-Linear Modeling of Genotype × Environment Interaction
+
+## Overview
+
+This website presents a reproducible tutorial for modeling genotype-by-environment interaction using tree-based learning algorithms and Shapley decomposition.
+
+The analytical workflow integrates machine learning interpretability with traditional biometric methods for evaluating genotype performance, adaptability, and stability in multi-environment trials.
+
+## Tutorial scope
+
+The tutorial covers the complete sequence used in the associated analysis:
+
+1. import and preparation of multi-environment trial data;
+2. visualization of phenotypic performance;
+3. calculation of the environmental index;
+4. fitting and validation of a Random Forest model;
+5. SHAP decomposition of model predictions;
+6. AMMI decomposition of genotype-by-environment interaction;
+7. calculation of stability and simultaneous selection indices;
+8. comparison of genotype rankings;
+9. concordance analysis between linear and non-linear approaches;
+10. Spearman rank correlation among selection criteria.
+
+All analytical code will be displayed directly in a single R Markdown page so that the complete pipeline can be inspected and reproduced in its execution order.
+
+## Data set
+
+The tutorial uses a maize multi-environment trial data set with nine genotypes evaluated across twenty environments.
+
+Each genotype-by-environment combination contains four replicates, and the analyzed trait is grain yield measured in kilograms per hectare.
+
+## Analytical frameworks
+
+The project includes the following analytical components:
+
+- Random Forest;
+- Shapley Additive Explanations;
+- AMMI analysis;
+- AMMI Stability Value;
+- Simultaneous Selection Index;
+- genotype ranking;
+- rank concordance;
+- Spearman correlation.
+
+## Website structure
+
+The website currently contains the following pages:
+
+- **Home** — general project overview;
+- **About** — methodological context and tutorial organization;
+- **License** — terms of use and redistribution.
+
+The complete reproducible analysis will be added after the initial website structure is finalized.
+
+## Reproducibility
+
+The repository is managed with `workflowr`, combining R Markdown, Git version control, reproducibility checks, and a versioned research website.
+
+The source code and the rendered results are maintained in the same version-controlled project.

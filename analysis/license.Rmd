@@ -1,5 +1,6 @@
 ---
 title: "License"
+site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     toc: false
@@ -7,15 +8,38 @@ editor_options:
   chunk_output_type: console
 ---
 
-What license are you using for your code? See [choosealicense.com][choose] for
-help deciding. It's a convention to save a file `LICENSE` in the root of your
-Git repo that contains the license text.
+# License
 
-What license are you using for the written content on your site? It is
-traditional to choose a [Creative Commons][cc] license for this type of content.
+Except where otherwise indicated, the materials in this repository are licensed under the:
 
-[choose]: https://choosealicense.com/
-[cc]: https://creativecommons.org/choose/
+## Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
 
-How should others cite your work? It's a convention to save a file `CITATION`
-in the root of your Git repo that contains the citation information.
+Under this license, the materials may be shared and adapted under the following conditions:
+
+### Attribution
+
+Appropriate credit must be provided, a link to the license must be included, and any modifications must be indicated.
+
+### NonCommercial
+
+The materials may not be used for commercial purposes.
+
+### ShareAlike
+
+Adapted materials must be distributed under the same license.
+
+### No additional restrictions
+
+No legal or technological restrictions may be applied that prevent others from exercising the rights granted by the license.
+
+The complete license terms are available at:
+
+[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+## Citation
+
+When reusing the analytical workflow, data organization, figures, or tutorial materials, the repository and the associated manuscript should be cited.
+
+## Third-party materials
+
+Files or materials that contain a separate attribution, citation, or licensing statement remain subject to their original terms.
