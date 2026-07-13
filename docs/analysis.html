@@ -520,15 +520,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree6f375a824addd1380e8bac06e767b61c26148a89targetblank6f375a8a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree3bca313ffe1a3535d94e57e6e0ae550cf8ce5767targetblank3bca313a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/6f375a824addd1380e8bac06e767b61c26148a89" target="_blank">6f375a8</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/3bca313ffe1a3535d94e57e6e0ae550cf8ce5767" target="_blank">3bca313</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree6f375a824addd1380e8bac06e767b61c26148a89targetblank6f375a8a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree3bca313ffe1a3535d94e57e6e0ae550cf8ce5767targetblank3bca313a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -538,7 +538,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/6f375a824addd1380e8bac06e767b61c26148a89" target="_blank">6f375a8</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/3bca313ffe1a3535d94e57e6e0ae550cf8ce5767" target="_blank">3bca313</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -605,6 +605,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/3bca313ffe1a3535d94e57e6e0ae550cf8ce5767/analysis/analysis.Rmd" target="_blank">3bca313</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+<td>
+Add data preparation and phenotypic performance analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/9f70394379be4ccf4ee2fdef41fc6e9d7c42759f/docs/analysis.html" target="_blank">9f70394</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/6f375a824addd1380e8bac06e767b61c26148a89/analysis/analysis.Rmd" target="_blank">6f375a8</a>
 </td>
 <td>
@@ -635,48 +669,112 @@ Shapley Additive Explanations, AMMI decomposition, stability indices,
 genotype ranking, and rank correlation.</p>
 <p>All analytical code is presented directly in this R Markdown document
 and follows the order required to reproduce the analysis.</p>
-</div>
-<div id="computational-setup" class="section level1">
-<h1>Computational setup</h1>
-<p>The global chunk options define how code, messages, warnings, tables,
-and figures are displayed throughout the analysis.</p>
 <pre class="r"><code>knitr::opts_chunk$set(
   echo = TRUE,
   warning = FALSE,
   message = FALSE,
   fig.align = &quot;center&quot;,
-  fig.width = 9,
+  fig.width = &quot;100%&quot;,
   fig.height = 6
 )</code></pre>
 </div>
 <div id="required-packages" class="section level1">
 <h1>Required packages</h1>
-<p>This section loads the packages required for data manipulation,
-machine learning, model interpretation, statistical analysis, and
-graphical visualization.</p>
+<p>The following packages are used for data manipulation, graphical
+visualization, Random Forest modeling, and SHAP decomposition.</p>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(randomForest)
+library(DALEX)</code></pre>
 </div>
 <div id="data-import" class="section level1">
 <h1>Data import</h1>
-<p>This section imports the original maize multi-environment trial data
-set stored in:</p>
-<pre class="text"><code>data/maize.txt</code></pre>
+<p>The maize multi-environment trial data set is stored as a
+tab-delimited text file in the <code>data</code> directory.</p>
+<pre class="r"><code>maize &lt;- read.table(
+  &quot;data/maize.txt&quot;,
+  h = TRUE
+)
+
+head(maize)</code></pre>
+<pre><code>  ENV GEN REP     GY
+1   1   1   1 3699.7
+2   1   1   2 2947.9
+3   1   1   3 3745.3
+4   1   1   4 4093.3
+5   1   2   1 3801.2
+6   1   2   2 1631.4</code></pre>
 </div>
 <div id="data-preparation" class="section level1">
 <h1>Data preparation</h1>
-<p>The original observations are summarized by genotype and environment
-before the machine-learning and interaction analyses.</p>
+<p>The original replicate-level observations are summarized by genotype
+and environment. The resulting data frame contains the mean grain yield
+for each genotype-by-environment combination.</p>
+<pre class="r"><code>df_ml &lt;- maize %&gt;%
+  group_by(GEN, ENV) %&gt;%
+  summarise(
+    GY = mean(GY, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  )
+
+df_ml$ENV &lt;- as.factor(df_ml$ENV)
+df_ml$GEN &lt;- as.factor(df_ml$GEN)</code></pre>
 </div>
 <div id="phenotypic-performance" class="section level1">
 <h1>Phenotypic performance</h1>
 <div id="grain-yield-across-environments" class="section level2">
 <h2>Grain yield across environments</h2>
-<p>This section presents the distribution of grain yield across the
-evaluated environments.</p>
+<p>The distribution of mean grain yield is represented for each
+environment. Each point corresponds to the mean performance of one
+genotype within an environment.</p>
+<pre class="r"><code>ggplot(df_ml, aes(x = ENV, y = GY, fill = ENV)) +
+  geom_boxplot(
+    alpha = 0.7,
+    show.legend = FALSE
+  ) +
+  geom_jitter(
+    width = 0.2,
+    alpha = 0.5,
+    color = &quot;black&quot;
+  ) +
+  labs(
+    title = &quot;&quot;,
+    x = &quot;Environment (ENV)&quot;,
+    y = &quot;Grain Yield (GY)&quot;
+  ) +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  theme(
+    legend.position = &quot;none&quot;
+  )</code></pre>
+<p><img src="figure/analysis.Rmd/grain-yield-environments-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
 <div id="grain-yield-across-genotypes" class="section level2">
 <h2>Grain yield across genotypes</h2>
-<p>This section presents the distribution of grain yield across the
-evaluated genotypes.</p>
+<p>The distribution of mean grain yield is represented for each
+genotype. Each point corresponds to the mean performance of one genotype
+within an environment.</p>
+<pre class="r"><code>ggplot(df_ml, aes(x = GEN, y = GY, fill = GEN)) +
+  geom_boxplot(
+    alpha = 0.7
+  ) +
+  geom_jitter(
+    width = 0.2,
+    alpha = 0.5,
+    color = &quot;black&quot;
+  ) +
+  labs(
+    title = &quot;&quot;,
+    x = &quot;Genotype (GEN)&quot;,
+    y = &quot;Grain Yield (GY)&quot;
+  ) +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  theme(
+    legend.position = &quot;none&quot;
+  )</code></pre>
+<p><img src="figure/analysis.Rmd/grain-yield-genotypes-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="environmental-index" class="section level1">
@@ -796,45 +894,6 @@ ranking is represented using a rank-concordance plot.</p>
 <p>Spearman correlations are calculated among grain yield, AMMI
 stability, simultaneous selection, SHAP effect, and SHAP stability
 rankings.</p>
-</div>
-<div id="session-information" class="section level1">
-<h1>Session information</h1>
-<p>The computational environment used to build the analysis is reported
-below.</p>
-<pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.5.1 (2025-06-13 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26200)
-
-Matrix products: default
-  LAPACK version 3.12.1
-
-locale:
-[1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8   
-[3] LC_MONETARY=Portuguese_Brazil.utf8 LC_NUMERIC=C                      
-[5] LC_TIME=Portuguese_Brazil.utf8    
-
-time zone: America/Sao_Paulo
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] workflowr_1.7.2
-
-loaded via a namespace (and not attached):
- [1] vctrs_0.7.1       httr_1.4.7        cli_3.6.5         knitr_1.50       
- [5] rlang_1.1.7       xfun_0.54         stringi_1.8.7     otel_0.2.0       
- [9] processx_3.8.6    promises_1.5.0    jsonlite_2.0.0    glue_1.8.0       
-[13] rprojroot_2.1.1   git2r_0.36.2      htmltools_0.5.9   httpuv_1.6.16    
-[17] ps_1.9.1          sass_0.4.10       rmarkdown_2.30    jquerylib_0.1.4  
-[21] tibble_3.3.1      evaluate_1.0.5    fastmap_1.2.0     yaml_2.3.12      
-[25] lifecycle_1.0.5   whisker_0.4.1     stringr_1.6.0     compiler_4.5.1   
-[29] fs_1.6.6          pkgconfig_2.0.3   Rcpp_1.1.1        rstudioapi_0.17.1
-[33] later_1.4.4       digest_0.6.39     R6_2.6.1          pillar_1.11.1    
-[37] callr_3.7.6       magrittr_2.0.4    bslib_0.9.0       tools_4.5.1      
-[41] cachem_1.1.0      getPass_0.2-4    </code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -863,20 +922,24 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.7.2
+[1] DALEX_2.5.3          randomForest_4.7-1.2 tidyr_1.3.2         
+[4] dplyr_1.2.1          ggplot2_4.0.3        workflowr_1.7.2     
 
 loaded via a namespace (and not attached):
- [1] vctrs_0.7.1       httr_1.4.7        cli_3.6.5         knitr_1.50       
- [5] rlang_1.1.7       xfun_0.54         stringi_1.8.7     otel_0.2.0       
- [9] processx_3.8.6    promises_1.5.0    jsonlite_2.0.0    glue_1.8.0       
-[13] rprojroot_2.1.1   git2r_0.36.2      htmltools_0.5.9   httpuv_1.6.16    
-[17] ps_1.9.1          sass_0.4.10       rmarkdown_2.30    jquerylib_0.1.4  
-[21] tibble_3.3.1      evaluate_1.0.5    fastmap_1.2.0     yaml_2.3.12      
-[25] lifecycle_1.0.5   whisker_0.4.1     stringr_1.6.0     compiler_4.5.1   
-[29] fs_1.6.6          pkgconfig_2.0.3   Rcpp_1.1.1        rstudioapi_0.17.1
-[33] later_1.4.4       digest_0.6.39     R6_2.6.1          pillar_1.11.1    
-[37] callr_3.7.6       magrittr_2.0.4    bslib_0.9.0       tools_4.5.1      
-[41] cachem_1.1.0      getPass_0.2-4    </code></pre>
+ [1] sass_0.4.10        generics_0.1.4     stringi_1.8.7      digest_0.6.39     
+ [5] magrittr_2.0.4     evaluate_1.0.5     grid_4.5.1         RColorBrewer_1.1-3
+ [9] fastmap_1.2.0      rprojroot_2.1.1    jsonlite_2.0.0     processx_3.8.6    
+[13] whisker_0.4.1      ps_1.9.1           promises_1.5.0     httr_1.4.7        
+[17] purrr_1.2.1        viridisLite_0.4.2  scales_1.4.0       jquerylib_0.1.4   
+[21] cli_3.6.5          rlang_1.1.7        withr_3.0.2        cachem_1.1.0      
+[25] yaml_2.3.12        otel_0.2.0         tools_4.5.1        httpuv_1.6.16     
+[29] vctrs_0.7.1        R6_2.6.1           lifecycle_1.0.5    git2r_0.36.2      
+[33] stringr_1.6.0      fs_1.6.6           pkgconfig_2.0.3    callr_3.7.6       
+[37] pillar_1.11.1      bslib_0.9.0        later_1.4.4        gtable_0.3.6      
+[41] glue_1.8.0         Rcpp_1.1.1         xfun_0.54          tibble_3.3.1      
+[45] tidyselect_1.2.1   rstudioapi_0.17.1  knitr_1.50         farver_2.1.2      
+[49] htmltools_0.5.9    rmarkdown_2.30     labeling_0.4.3     compiler_4.5.1    
+[53] getPass_0.2-4      S7_0.2.1          </code></pre>
 </div>
 </div>
 </div>
