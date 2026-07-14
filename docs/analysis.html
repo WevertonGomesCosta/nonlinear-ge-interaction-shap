@@ -528,15 +528,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree00803c402fff5b49a0f0ab8dd43e8114ab3124c0targetblank00803c4a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree84a260a77b048b87fa6f066dd4fd707570f60206targetblank84a260aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/00803c402fff5b49a0f0ab8dd43e8114ab3124c0" target="_blank">00803c4</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/84a260a77b048b87fa6f066dd4fd707570f60206" target="_blank">84a260a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree00803c402fff5b49a0f0ab8dd43e8114ab3124c0targetblank00803c4a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree84a260a77b048b87fa6f066dd4fd707570f60206targetblank84a260aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -546,7 +546,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/00803c402fff5b49a0f0ab8dd43e8114ab3124c0" target="_blank">00803c4</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/84a260a77b048b87fa6f066dd4fd707570f60206" target="_blank">84a260a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -564,10 +564,6 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    code/Codigo_SHAP_GE_10_07_23.txt
     Ignored:    data/Manuscript_MN_NE_ACCN.docx
-
-Untracked files:
-    Untracked:  output/random_forest_loeo_predictions.rds
-    Untracked:  output/shap_results.rds
 
 </code></pre>
 <p>
@@ -612,6 +608,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/84a260a77b048b87fa6f066dd4fd707570f60206/analysis/analysis.Rmd" target="_blank">84a260a</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-14
+</td>
+<td>
+Disable repeated LOEO fitting and load validated results
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/abd35e12cc15520fd69772167296b91164d41fb0/docs/analysis.html" target="_blank">abd35e1</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1206,9 +1236,9 @@ are used for model fitting.</p>
 ambientes &lt;- unique(df_ml$ENV)
 predicoes_cv &lt;- data.frame()
 
-cat(&quot;Starting leave-one-environment-out cross-validation...\n&quot;)</code></pre>
-<pre><code>Starting leave-one-environment-out cross-validation...</code></pre>
-<pre class="r"><code>for (env_teste in ambientes) {
+cat(&quot;Starting leave-one-environment-out cross-validation...\n&quot;)
+
+for (env_teste in ambientes) {
   
   dados_treino &lt;- df_ml %&gt;%
     filter(ENV != env_teste)
@@ -2228,6 +2258,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/abd35e12cc15520fd69772167296b91164d41fb0/docs/figure/analysis.Rmd/stability-concordance-1.png" target="_blank">abd35e1</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/02fb7fb8d3b7c75a26ceb8cab7aa7a072347cab8/docs/figure/analysis.Rmd/stability-concordance-1.png" target="_blank">02fb7fb</a>
