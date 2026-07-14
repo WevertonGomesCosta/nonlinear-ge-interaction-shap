@@ -528,15 +528,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree20f644652a77bc743a27009c41d6b6dd03cbce16targetblank20f6446a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreee9401c2651a410095a364dbe783c0648dc0ad979targetblanke9401c2a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/20f644652a77bc743a27009c41d6b6dd03cbce16" target="_blank">20f6446</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/e9401c2651a410095a364dbe783c0648dc0ad979" target="_blank">e9401c2</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree20f644652a77bc743a27009c41d6b6dd03cbce16targetblank20f6446a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreee9401c2651a410095a364dbe783c0648dc0ad979targetblanke9401c2a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -546,7 +546,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/20f644652a77bc743a27009c41d6b6dd03cbce16" target="_blank">20f6446</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/e9401c2651a410095a364dbe783c0648dc0ad979" target="_blank">e9401c2</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -608,6 +608,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/e9401c2651a410095a364dbe783c0648dc0ad979/analysis/analysis.Rmd" target="_blank">e9401c2</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-14
+</td>
+<td>
+Use full-width figures and tables
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/86b4bbc012ad177946edd7484ebb58a7990787ed/docs/analysis.html" target="_blank">86b4bbc</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -915,14 +949,6 @@ Shapley Additive Explanations, AMMI decomposition, stability indices,
 genotype ranking, and rank correlation.</p>
 <p>All analytical code is presented directly in this R Markdown document
 and follows the order required to reproduce the analysis.</p>
-<pre class="r"><code>knitr::opts_chunk$set(
-  echo = TRUE,
-  warning = FALSE,
-  message = FALSE,
-  fig.align = &quot;center&quot;,
-  fig.width = &quot;100%&quot;,
-  fig.height = 6
-)</code></pre>
 </div>
 <div id="required-packages" class="section level1">
 <h1>Required packages</h1>
@@ -1000,7 +1026,7 @@ genotype within an environment.</p>
   theme(
     legend.position = &quot;none&quot;
   )</code></pre>
-<p><img src="figure/analysis.Rmd/grain-yield-environments-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/analysis.Rmd/grain-yield-environments-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-grain-yield-environments-1">
 Past versions of grain-yield-environments-1.png
@@ -1063,7 +1089,7 @@ within an environment.</p>
   theme(
     legend.position = &quot;none&quot;
   )</code></pre>
-<p><img src="figure/analysis.Rmd/grain-yield-genotypes-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/analysis.Rmd/grain-yield-genotypes-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-grain-yield-genotypes-1">
 Past versions of grain-yield-genotypes-1.png
@@ -1398,7 +1424,7 @@ p_shap &lt;- ggplot(
   )
 
 print(p_shap)</code></pre>
-<p><img src="figure/analysis.Rmd/shap-genotype-profiles-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/analysis.Rmd/shap-genotype-profiles-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-shap-genotype-profiles-1">
 Past versions of shap-genotype-profiles-1.png
@@ -1678,7 +1704,7 @@ each component.</p>
   )
 
 print(p_ammi)</code></pre>
-<p><img src="figure/analysis.Rmd/ammi-biplot-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/analysis.Rmd/ammi-biplot-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-ammi-biplot-1">
 Past versions of ammi-biplot-1.png
@@ -1739,7 +1765,7 @@ across environments.</p>
   )
 
 print(figura_final)</code></pre>
-<p><img src="figure/analysis.Rmd/joint-ammi-shap-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/analysis.Rmd/joint-ammi-shap-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-joint-ammi-shap-1">
 Past versions of joint-ammi-shap-1.png
@@ -2009,7 +2035,7 @@ preferred position under every criterion.</p>
       l = 25
     )
   )</code></pre>
-<p><img src="figure/analysis.Rmd/rank-dynamics-plot-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p><img src="figure/analysis.Rmd/rank-dynamics-plot-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-rank-dynamics-plot-1">
 Past versions of rank-dynamics-plot-1.png
@@ -2152,7 +2178,7 @@ while the point fill represents the grain-yield ranking.</p>
   )
 
 print(p_stability_concordance)</code></pre>
-<p><img src="figure/analysis.Rmd/stability-concordance-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/analysis.Rmd/stability-concordance-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stability-concordance-1">
 Past versions of stability-concordance-1.png
@@ -2262,7 +2288,7 @@ corrplot::corrplot(
     1
   )
 )</code></pre>
-<p><img src="figure/analysis.Rmd/spearman-correlation-plot-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/analysis.Rmd/spearman-correlation-plot-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-spearman-correlation-plot-1">
 Past versions of spearman-correlation-plot-1.png
