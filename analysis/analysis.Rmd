@@ -159,7 +159,7 @@ head(env_indices)
 
 The Random Forest model is evaluated through leave-one-environment-out cross-validation. At each iteration, one environment is reserved for prediction, while the remaining environments are used for model fitting.
 
-```{r random-forest-loeo, message=FALSE, warning=FALSE}
+```{r random-forest-loeo, eval=FALSE, message=FALSE, warning=FALSE}
 set.seed(42)
 
 ambientes <- unique(df_ml$ENV)
