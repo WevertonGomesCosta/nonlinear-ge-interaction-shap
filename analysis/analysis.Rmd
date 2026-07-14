@@ -193,6 +193,38 @@ for (env_teste in ambientes) {
 }
 ```
 
+```{r load-random-forest-validation, include=FALSE}
+validation_file <- "output/random_forest_loeo_predictions.rds"
+
+stopifnot(
+  file.exists(validation_file)
+)
+
+predicoes_cv <- readRDS(
+  validation_file
+)
+
+stopifnot(
+  identical(
+    dim(predicoes_cv),
+    c(180L, 5L)
+  ),
+  identical(
+    names(predicoes_cv),
+    c(
+      "GEN",
+      "ENV",
+      "GY",
+      "ENV_INDEX",
+      "Pred_GY"
+    )
+  ),
+  nlevels(predicoes_cv$GEN) == 9L,
+  nlevels(predicoes_cv$ENV) == 20L,
+  !anyNA(predicoes_cv)
+)
+```
+
 ## Predictive metrics
 
 Predictive performance is summarized using the cross-validated coefficient of determination, the Pearson correlation between observed and predicted grain yield, and the root mean squared error.
@@ -246,7 +278,7 @@ cat(
 
 The final Random Forest model is fitted using the complete analytical data set. Grain yield is modeled as a function of genotype and the continuous environmental index.
 
-```{r final-random-forest, message=FALSE, warning=FALSE}
+```{r final-random-forest, eval=FALSE, message=FALSE, warning=FALSE}
 set.seed(42)
 
 rf_model <- randomForest(
@@ -262,7 +294,7 @@ rf_model <- randomForest(
 
 The Random Forest model is connected to the DALEX framework using the genotype and environmental-index predictors. The response variable supplied to the explainer is the observed mean grain yield.
 
-```{r dalex-explainer, message=FALSE, warning=FALSE}
+```{r dalex-explainer, eval=FALSE, message=FALSE, warning=FALSE}
 explainer_rf <- explain(
   model = rf_model,
   data = df_ml[, c("GEN", "ENV_INDEX")],
@@ -275,7 +307,7 @@ explainer_rf <- explain(
 
 SHAP contributions are calculated for every genotype-by-environment observation. For each observation, the mean contribution associated with genotype and environmental index is extracted from the SHAP decomposition.
 
-```{r shap-contributions, message=FALSE, warning=FALSE}
+```{r shap-contributions, eval=FALSE, message=FALSE, warning=FALSE}
 shap_list <- list()
 
 cat("Starting SHAP contribution calculation...\n")
@@ -314,6 +346,43 @@ df_results <- cbind(
   df_shap_final
 )
 
+head(df_results)
+```
+
+```{r load-shap-results, include=FALSE}
+shap_file <- "output/shap_results.rds"
+
+stopifnot(
+  file.exists(shap_file)
+)
+
+df_results <- readRDS(
+  shap_file
+)
+
+stopifnot(
+  identical(
+    dim(df_results),
+    c(180L, 6L)
+  ),
+  identical(
+    names(df_results),
+    c(
+      "GEN",
+      "ENV",
+      "GY",
+      "ENV_INDEX",
+      "SHAP_GEN",
+      "SHAP_ENV"
+    )
+  ),
+  nlevels(df_results$GEN) == 9L,
+  nlevels(df_results$ENV) == 20L,
+  !anyNA(df_results)
+)
+```
+
+```{r shap-results-preview}
 head(df_results)
 ```
 
