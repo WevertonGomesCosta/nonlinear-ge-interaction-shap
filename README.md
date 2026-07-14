@@ -1,26 +1,43 @@
 # Non-Linear Modeling of Genotype × Environment Interaction
 
-This repository provides a reproducible `workflowr` tutorial associated with the study **“Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition.”**
+This repository provides the reproducible analytical workflow associated with the study **“Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition.”**
+
+## Authors
+
+**Moyses Nascimento**  
+Associate Professor  
+Department of Statistics — Federal University of Viçosa  
+[moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
+
+**Weverton Gomes da Costa**  
+Postdoctoral Researcher  
+Department of Statistics — Federal University of Viçosa  
+[weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)
 
 ## Overview
 
 Genotype-by-environment interaction is a central component of multi-environment trial analysis because genotypes may respond differently across environmental conditions.
 
-This project presents an analytical workflow that combines tree-based machine learning, Shapley Additive Explanations, and traditional AMMI-based methods to evaluate genotype performance, adaptability, and stability.
+This project combines tree-based machine learning, Shapley Additive Explanations, and AMMI-based methods to evaluate genotype performance, adaptability, responsiveness, and stability.
 
-The repository is organized as a reproducible tutorial in which the complete analytical pipeline is presented in an R Markdown document.
+The complete analytical workflow is presented in a single R Markdown document and published as a version-controlled `workflowr` research website.
 
-## Objectives
+## Analytical workflow
 
-The analytical workflow is structured to:
+The analysis includes:
 
-1. summarize phenotypic performance across genotypes and environments;
-2. fit and validate a tree-based machine learning model;
-3. obtain local feature contributions through SHAP decomposition;
-4. perform AMMI decomposition of genotype-by-environment interaction;
-5. calculate stability and simultaneous selection indices;
-6. compare genotype rankings across linear and non-linear frameworks;
-7. evaluate rank concordance using Spearman correlation.
+1. import and preparation of multi-environment trial data;
+2. visualization of phenotypic performance;
+3. calculation of the environmental index;
+4. Random Forest fitting and leave-one-environment-out validation;
+5. SHAP decomposition of model predictions;
+6. AMMI decomposition of genotype-by-environment interaction;
+7. calculation of the AMMI Stability Value;
+8. calculation of SHAP effect and stability measures;
+9. simultaneous selection and genotype ranking;
+10. visualization of genotype-rank dynamics;
+11. concordance between linear and non-linear stability rankings;
+12. Spearman rank correlation among selection criteria.
 
 ## Data
 
@@ -29,6 +46,7 @@ The analysis uses a maize multi-environment trial data set containing:
 - 9 genotypes;
 - 20 environments;
 - 4 replicates per genotype-by-environment combination;
+- 720 original observations;
 - grain yield measured in kilograms per hectare.
 
 The original data file is stored in:
@@ -36,6 +54,15 @@ The original data file is stored in:
 ```text
 data/maize.txt
 ```
+
+The variables are:
+
+| Variable | Description |
+|---|---|
+| `ENV` | Environment identifier |
+| `GEN` | Genotype identifier |
+| `REP` | Replicate identifier |
+| `GY` | Grain yield in kilograms per hectare |
 
 ## Repository structure
 
@@ -49,40 +76,70 @@ nonlinear-ge-interaction-shap/
 │   └── license.Rmd
 ├── code/
 ├── data/
+│   └── maize.txt
 ├── docs/
 ├── output/
+│   ├── random_forest_loeo_predictions.rds
+│   └── shap_results.rds
 ├── README.md
 ├── _workflowr.yml
 └── nonlinear-ge-interaction-shap.Rproj
 ```
 
-The complete analytical pipeline is organized in:
+## Reproducible analysis
+
+The complete analytical pipeline is available in:
 
 ```text
 analysis/analysis.Rmd
 ```
 
-The page presents the analytical code, results, figures, and computational information in their execution order.
+All analytical code is displayed directly in the analysis page.
 
-## Reproducibility
+The computationally intensive Random Forest validation and SHAP calculations are preserved as visible code with `eval = FALSE`. Their previously calculated and validated results are stored as version-controlled R objects:
 
-The project is managed with the `workflowr` R package. The framework combines:
+```text
+output/random_forest_loeo_predictions.rds
+output/shap_results.rds
+```
 
-- R Markdown documents;
-- Git version control;
-- reproducibility checks;
-- versioned results;
-- a static research website.
+Hidden loading chunks read these objects during routine website construction. This structure preserves the complete analytical procedure while avoiding repeated execution of computationally intensive steps.
 
-All analytical code will be displayed directly in the analysis page. No external analytical functions or hidden execution scripts are required to reproduce the workflow.
+The loaded objects are checked for:
+
+- file availability;
+- expected dimensions;
+- expected variable names;
+- genotype and environment factor levels;
+- absence of missing values.
 
 ## Website
 
-The project website is available at:
+Project website:
 
 ```text
 https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
 ```
+
+Complete analysis:
+
+```text
+https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/analysis.html
+```
+
+## Reproducibility framework
+
+The project is managed with the `workflowr` R package. The framework integrates:
+
+- R Markdown documents;
+- Git version control;
+- reproducibility checks;
+- recorded session information;
+- relative file paths;
+- versioned figures and results;
+- a static research website.
+
+Each published page is connected to the Git commit containing the corresponding analytical source code.
 
 ## Software requirements
 
@@ -91,8 +148,16 @@ The analysis requires:
 - R;
 - RStudio or another R Markdown-compatible environment;
 - Git;
-- workflowr;
-- the R packages listed in the analysis page.
+- `workflowr`;
+- `ggplot2`;
+- `dplyr`;
+- `tidyr`;
+- `randomForest`;
+- `DALEX`;
+- `patchwork`;
+- `ggrepel`;
+- `corrplot`;
+- `viridisLite`.
 
 ## Reproducing the project
 
@@ -102,16 +167,24 @@ Clone the repository:
 git clone https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap.git
 ```
 
-Open:
+Open the R project:
 
 ```text
 nonlinear-ge-interaction-shap.Rproj
 ```
 
-Build the website from the R console:
+Build the complete website:
 
 ```r
 workflowr::wflow_build()
+```
+
+Build only the analytical page:
+
+```r
+workflowr::wflow_build(
+  "analysis/analysis.Rmd"
+)
 ```
 
 View the local website:
@@ -119,3 +192,33 @@ View the local website:
 ```r
 workflowr::wflow_view()
 ```
+
+## Project context
+
+This work is developed in connection with the [LICAE Laboratory](https://www.licae.ufv.br/) and the Department of Statistics at the Federal University of Viçosa.
+
+## License
+
+Except where otherwise indicated, the materials in this repository are distributed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License — CC BY-NC-SA 4.0**.
+
+The complete licensing conditions are available on the project website:
+
+```text
+https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/license.html
+```
+
+## Suggested citation
+
+Nascimento, M. and Costa, W. G. (2026). *Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition*. Workflowr project website and analytical repository. Available at: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
+
+When scientific methods, results, or interpretations from the associated manuscript are reused, the final published manuscript should also be cited.
+
+## Contact
+
+**Moyses Nascimento**  
+Department of Statistics — Federal University of Viçosa  
+[moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
+
+**Weverton Gomes da Costa**  
+Department of Statistics — Federal University of Viçosa  
+[weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)
