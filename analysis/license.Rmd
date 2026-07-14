@@ -1,45 +1,75 @@
 ---
 title: "License"
+author:
+  - Nascimento, M.^[Moyses Nascimento, Associate Professor, Department of Statistics - Federal University of Viçosa, moysesnascim@ufv.br]
+  - Costa, W. G.^[Weverton Gomes da Costa, Postdoctoral Researcher, Department of Statistics - Federal University of Viçosa, weverton.costa@ufv.br]
+date: "`r Sys.Date()`"
 site: workflowr::wflow_site
+url: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: FALSE
 editor_options:
   chunk_output_type: console
+github-repo: wevertongomescosta/nonlinear-ge-interaction-shap
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE
+)
+```
 
 # License
 
-Except where otherwise indicated, the materials in this repository are licensed under the:
+Except where otherwise indicated, the materials in this repository are distributed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License — CC BY-NC-SA 4.0**.
 
-## Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+## Permissions
 
-Under this license, the materials may be shared and adapted under the following conditions:
+Under this license, the material may be:
 
-### Attribution
+- **shared** — copied and redistributed in any medium or format;
+- **adapted** — remixed, transformed, and used as the basis for derivative material.
 
-Appropriate credit must be provided, a link to the license must be included, and any modifications must be indicated.
+## Conditions
 
-### NonCommercial
+Reuse is permitted under the following conditions:
 
-The materials may not be used for commercial purposes.
+- **Attribution** — appropriate credit must be provided, a link to the license must be included, and modifications must be identified;
+- **NonCommercial** — the material may not be used for commercial purposes;
+- **ShareAlike** — adapted material must be distributed under the same license;
+- **No additional restrictions** — legal or technological restrictions may not prevent others from exercising the rights granted by the license.
 
-### ShareAlike
+The attribution must not imply endorsement by the original authors.
 
-Adapted materials must be distributed under the same license.
+## Full license text
 
-### No additional restrictions
+The official legal text is available at:
 
-No legal or technological restrictions may be applied that prevent others from exercising the rights granted by the license.
+[https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
 
-The complete license terms are available at:
+## Suggested citation
 
-[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+Nascimento, M. and Costa, W. G. (2026). *Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition*. Workflowr project website and analytical repository. Available at: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
 
-## Citation
-
-When reusing the analytical workflow, data organization, figures, or tutorial materials, the repository and the associated manuscript should be cited.
+When scientific methods, results, or interpretations from the associated manuscript are reused, the manuscript should also be cited using its final bibliographic information.
 
 ## Third-party materials
 
-Files or materials that contain a separate attribution, citation, or licensing statement remain subject to their original terms.
+Files or materials containing separate attribution, citation, or licensing statements remain subject to their original terms.
+
+## Disclaimer
+
+The analytical materials are provided for research, teaching, and reproducibility purposes. Users are responsible for verifying their suitability for a particular application.
+
+## Contact
+
+**Moyses Nascimento**  
+Associate Professor — Department of Statistics — Federal University of Viçosa  
+[moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
+
+**Weverton Gomes da Costa**  
+Postdoctoral Researcher — Department of Statistics — Federal University of Viçosa  
+[weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)

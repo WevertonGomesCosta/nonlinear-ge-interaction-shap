@@ -1,12 +1,18 @@
 ---
 title: "Reproducible Analysis"
+author:
+  - Nascimento, M.^[Moyses Nascimento, Associate Professor, Department of Statistics - Federal University of Viçosa, moysesnascim@ufv.br]
+  - Costa, W. G.^[Weverton Gomes da Costa, Postdoctoral Researcher, Department of Statistics - Federal University of Viçosa, weverton.costa@ufv.br]
+date: "`r Sys.Date()`"
 site: workflowr::wflow_site
+url: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
 output:
   workflowr::wflow_html:
     toc: true
     toc_float: true
 editor_options:
   chunk_output_type: console
+github-repo: wevertongomescosta/nonlinear-ge-interaction-shap
 ---
 
 # Overview

@@ -1,51 +1,65 @@
 ---
-title: "About"
+title: "About the Project"
+author:
+  - Nascimento, M.^[Moyses Nascimento, Associate Professor, Department of Statistics - Federal University of Viçosa, moysesnascim@ufv.br]
+  - Costa, W. G.^[Weverton Gomes da Costa, Postdoctoral Researcher, Department of Statistics - Federal University of Viçosa, weverton.costa@ufv.br]
+date: "`r Sys.Date()`"
 site: workflowr::wflow_site
+url: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: FALSE
 editor_options:
   chunk_output_type: console
+github-repo: wevertongomescosta/nonlinear-ge-interaction-shap
 ---
 
-# About This Project
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE
+)
+```
 
-## Background
+# About the Project
 
-Multi-environment trials are used to evaluate the performance of genotypes across contrasting environmental conditions.
+## Scientific context
 
-A relevant component of these trials is genotype-by-environment interaction, which occurs when genotypes present different response patterns across environments. The evaluation of this interaction supports the identification of productive, adapted, responsive, and stable genotypes.
+Multi-environment trials are used to evaluate genotype performance under contrasting environmental conditions.
 
-Traditional approaches such as the Additive Main Effects and Multiplicative Interaction model use linear and multiplicative structures to describe genotype-by-environment interaction.
+Genotype-by-environment interaction occurs when genotypes respond differently to environmental variation. Its analysis supports the identification of productive, adapted, responsive, and stable genotypes.
 
-Tree-based machine learning algorithms provide an additional framework for modeling complex response patterns. Shapley Additive Explanations can then be used to decompose model predictions and quantify the contribution of the model features to individual predictions.
+The Additive Main Effects and Multiplicative Interaction model represents interaction through a bilinear decomposition based on interaction principal components. Tree-based learning algorithms provide a complementary framework for representing non-linear response structures.
 
-## Tutorial objective
+Shapley Additive Explanations are used to decompose Random Forest predictions and quantify the contribution of genotype and environmental information to individual predictions.
 
-The objective of this tutorial is to present a reproducible analytical pipeline for evaluating genotype-by-environment interaction through:
+## Project objective
 
-- tree-based machine learning;
-- Random Forest prediction;
+The objective of this project is to provide a reproducible analytical workflow for investigating genotype-by-environment interaction through the joint use of:
+
+- Random Forest modeling;
+- leave-one-environment-out validation;
 - SHAP decomposition;
 - AMMI analysis;
-- stability indices;
-- simultaneous selection;
-- genotype ranking;
-- methodological concordance.
+- AMMI Stability Value;
+- SHAP effect and stability measures;
+- Simultaneous Selection Index;
+- genotype-rank dynamics;
+- stability concordance;
+- Spearman rank correlation.
 
-The analytical sequence follows the methods and results presented in the associated manuscript.
+The analytical sequence follows the methods and results considered in the associated manuscript.
 
 ## Data set
 
-The data set contains maize grain-yield observations collected from:
+The maize data set contains grain-yield observations from:
 
 - nine genotypes;
 - twenty environments;
 - four replicates per genotype-by-environment combination.
 
 The complete experiment contains 720 observations.
-
-The variables are:
 
 | Variable | Description |
 |---|---|
@@ -54,33 +68,68 @@ The variables are:
 | `REP` | Replicate identifier |
 | `GY` | Grain yield in kilograms per hectare |
 
+The replicate-level observations are summarized by genotype and environment before the predictive and interaction analyses.
+
 ## Analytical organization
 
-The reproducible analysis is organized sequentially into:
+The complete pipeline is presented in a single sequential analysis page containing:
 
-1. computational setup;
-2. package loading;
-3. data import;
-4. data preparation;
-5. descriptive visualization;
-6. Random Forest fitting and validation;
-7. SHAP decomposition;
-8. AMMI decomposition;
-9. stability and selection indices;
-10. genotype ranking;
-11. rank concordance;
-12. correlation analysis.
+1. package loading;
+2. data import and preparation;
+3. phenotypic visualization;
+4. environmental-index calculation;
+5. Random Forest validation;
+6. final Random Forest modeling;
+7. DALEX model explanation;
+8. SHAP contribution calculation;
+9. AMMI interaction decomposition;
+10. stability and simultaneous selection indices;
+11. genotype rankings;
+12. rank-dynamics visualization;
+13. stability-concordance analysis;
+14. Spearman rank-correlation analysis.
 
-The complete code is presented directly in the R Markdown analysis page. The organization prioritizes transparency and direct access to every analytical step.
+All executable analytical code is displayed directly in the R Markdown document. Computationally intensive results may be loaded from versioned output objects after their original calculation has been documented and validated.
 
 ## Reproducibility framework
 
 The project uses `workflowr` to integrate:
 
 - literate programming;
-- version control;
+- Git version control;
 - computational documentation;
 - reproducibility checks;
+- versioned figures and results;
 - website publication.
 
-Each published analysis page is connected to a specific Git commit, allowing the source code and rendered results to be tracked together.
+Each published page is associated with a specific Git commit.
+
+## Project context
+
+This work is developed in connection with the [LICAE Laboratory](https://www.licae.ufv.br/) and the Department of Statistics at the Federal University of Viçosa.
+
+## Authors
+
+**Moyses Nascimento**  
+Associate Professor  
+Department of Statistics — Federal University of Viçosa
+
+**Weverton Gomes da Costa**  
+Postdoctoral Researcher  
+Department of Statistics — Federal University of Viçosa
+
+## Repository
+
+Official repository:  
+[https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap](https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap)
+
+Project website:  
+[https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/](https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/)
+
+## Contact
+
+**Moyses Nascimento**  
+[moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
+
+**Weverton Gomes da Costa**  
+[weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)

@@ -1,69 +1,99 @@
 ---
-title: "Home"
+title: "Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition"
+author:
+  - Nascimento, M.^[Moyses Nascimento, Associate Professor, Department of Statistics - Federal University of Viçosa, moysesnascim@ufv.br]
+  - Costa, W. G.^[Weverton Gomes da Costa, Postdoctoral Researcher, Department of Statistics - Federal University of Viçosa, weverton.costa@ufv.br]
+date: "`r Sys.Date()`"
 site: workflowr::wflow_site
+url: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: FALSE
 editor_options:
   chunk_output_type: console
+github-repo: wevertongomescosta/nonlinear-ge-interaction-shap
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE
+)
+```
 
 # Non-Linear Modeling of Genotype × Environment Interaction
 
-## Overview
+This website documents the reproducible analytical workflow associated with the study **“Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition.”**
 
-This website presents a reproducible tutorial for modeling genotype-by-environment interaction using tree-based learning algorithms and Shapley decomposition.
+The project integrates Random Forest modeling, Shapley Additive Explanations, AMMI decomposition, stability indices, simultaneous selection, and genotype-rank comparison in multi-environment trials.
 
-The analytical workflow integrates machine learning interpretability with traditional biometric methods for evaluating genotype performance, adaptability, and stability in multi-environment trials.
+## Scientific scope
 
-## Tutorial scope
+Genotype-by-environment interaction occurs when genotypes present different response patterns across environmental conditions. Its evaluation is central to identifying genotypes that combine grain-yield performance, adaptability, responsiveness, and stability.
 
-The tutorial covers the complete sequence used in the associated analysis:
+Traditional biometric approaches such as AMMI describe interaction through linear and multiplicative components. Tree-based learning algorithms provide an additional framework for representing complex response patterns, while SHAP decomposition quantifies genotype- and environment-specific contributions to model predictions.
+
+The project compares these complementary representations through a unified and reproducible workflow.
+
+## Analytical workflow
+
+The complete analysis includes:
 
 1. import and preparation of multi-environment trial data;
 2. visualization of phenotypic performance;
 3. calculation of the environmental index;
-4. fitting and validation of a Random Forest model;
+4. Random Forest fitting and leave-one-environment-out validation;
 5. SHAP decomposition of model predictions;
 6. AMMI decomposition of genotype-by-environment interaction;
-7. calculation of stability and simultaneous selection indices;
-8. comparison of genotype rankings;
-9. concordance analysis between linear and non-linear approaches;
-10. Spearman rank correlation among selection criteria.
+7. calculation of AMMI and SHAP stability measures;
+8. simultaneous selection and genotype ranking;
+9. visualization of rank dynamics;
+10. concordance between linear and non-linear stability rankings;
+11. Spearman rank correlation among selection criteria.
 
-All analytical code will be displayed directly in a single R Markdown page so that the complete pipeline can be inspected and reproduced in its execution order.
+The full analytical code, outputs, tables, and figures are available on the [Reproducible Analysis](analysis.html) page.
 
 ## Data set
 
-The tutorial uses a maize multi-environment trial data set with nine genotypes evaluated across twenty environments.
+The analysis uses a maize multi-environment trial data set containing:
 
-Each genotype-by-environment combination contains four replicates, and the analyzed trait is grain yield measured in kilograms per hectare.
+- nine genotypes;
+- twenty environments;
+- four replicates per genotype-by-environment combination;
+- 720 original observations;
+- grain yield measured in kilograms per hectare.
 
-## Analytical frameworks
+## Website organization
 
-The project includes the following analytical components:
+The website contains four pages:
 
-- Random Forest;
-- Shapley Additive Explanations;
-- AMMI analysis;
-- AMMI Stability Value;
-- Simultaneous Selection Index;
-- genotype ranking;
-- rank concordance;
-- Spearman correlation.
-
-## Website structure
-
-The website currently contains the following pages:
-
-- **Home** — general project overview;
-- **About** — methodological context and tutorial organization;
-- **License** — terms of use and redistribution.
-
-The complete reproducible analysis will be added after the initial website structure is finalized.
+1. **Home** — project overview and analytical scope;
+2. **Analysis** — complete reproducible analytical pipeline;
+3. **About** — scientific context, project organization, authorship, and institutional information;
+4. **License** — conditions for reuse, attribution, and citation.
 
 ## Reproducibility
 
-The repository is managed with `workflowr`, combining R Markdown, Git version control, reproducibility checks, and a versioned research website.
+The repository is managed with `workflowr`, integrating R Markdown, Git version control, computational documentation, reproducibility checks, and website publication.
 
-The source code and the rendered results are maintained in the same version-controlled project.
+Each published page is connected to a specific Git commit, allowing the analytical source code and rendered results to be tracked together.
+
+## Project context
+
+This work is developed in connection with the [LICAE Laboratory](https://www.licae.ufv.br/) and the Department of Statistics at the Federal University of Viçosa.
+
+## Repository
+
+Official repository:  
+[https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap](https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap)
+
+## Contact
+
+**Moyses Nascimento**  
+Associate Professor — Department of Statistics — Federal University of Viçosa  
+[moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
+
+**Weverton Gomes da Costa**  
+Postdoctoral Researcher — Department of Statistics — Federal University of Viçosa  
+[weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)
