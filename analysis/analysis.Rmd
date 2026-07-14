@@ -23,14 +23,15 @@ The workflow combines phenotypic evaluation, Random Forest modeling, Shapley Add
 
 All analytical code is presented directly in this R Markdown document and follows the order required to reproduce the analysis.
 
-```{r setup, eval=FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
   warning = FALSE,
   message = FALSE,
   fig.align = "center",
-  fig.width = "100%",
-  fig.height = 6
+  fig.width = 10,
+  fig.height = 6,
+  out.width = "100%"
 )
 ```
 
