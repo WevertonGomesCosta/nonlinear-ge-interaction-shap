@@ -504,23 +504,20 @@ p_shap <- ggplot(
     size = 2,
     alpha = 0.9
   ) +
-  scale_color_viridis_d(
-    option = "viridis"
+  scale_color_manual(
+    values = as.vector(
+      pals::glasbey(9)
+    )
   ) +
   theme_classic(
     base_size = 12
   ) +
   labs(
-    title = "",
-    subtitle = "",
+    title = " ",
+    subtitle = " ",
     x = "Environments",
-    y = expression(
-      paste(
-        "Genotype SHAP Value (G",
-        times,
-        "E Effect) in kg ",
-        ha^-1
-      )
+    y = bquote(
+      "Genotype SHAP Value (G" %*% "E Effect) in kg " ~ ha^-1
     ),
     color = "Genotypes"
   ) +
@@ -533,7 +530,9 @@ p_shap <- ggplot(
     plot.subtitle = element_text(
       size = 10,
       color = "gray30",
-      margin = ggplot2::margin(b = 12)
+      margin = ggplot2::margin(
+        b = 12
+      )
     ),
     axis.title = element_text(
       face = "plain",
@@ -755,8 +754,10 @@ p_ammi <- ggplot() +
     size = 3.5,
     show.legend = FALSE
   ) +
-  scale_color_viridis_d(
-    option = "viridis"
+  scale_color_manual(
+    values = as.vector(
+      pals::glasbey(9)
+    )
   ) +
   theme_classic(
     base_size = 12
