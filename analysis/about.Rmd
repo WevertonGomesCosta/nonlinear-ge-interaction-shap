@@ -47,7 +47,6 @@ The objective of this project is to provide a reproducible analytical workflow f
 - classical Simultaneous Selection Index;
 - SHAP-based Simultaneous Selection Index;
 - genotype-rank dynamics;
-- stability concordance;
 - Spearman rank correlation.
 
 The analytical sequence follows the methods and results considered in the associated manuscript.
@@ -77,18 +76,18 @@ The complete pipeline is presented in a single sequential analysis page containi
 
 1. package loading;
 2. data import and preparation;
-3. phenotypic visualization;
-4. environmental-index calculation;
-5. Random Forest validation;
-6. final Random Forest modeling;
-7. DALEX model explanation;
-8. SHAP contribution calculation;
-9. AMMI interaction decomposition;
-10. AMMI and SHAP stability measures;
-11. classical and SHAP-based simultaneous selection indices;
-12. genotype rankings across six selection criteria;
-13. rank-dynamics visualization;
-14. stability-concordance analysis;
+3. graphical representation of the leave-one-environment-out validation scheme;
+4. phenotypic visualization;
+5. environmental-index calculation;
+6. Random Forest validation;
+7. final Random Forest modeling;
+8. DALEX model explanation;
+9. SHAP contribution calculation;
+10. AMMI interaction decomposition;
+11. AMMI and SHAP stability measures;
+12. classical and SHAP-based simultaneous selection indices;
+13. genotype rankings across six selection criteria;
+14. rank-dynamics visualization;
 15. Spearman rank-correlation analysis.
 
 The complete analytical workflow is documented directly in the R Markdown analysis.

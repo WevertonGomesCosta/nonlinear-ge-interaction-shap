@@ -41,16 +41,16 @@ The project compares these complementary representations through a unified and r
 The complete analysis includes:
 
 1. import and preparation of multi-environment trial data;
-2. visualization of phenotypic performance;
-3. calculation of the environmental index;
-4. Random Forest fitting and leave-one-environment-out validation;
-5. SHAP decomposition of model predictions;
-6. AMMI decomposition of genotype-by-environment interaction;
-7. calculation of AMMI and SHAP stability measures;
-8. calculation of classical and SHAP-based simultaneous selection indices;
-9. genotype ranking across six selection criteria;
-10. visualization of genotype-rank dynamics;
-11. concordance between linear and non-linear stability rankings;
+2. graphical representation of the leave-one-environment-out validation scheme;
+3. visualization of phenotypic performance;
+4. calculation of the environmental index;
+5. Random Forest fitting and leave-one-environment-out validation;
+6. SHAP decomposition of model predictions;
+7. AMMI decomposition of genotype-by-environment interaction;
+8. calculation of AMMI and SHAP stability measures;
+9. calculation of classical and SHAP-based simultaneous selection indices;
+10. genotype ranking across six selection criteria;
+11. visualization of genotype-rank dynamics;
 12. Spearman rank correlation among the six selection criteria.
 
 The full analytical code, outputs, tables, and figures are available on the [Reproducible Analysis](analysis.html) page.
