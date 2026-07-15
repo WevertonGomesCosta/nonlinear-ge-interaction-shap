@@ -216,6 +216,30 @@ figure_1 <- (
 print(figure_1)
 ```
 
+# Environmental index
+
+The environmental index is calculated as the mean grain yield of all genotypes evaluated within each environment. This continuous variable represents the productive potential of each environment.
+
+```{r environmental-index}
+env_indices <- df_ml %>%
+  group_by(ENV) %>%
+  summarise(
+    ENV_INDEX = mean(
+      GY,
+      na.rm = TRUE
+    ),
+    .groups = "drop"
+  )
+
+df_ml <- df_ml %>%
+  left_join(
+    env_indices,
+    by = "ENV"
+  )
+
+head(env_indices)
+```
+
 # Random Forest modeling
 
 ## Leave-one-environment-out validation
