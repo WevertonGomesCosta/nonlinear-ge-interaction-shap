@@ -219,4 +219,3 @@ Department of Statistics — Federal University of Viçosa
 Laboratory of Computational Intelligence and Statistical Learning (LICAE)  
 Department of Statistics — Federal University of Viçosa  
 [weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)
-[weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)
