@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 
 This website documents the reproducible analytical workflow associated with the study **“Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition.”**
 
-The project integrates Random Forest modeling, Shapley Additive Explanations, AMMI decomposition, stability indices, simultaneous selection, and genotype-rank comparison in multi-environment trials.
+The project integrates Random Forest modeling, Shapley Additive Explanations, AMMI decomposition, stability indices, classical and SHAP-based simultaneous selection, and genotype-rank comparison in multi-environment trials.
 
 ## Scientific scope
 
@@ -47,10 +47,11 @@ The complete analysis includes:
 5. SHAP decomposition of model predictions;
 6. AMMI decomposition of genotype-by-environment interaction;
 7. calculation of AMMI and SHAP stability measures;
-8. simultaneous selection and genotype ranking;
-9. visualization of rank dynamics;
-10. concordance between linear and non-linear stability rankings;
-11. Spearman rank correlation among selection criteria.
+8. calculation of classical and SHAP-based simultaneous selection indices;
+9. genotype ranking across six selection criteria;
+10. visualization of genotype-rank dynamics;
+11. concordance between linear and non-linear stability rankings;
+12. Spearman rank correlation among the six selection criteria.
 
 The full analytical code, outputs, tables, and figures are available on the [Reproducible Analysis](analysis.html) page.
 
