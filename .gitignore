@@ -3,4 +3,6 @@
 .RData
 .Ruserdata
 *.docx
+*.pdf
 code/Codigo_SHAP_GE_10_07_23.txt
+code/Codigo_SHAP_GE_15_07_23.txt
