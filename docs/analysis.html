@@ -528,15 +528,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree0fcbdab724d36aa632b8d7039713a0f8b7360f99targetblank0fcbdaba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree3dc445e492e9d81600a533ed53239700452e002dtargetblank3dc445ea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/0fcbdab724d36aa632b8d7039713a0f8b7360f99" target="_blank">0fcbdab</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/3dc445e492e9d81600a533ed53239700452e002d" target="_blank">3dc445e</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree0fcbdab724d36aa632b8d7039713a0f8b7360f99targetblank0fcbdaba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree3dc445e492e9d81600a533ed53239700452e002dtargetblank3dc445ea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -546,7 +546,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/0fcbdab724d36aa632b8d7039713a0f8b7360f99" target="_blank">0fcbdab</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/3dc445e492e9d81600a533ed53239700452e002d" target="_blank">3dc445e</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -564,7 +564,9 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    code/Codigo_SHAP_GE_10_07_23.txt
     Ignored:    code/Codigo_SHAP_GE_15_07_23.txt
+    Ignored:    code/Script_15-07.txt
     Ignored:    data/Artigo_Completo.pdf
+    Ignored:    data/Complex and Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition.docx
     Ignored:    data/Manuscript_MN_NE_ACCN(Inglês) (1).docx
     Ignored:    data/Manuscript_MN_NE_ACCN.docx
 
@@ -611,6 +613,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/3dc445e492e9d81600a533ed53239700452e002d/analysis/analysis.Rmd" target="_blank">3dc445e</a>
+</td>
+<td>
+Weverton Gomes da Costa
+</td>
+<td>
+2026-07-15
+</td>
+<td>
+Update analysis for revised five-figure workflow
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/5dde84b9dde999aeb8ca35132cd0f5e0680a2d41/docs/analysis.html" target="_blank">5dde84b</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-15
+</td>
+<td>
+Rebuild analysis with committed source
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1279,19 +1315,17 @@ and follows the order required to reproduce the analysis.</p>
 <div id="required-packages" class="section level1">
 <h1>Required packages</h1>
 <p>The following packages are used for data manipulation, graphical
-visualization, Random Forest modeling, SHAP decomposition, composite
-figure construction, genotype-rank visualization, and rank-correlation
-analysis.</p>
+visualization, Random Forest modeling, SHAP decomposition, faceted scale
+control, genotype-rank visualization, and rank-correlation analysis.</p>
 <pre class="r"><code>library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(randomForest)
 library(DALEX)
 library(iBreakDown)
-library(patchwork)
-library(ggrepel)
-library(corrplot)
-library(pals)</code></pre>
+library(pals)
+library(ggh4x)
+library(ggcorrplot)</code></pre>
 </div>
 <div id="data-import" class="section level1">
 <h1>Data import</h1>
@@ -1326,81 +1360,154 @@ for each genotype-by-environment combination.</p>
 df_ml$ENV &lt;- as.factor(df_ml$ENV)
 df_ml$GEN &lt;- as.factor(df_ml$GEN)</code></pre>
 </div>
-<div id="phenotypic-performance" class="section level1">
-<h1>Phenotypic performance</h1>
-<p>The distribution of mean grain yield is represented jointly across
-environments and genotypes.</p>
-<p>Panel A displays the environmental distributions. Each jittered point
-represents the mean performance of one genotype within an environment.
-Panel B displays the marginal genotype distributions, with each point
-corresponding to the mean performance of one genotype in one
-environment.</p>
-<p>The boxplot outliers are not displayed separately because all
-genotype-by-environment means are already represented by the jittered
-points.</p>
-<pre class="r"><code>p_env &lt;- ggplot(
-  df_ml,
+<div id="leave-one-environment-out-validation-scheme"
+class="section level1">
+<h1>Leave-one-environment-out validation scheme</h1>
+<p>The leave-one-environment-out design uses each environment once as
+the validation environment. The diagonal cells identify the environment
+excluded in each iteration, while the remaining environments are
+retained for model fitting.</p>
+<pre class="r"><code>loeo_scheme &lt;- tidyr::expand_grid(
+  Iteration_number = seq_len(20),
+  Environment_number = seq_len(20)
+) %&gt;%
+  mutate(
+    Value = as.numeric(
+      Iteration_number == Environment_number
+    ),
+    Iteration = factor(
+      paste0(&quot;Iter&quot;, Iteration_number),
+      levels = rev(
+        paste0(&quot;Iter&quot;, seq_len(20))
+      )
+    ),
+    Environment = factor(
+      paste0(&quot;Env&quot;, Environment_number),
+      levels = paste0(
+        &quot;Env&quot;,
+        seq_len(20)
+      )
+    )
+  )
+
+figure_1 &lt;- ggplot(
+  loeo_scheme,
   aes(
-    x = ENV,
-    y = GY,
-    fill = ENV
+    x = Environment,
+    y = Iteration,
+    fill = Value
   )
 ) +
-  geom_boxplot(
-    alpha = 0.75,
-    outlier.shape = NA,
-    linewidth = 0.4
+  geom_tile(
+    color = &quot;white&quot;,
+    linewidth = 0.1,
+    alpha = 0.5
   ) +
-  geom_jitter(
-    width = 0.15,
-    alpha = 0.4,
-    color = &quot;black&quot;,
-    size = 1.2
-  ) +
-  scale_fill_manual(
-    values = as.vector(
-      pals::glasbey(20)
-    )
-  ) +
-  theme_classic(
-    base_size = 12
+  scale_fill_gradient(
+    low = &quot;#4ADC36&quot;,
+    high = &quot;#DB241F&quot;,
+    guide = &quot;none&quot;
   ) +
   labs(
     x = &quot;Environments&quot;,
-    y = expression(
-      paste(
-        &quot;Grain Yield (GY) in kg &quot;,
-        ha^-1
-      )
-    )
+    y = &quot;Iterations&quot;
   ) +
   theme(
+    panel.background = element_blank(),
+    panel.grid = element_blank(),
     legend.position = &quot;none&quot;,
-    axis.line = element_line(
+    plot.margin = ggplot2::margin(
+      t = 2,
+      r = 0,
+      b = 0,
+      l = 0
+    ),
+    axis.line = element_blank(),
+    axis.text.y = element_text(
+      size = 7,
+      angle = 0,
       color = &quot;black&quot;,
-      linewidth = 0.5
+      family = &quot;serif&quot;
     ),
     axis.text.x = element_text(
+      size = 7,
+      angle = 90,
+      vjust = 0.5,
+      hjust = 0.5,
       color = &quot;black&quot;,
-      size = 9
+      family = &quot;serif&quot;
     ),
-    axis.text.y = element_text(
+    axis.title.y = element_text(
+      size = 12,
       color = &quot;black&quot;,
-      size = 9
+      family = &quot;serif&quot;
     ),
-    axis.title = element_text(
-      size = 11
-    )
+    axis.title.x = element_text(
+      size = 10,
+      color = &quot;black&quot;,
+      family = &quot;serif&quot;
+    ),
+    axis.ticks = element_blank()
   )
 
-p_gen &lt;- ggplot(
-  df_ml,
+print(figure_1)</code></pre>
+<p><img src="figure/analysis.Rmd/loeo-validation-scheme-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="phenotypic-performance" class="section level1">
+<h1>Phenotypic performance</h1>
+<p>The distribution of mean grain yield is represented in two vertically
+arranged panels. Panel A displays the environmental distributions, and
+Panel B displays the genotype distributions. Every jittered point
+represents one genotype-by-environment mean.</p>
+<p>The boxplot outliers are not displayed separately because all
+genotype-by-environment means are already represented by the jittered
+points.</p>
+<pre class="r"><code>phenotypic_plot_data &lt;- bind_rows(
+  df_ml %&gt;%
+    transmute(
+      facet = &quot;A&quot;,
+      Category = factor(
+        as.character(ENV),
+        levels = as.character(seq_len(20))
+      ),
+      GY = GY
+    ),
+  df_ml %&gt;%
+    transmute(
+      facet = &quot;B&quot;,
+      Category = factor(
+        as.character(GEN),
+        levels = as.character(seq_len(20))
+      ),
+      GY = GY
+    )
+)
+
+phenotypic_titles &lt;- data.frame(
+  facet = c(&quot;A&quot;, &quot;B&quot;),
+  Category = factor(
+    c(&quot;10&quot;, &quot;5&quot;),
+    levels = as.character(seq_len(20))
+  ),
+  x_title = c(
+    &quot;Environments&quot;,
+    &quot;Genotypes&quot;
+  )
+)
+
+figure_2 &lt;- ggplot(
+  phenotypic_plot_data,
   aes(
-    x = GEN,
+    x = Category,
     y = GY,
-    fill = GEN
+    fill = Category
   )
 ) +
+  facet_wrap(
+    ~facet,
+    scales = &quot;free&quot;,
+    ncol = 1
+  ) +
   geom_boxplot(
     alpha = 0.75,
     outlier.shape = NA,
@@ -1412,16 +1519,32 @@ p_gen &lt;- ggplot(
     color = &quot;black&quot;,
     size = 1.2
   ) +
+  geom_text(
+    data = phenotypic_titles,
+    aes(
+      x = Category,
+      y = -Inf,
+      label = x_title
+    ),
+    inherit.aes = FALSE,
+    vjust = 3,
+    size = 3.5,
+    family = &quot;serif&quot;,
+    color = &quot;black&quot;
+  ) +
   scale_fill_manual(
-    values = as.vector(
-      pals::glasbey(9)
+    values = stats::setNames(
+      as.vector(
+        pals::glasbey(20)
+      ),
+      as.character(seq_len(20))
     )
   ) +
-  theme_classic(
-    base_size = 12
+  coord_cartesian(
+    clip = &quot;off&quot;
   ) +
   labs(
-    x = &quot;Genotypes&quot;,
+    x = &quot;&quot;,
     y = expression(
       paste(
         &quot;Grain Yield (GY) in kg &quot;,
@@ -1430,39 +1553,51 @@ p_gen &lt;- ggplot(
     )
   ) +
   theme(
-    legend.position = &quot;none&quot;,
-    axis.line = element_line(
+    strip.background = element_blank(),
+    panel.background = element_rect(
       color = &quot;black&quot;,
-      linewidth = 0.5
+      fill = &quot;white&quot;
     ),
-    axis.text.x = element_text(
-      color = &quot;black&quot;,
-      size = 9
+    panel.grid = element_blank(),
+    legend.position = &quot;none&quot;,
+    plot.margin = ggplot2::margin(
+      t = 2,
+      r = 0,
+      b = 8,
+      l = 0
+    ),
+    axis.line.x = element_blank(),
+    axis.line.y = element_line(
+      color = &quot;black&quot;
     ),
     axis.text.y = element_text(
+      size = 10,
+      angle = 0,
       color = &quot;black&quot;,
-      size = 9
+      family = &quot;serif&quot;
     ),
-    axis.title = element_text(
-      size = 11
+    axis.text.x = element_text(
+      size = 10,
+      angle = 0,
+      color = &quot;black&quot;,
+      family = &quot;serif&quot;
+    ),
+    axis.title.y = element_text(
+      size = 12,
+      color = &quot;black&quot;,
+      family = &quot;serif&quot;
+    ),
+    axis.title.x = element_blank(),
+    axis.ticks = element_blank(),
+    strip.text = element_text(
+      hjust = 0,
+      size = 9,
+      family = &quot;serif&quot;,
+      color = &quot;black&quot;
     )
   )
 
-figure_1 &lt;- (
-  p_env |
-    p_gen
-) +
-  patchwork::plot_layout(
-    widths = c(
-      1.5,
-      1
-    )
-  ) +
-  patchwork::plot_annotation(
-    tag_levels = &quot;A&quot;
-  )
-
-print(figure_1)</code></pre>
+print(figure_2)</code></pre>
 <p><img src="figure/analysis.Rmd/phenotypic-performance-figure-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-phenotypic-performance-figure-1">
@@ -1550,28 +1685,27 @@ predicoes_cv &lt;- data.frame()
 cat(&quot;Starting leave-one-environment-out cross-validation...\n&quot;)
 
 for (env_teste in ambientes) {
-  
   dados_treino &lt;- df_ml %&gt;%
     filter(
       ENV != env_teste
     )
-  
+
   dados_teste &lt;- df_ml %&gt;%
     filter(
       ENV == env_teste
     )
-  
+
   rf_fold &lt;- randomForest(
     GY ~ GEN + ENV_INDEX,
     data = dados_treino,
     ntree = 500
   )
-  
+
   dados_teste$Pred_GY &lt;- predict(
     rf_fold,
     newdata = dados_teste
   )
-  
+
   predicoes_cv &lt;- bind_rows(
     predicoes_cv,
     dados_teste
@@ -1697,7 +1831,6 @@ shap_list &lt;- vector(
 cat(&quot;Starting SHAP contribution calculation...\n&quot;)
 
 for (i in seq_len(nrow(df_ml))) {
-  
   obs &lt;- df_ml[
     i,
     c(
@@ -1705,14 +1838,14 @@ for (i in seq_len(nrow(df_ml))) {
       &quot;ENV_INDEX&quot;
     )
   ]
-  
+
   shap_obs &lt;- predict_parts(
     explainer = explainer_rf,
     new_observation = obs,
     type = &quot;shap&quot;,
     B = 25
   )
-  
+
   val_gen &lt;- shap_obs %&gt;%
     filter(
       variable_name == &quot;GEN&quot;
@@ -1722,7 +1855,7 @@ for (i in seq_len(nrow(df_ml))) {
       .groups = &quot;drop&quot;
     ) %&gt;%
     pull(SHAP_GEN)
-  
+
   val_env &lt;- shap_obs %&gt;%
     filter(
       variable_name == &quot;ENV_INDEX&quot;
@@ -1732,7 +1865,7 @@ for (i in seq_len(nrow(df_ml))) {
       .groups = &quot;drop&quot;
     ) %&gt;%
     pull(SHAP_ENV)
-  
+
   shap_list[[i]] &lt;- data.frame(
     SHAP_GEN = val_gen,
     SHAP_ENV = val_env
@@ -1775,152 +1908,6 @@ saveRDS(
 5 5     1     3165.     3613.    -27.5   -1349.
 6 6     1     4116.     3613.    321.    -1313.</code></pre>
 </div>
-<div id="genotype-response-profiles" class="section level2">
-<h2>Genotype response profiles</h2>
-<p>Genotype-specific SHAP contributions are represented across
-environments. Positive and negative values indicate the direction of the
-genotype contribution to the Random Forest prediction relative to the
-model reference value.</p>
-<pre class="r"><code>df_results$GEN &lt;- as.factor(df_results$GEN)
-df_results$ENV &lt;- as.factor(df_results$ENV)
-
-p_shap &lt;- ggplot(
-  df_results,
-  aes(
-    x = ENV,
-    y = SHAP_GEN,
-    group = GEN,
-    color = GEN
-  )
-) +
-  geom_hline(
-    yintercept = 0,
-    linetype = &quot;dashed&quot;,
-    color = &quot;gray60&quot;,
-    linewidth = 0.4
-  ) +
-  geom_line(
-    linewidth = 0.8,
-    alpha = 0.85
-  ) +
-  geom_point(
-    size = 2,
-    alpha = 0.9
-  ) +
-  scale_color_manual(
-    values = as.vector(
-      pals::glasbey(9)
-    )
-  ) +
-  theme_classic(
-    base_size = 12
-  ) +
-  labs(
-    title = &quot; &quot;,
-    subtitle = &quot; &quot;,
-    x = &quot;Environments&quot;,
-    y = bquote(
-      &quot;Genotype SHAP Value (G&quot; %*% &quot;E Effect) in kg &quot; ~ ha^-1
-    ),
-    color = &quot;Genotypes&quot;
-  ) +
-  theme(
-    plot.title = element_text(
-      face = &quot;bold&quot;,
-      size = 13,
-      hjust = 0
-    ),
-    plot.subtitle = element_text(
-      size = 10,
-      color = &quot;gray30&quot;,
-      margin = ggplot2::margin(
-        b = 12
-      )
-    ),
-    axis.title = element_text(
-      face = &quot;plain&quot;,
-      size = 11
-    ),
-    axis.text = element_text(
-      color = &quot;black&quot;,
-      size = 9
-    ),
-    legend.position = &quot;bottom&quot;,
-    legend.title = element_text(
-      face = &quot;bold&quot;,
-      size = 10
-    ),
-    legend.text = element_text(
-      size = 9
-    ),
-    axis.line = element_line(
-      color = &quot;black&quot;,
-      linewidth = 0.5
-    )
-  )
-
-print(p_shap)</code></pre>
-<p><img src="figure/analysis.Rmd/shap-genotype-profiles-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-shap-genotype-profiles-1">
-Past versions of shap-genotype-profiles-1.png
-</button>
-</p>
-<div id="fig-shap-genotype-profiles-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/458c0027fb0b59815c6eec87132090b2bf152f33/docs/figure/analysis.Rmd/shap-genotype-profiles-1.png" target="_blank">458c002</a>
-</td>
-<td>
-WevertonGomesCosta
-</td>
-<td>
-2026-07-15
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/59212d01e6dd4195ed211ece6ca6b8bd8a997493/docs/figure/analysis.Rmd/shap-genotype-profiles-1.png" target="_blank">59212d0</a>
-</td>
-<td>
-WevertonGomesCosta
-</td>
-<td>
-2026-07-15
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/95e3343d7ec5425ef90cb0beb27e0ec54353c3cb/docs/figure/analysis.Rmd/shap-genotype-profiles-1.png" target="_blank">95e3343</a>
-</td>
-<td>
-WevertonGomesCosta
-</td>
-<td>
-2026-07-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
 </div>
 <div id="ammi-analysis" class="section level1">
 <h1>AMMI analysis</h1>
@@ -1938,14 +1925,20 @@ grain-yield observations.</p>
 env_effects &lt;- df_results %&gt;%
   group_by(ENV) %&gt;%
   summarise(
-    m_env = mean(GY, na.rm = TRUE),
+    m_env = mean(
+      GY,
+      na.rm = TRUE
+    ),
     .groups = &quot;drop&quot;
   )
 
 gen_effects &lt;- df_results %&gt;%
   group_by(GEN) %&gt;%
   summarise(
-    m_gen = mean(GY, na.rm = TRUE),
+    m_gen = mean(
+      GY,
+      na.rm = TRUE
+    ),
     .groups = &quot;drop&quot;
   )
 
@@ -1972,7 +1965,9 @@ mat_int &lt;- df_int %&gt;%
     names_from = ENV,
     values_from = GE_effect
   ) %&gt;%
-  tibble::column_to_rownames(&quot;GEN&quot;) %&gt;%
+  tibble::column_to_rownames(
+    &quot;GEN&quot;
+  ) %&gt;%
   as.matrix()</code></pre>
 </div>
 <div id="singular-value-decomposition" class="section level2">
@@ -1981,7 +1976,9 @@ mat_int &lt;- df_int %&gt;%
 genotype-by-environment interaction matrix. The squared singular values
 are used to calculate the percentage of interaction variation
 represented by each component.</p>
-<pre class="r"><code>svd_ammi &lt;- svd(mat_int)
+<pre class="r"><code>svd_ammi &lt;- svd(
+  mat_int
+)
 
 lambda &lt;- svd_ammi$d
 
@@ -2056,27 +2053,102 @@ scores_env$ENV &lt;- as.factor(
   colnames(mat_int)
 )</code></pre>
 </div>
-<div id="ammi-biplot" class="section level2">
-<h2>AMMI biplot</h2>
-<p>The AMMI biplot represents genotype scores and environmental vectors
-for the first two interaction principal components. The percentages
-shown on the axes correspond to the interaction variation represented by
-each component.</p>
-<pre class="r"><code>p_ammi &lt;- ggplot() +
+</div>
+<div id="joint-ammi-and-shap-representation" class="section level1">
+<h1>Joint AMMI and SHAP representation</h1>
+<p>The first panel represents the genotype scores and environmental
+vectors for the first two AMMI interaction principal components. The
+second panel represents genotype-specific SHAP contributions across
+environments.</p>
+<pre class="r"><code>ammi_gen_plot_data &lt;- scores_gen %&gt;%
+  mutate(
+    facet = &quot;A&quot;
+  )
+
+ammi_env_plot_data &lt;- scores_env %&gt;%
+  mutate(
+    facet = &quot;A&quot;
+  )
+
+shap_plot_data &lt;- df_results %&gt;%
+  transmute(
+    GEN = as.factor(GEN),
+    ENV = as.numeric(
+      as.character(ENV)
+    ),
+    SHAP_GEN = SHAP_GEN,
+    facet = &quot;B&quot;
+  )
+
+figure_3_titles &lt;- data.frame(
+  facet = c(
+    &quot;A&quot;,
+    &quot;B&quot;
+  ),
+  x_title = c(
+    paste0(
+      &quot;IPCA1 (&quot;,
+      ipca1_pct,
+      &quot;%)&quot;
+    ),
+    &quot;Environments&quot;
+  ),
+  y_title = c(
+    paste0(
+      &quot;IPCA2 (&quot;,
+      ipca2_pct,
+      &quot;%)&quot;
+    ),
+    &quot;Genotype SHAP Value (G × E Effect) in kg ha⁻¹&quot;
+  ),
+  x = c(
+    -7,
+    10
+  ),
+  y = c(
+    -7,
+    -100
+  )
+)
+
+figure_3 &lt;- ggplot() +
+  facet_wrap(
+    ~facet,
+    scales = &quot;free&quot;,
+    ncol = 1
+  ) +
+  coord_cartesian(
+    clip = &quot;off&quot;
+  ) +
   geom_vline(
-    xintercept = 0,
+    data = data.frame(
+      facet = &quot;A&quot;,
+      x = 0
+    ),
+    aes(
+      xintercept = x
+    ),
     linetype = &quot;dashed&quot;,
     color = &quot;gray60&quot;,
     linewidth = 0.4
   ) +
   geom_hline(
-    yintercept = 0,
+    data = data.frame(
+      facet = c(
+        &quot;A&quot;,
+        &quot;B&quot;
+      ),
+      y = 0
+    ),
+    aes(
+      yintercept = y
+    ),
     linetype = &quot;dashed&quot;,
     color = &quot;gray60&quot;,
     linewidth = 0.4
   ) +
   geom_segment(
-    data = scores_env,
+    data = ammi_env_plot_data,
     aes(
       x = 0,
       y = 0,
@@ -2094,18 +2166,19 @@ each component.</p>
     linewidth = 0.5
   ) +
   geom_text(
-    data = scores_env,
+    data = ammi_env_plot_data,
     aes(
       x = IPCA1,
       y = IPCA2,
       label = ENV
     ),
     vjust = 1.4,
+    family = &quot;serif&quot;,
     color = &quot;gray20&quot;,
     size = 3
   ) +
   geom_point(
-    data = scores_gen,
+    data = ammi_gen_plot_data,
     aes(
       x = IPCA1,
       y = IPCA2,
@@ -2115,127 +2188,149 @@ each component.</p>
     alpha = 0.9
   ) +
   geom_text(
-    data = scores_gen,
+    data = ammi_gen_plot_data,
     aes(
       x = IPCA1,
       y = IPCA2,
       label = GEN
     ),
     vjust = -1.2,
+    family = &quot;serif&quot;,
     fontface = &quot;bold&quot;,
     size = 3.5,
     show.legend = FALSE
+  ) +
+  geom_line(
+    data = shap_plot_data,
+    aes(
+      x = ENV,
+      y = SHAP_GEN,
+      group = GEN,
+      color = GEN
+    ),
+    linewidth = 0.5
+  ) +
+  geom_point(
+    data = shap_plot_data,
+    aes(
+      x = ENV,
+      y = SHAP_GEN,
+      group = GEN,
+      color = GEN
+    ),
+    size = 1
+  ) +
+  geom_text(
+    data = figure_3_titles,
+    aes(
+      x = x,
+      y = -Inf,
+      label = x_title
+    ),
+    inherit.aes = FALSE,
+    vjust = 4.5,
+    size = 3,
+    family = &quot;serif&quot;,
+    color = &quot;black&quot;
+  ) +
+  geom_text(
+    data = figure_3_titles,
+    aes(
+      x = -Inf,
+      y = y,
+      label = y_title
+    ),
+    inherit.aes = FALSE,
+    vjust = -5,
+    size = 3,
+    family = &quot;serif&quot;,
+    color = &quot;black&quot;,
+    angle = 90
   ) +
   scale_color_manual(
     values = as.vector(
       pals::glasbey(9)
     )
   ) +
-  theme_classic(
-    base_size = 12
-  ) +
   labs(
-    x = paste0(
-      &quot;IPCA1 (&quot;,
-      ipca1_pct,
-      &quot;%)&quot;
-    ),
-    y = paste0(
-      &quot;IPCA2 (&quot;,
-      ipca2_pct,
-      &quot;%)&quot;
-    ),
-    color = &quot;Genotypes&quot;
+    x = &quot;&quot;,
+    y = &quot;&quot;,
+    color = &quot;Genotype&quot;
   ) +
   theme(
-    axis.title = element_text(
-      face = &quot;plain&quot;,
-      size = 11
-    ),
-    axis.text = element_text(
+    strip.background = element_blank(),
+    panel.background = element_rect(
       color = &quot;black&quot;,
-      size = 9
+      fill = &quot;white&quot;
     ),
-    axis.line = element_line(
+    panel.grid = element_blank(),
+    legend.position = &quot;bottom&quot;,
+    plot.margin = ggplot2::margin(
+      t = 2,
+      r = 0,
+      b = 0,
+      l = 0
+    ),
+    legend.text = element_text(
+      size = 10,
+      family = &quot;serif&quot;
+    ),
+    legend.title = element_text(
+      size = 10,
+      family = &quot;serif&quot;,
+      vjust = 0.5
+    ),
+    axis.line.x = element_blank(),
+    axis.line.y = element_line(
+      color = &quot;black&quot;
+    ),
+    axis.text.y = element_text(
+      size = 10,
+      angle = 0,
       color = &quot;black&quot;,
-      linewidth = 0.5
+      family = &quot;serif&quot;
     ),
-    legend.position = &quot;none&quot;
-  )
-
-print(p_ammi)</code></pre>
-<p><img src="figure/analysis.Rmd/ammi-biplot-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-ammi-biplot-1">
-Past versions of ammi-biplot-1.png
-</button>
-</p>
-<div id="fig-ammi-biplot-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/59212d01e6dd4195ed211ece6ca6b8bd8a997493/docs/figure/analysis.Rmd/ammi-biplot-1.png" target="_blank">59212d0</a>
-</td>
-<td>
-WevertonGomesCosta
-</td>
-<td>
-2026-07-15
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/f321462ab38b55a3e28c36ebf626f6a24a9b0423/docs/figure/analysis.Rmd/ammi-biplot-1.png" target="_blank">f321462</a>
-</td>
-<td>
-WevertonGomesCosta
-</td>
-<td>
-2026-07-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-<div id="joint-ammi-and-shap-representation" class="section level1">
-<h1>Joint AMMI and SHAP representation</h1>
-<p>The AMMI biplot and genotype-specific SHAP profiles are combined
-vertically. Panel A represents the first two interaction principal
-components, while Panel B represents the genotype SHAP contribution
-across environments.</p>
-<pre class="r"><code>figura_final &lt;- (
-  p_ammi /
-    p_shap
-) +
-  plot_layout(
-    heights = c(
-      1,
-      1.1
+    axis.text.x = element_text(
+      size = 10,
+      angle = 0,
+      color = &quot;black&quot;,
+      family = &quot;serif&quot;
+    ),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+    legend.key = element_blank(),
+    strip.text = element_text(
+      hjust = 0,
+      size = 9,
+      family = &quot;serif&quot;,
+      color = &quot;black&quot;
     )
   ) +
-  plot_annotation(
-    tag_levels = &quot;A&quot;
+  ggh4x::facetted_pos_scales(
+    x = list(
+      facet == &quot;A&quot; ~ scale_x_continuous(
+        breaks = seq(
+          -50,
+          50,
+          20
+        )
+      ),
+      facet == &quot;B&quot; ~ scale_x_continuous(
+        breaks = seq_len(20)
+      )
+    ),
+    y = list(
+      facet == &quot;A&quot; ~ scale_y_continuous(
+        limits = c(
+          -40,
+          30
+        )
+      ),
+      facet == &quot;B&quot; ~ scale_y_continuous()
+    )
   )
 
-print(figura_final)</code></pre>
+print(figure_3)</code></pre>
 <p><img src="figure/analysis.Rmd/joint-ammi-shap-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-joint-ammi-shap-1">
@@ -2304,7 +2399,8 @@ WevertonGomesCosta
 <p>The AMMI Stability Value combines the scores of the first two
 interaction principal components. Lower ASV values indicate greater
 stability according to the AMMI representation.</p>
-<pre class="r"><code>peso_asv &lt;- var_explained[1] / var_explained[2]
+<pre class="r"><code>peso_asv &lt;- var_explained[1] /
+  var_explained[2]
 
 asv_gen &lt;- scores_gen %&gt;%
   mutate(
@@ -2363,23 +2459,19 @@ tab_shap</code></pre>
 <h2>Simultaneous selection indices</h2>
 <p>The classical Simultaneous Selection Index combines the grain-yield
 ranking and the AMMI Stability Value ranking through their rank sum.</p>
-<p>A SHAP-based Simultaneous Selection Index is also calculated. Mean
-genotype SHAP contribution and SHAP stability are first transformed to a
-common scale ranging from 0 to 100. Higher standardized values indicate
-more favorable performance.</p>
-<p>The SHAP-based index assigns a weight of 60% to the standardized mean
-SHAP contribution and 40% to the standardized SHAP stability
-component.</p>
+<p>The SHAP-based Simultaneous Selection Index combines the mean
+genotype SHAP contribution and SHAP stability after min–max
+normalization to a common scale from 0 to 100. Higher normalized values
+indicate more favorable performance. The index assigns a weight of 60%
+to mean SHAP contribution and 40% to SHAP stability.</p>
 <pre class="r"><code>theta1 &lt;- 60
 theta2 &lt;- 40
 
-tabela_comparativa &lt;- left_join(
+dados_resultado &lt;- left_join(
   tab_shap,
   asv_gen,
   by = &quot;GEN&quot;
-)
-
-dados_resultado &lt;- tabela_comparativa %&gt;%
+) %&gt;%
   mutate(
     Rank_Prod = rank(
       -Media_GY,
@@ -2422,7 +2514,9 @@ dados_resultado &lt;- tabela_comparativa %&gt;%
       ties.method = &quot;first&quot;
     )
   ) %&gt;%
-  arrange(Rank_Prod)</code></pre>
+  arrange(
+    Rank_Prod
+  )</code></pre>
 </div>
 </div>
 <div id="genotype-ranking" class="section level1">
@@ -2432,7 +2526,9 @@ classical simultaneous selection index, mean SHAP contribution, SHAP
 stability, and the SHAP-based simultaneous selection index. In every
 ranking, position 1 represents the preferred genotype according to the
 corresponding criterion.</p>
-<pre class="r"><code>print(dados_resultado)</code></pre>
+<pre class="r"><code>print(
+  dados_resultado
+)</code></pre>
 <pre><code># A tibble: 9 × 14
   GEN   Media_GY SHAP_Medio SHAP_SD   ASV Rank_Prod Rank_ASV Rank_SHAP_Eff
   &lt;fct&gt;    &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;int&gt;    &lt;int&gt;         &lt;int&gt;
@@ -2489,7 +2585,7 @@ position under every criterion.</p>
       )
     )
   )</code></pre>
-<pre class="r"><code>figure_3_bump &lt;- ggplot(
+<pre class="r"><code>figure_4 &lt;- ggplot(
   dados_long,
   aes(
     x = Metodologia,
@@ -2499,11 +2595,11 @@ position under every criterion.</p>
   )
 ) +
   geom_line(
-    linewidth = 1.2,
+    linewidth = 1,
     alpha = 0.8
   ) +
   geom_point(
-    size = 4,
+    size = 2,
     shape = 21,
     fill = &quot;white&quot;,
     stroke = 1.5
@@ -2513,20 +2609,26 @@ position under every criterion.</p>
       dados_long,
       Metodologia == &quot;Grain Yield&quot;
     ),
-    aes(label = GEN),
-    hjust = 1.5,
+    aes(
+      label = GEN
+    ),
+    hjust = 2,
     fontface = &quot;bold&quot;,
-    size = 4
+    size = 4,
+    family = &quot;serif&quot;
   ) +
   geom_text(
     data = subset(
       dados_long,
       Metodologia == &quot;SHAP Effect&quot;
     ),
-    aes(label = GEN),
-    hjust = -0.5,
+    aes(
+      label = GEN
+    ),
+    hjust = -1,
     fontface = &quot;bold&quot;,
-    size = 4
+    size = 4,
+    family = &quot;serif&quot;
   ) +
   scale_color_manual(
     values = as.vector(
@@ -2536,34 +2638,60 @@ position under every criterion.</p>
   scale_y_reverse(
     breaks = 1:9
   ) +
-  theme_classic(
-    base_size = 13
+  coord_cartesian(
+    clip = &quot;off&quot;
   ) +
   labs(
     x = &quot;Selection Framework&quot;,
     y = &quot;Genotype Rank (1 = Best)&quot;
   ) +
+  theme_classic(
+    base_size = 13
+  ) +
   theme(
+    strip.background = element_blank(),
+    panel.background = element_rect(
+      color = &quot;black&quot;,
+      fill = &quot;white&quot;
+    ),
+    panel.grid = element_blank(),
     legend.position = &quot;none&quot;,
-    axis.line = element_blank(),
-    axis.ticks.x = element_blank(),
-    panel.grid.major.y = element_line(
-      color = &quot;gray93&quot;,
-      linetype = &quot;dashed&quot;
-    ),
-    panel.grid.major.x = element_line(
-      color = &quot;gray95&quot;,
-      linewidth = 8
-    ),
     plot.margin = ggplot2::margin(
-      t = 10,
-      r = 25,
-      b = 10,
-      l = 25
-    )
+      t = 2,
+      r = 18,
+      b = 2,
+      l = 18
+    ),
+    axis.line.x = element_blank(),
+    axis.line.y = element_line(
+      color = &quot;black&quot;
+    ),
+    axis.text.y = element_text(
+      size = 10,
+      angle = 0,
+      color = &quot;black&quot;,
+      family = &quot;serif&quot;
+    ),
+    axis.text.x = element_text(
+      size = 10,
+      angle = 0,
+      color = &quot;black&quot;,
+      family = &quot;serif&quot;
+    ),
+    axis.title.y = element_text(
+      size = 12,
+      color = &quot;black&quot;,
+      family = &quot;serif&quot;
+    ),
+    axis.title.x = element_text(
+      size = 10,
+      color = &quot;black&quot;,
+      family = &quot;serif&quot;
+    ),
+    axis.ticks = element_blank()
   )
 
-print(figure_3_bump)</code></pre>
+print(figure_4)</code></pre>
 <p><img src="figure/analysis.Rmd/rank-dynamics-plot-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-rank-dynamics-plot-1">
@@ -2625,182 +2753,6 @@ WevertonGomesCosta
 </div>
 </div>
 </div>
-<div id="stability-concordance" class="section level1">
-<h1>Stability concordance</h1>
-<p>The concordance plot compares the AMMI Stability Value ranking, which
-represents linear interaction stability, with the SHAP stability
-ranking, which represents variation in the non-linear genotype
-contribution across environments.</p>
-<p>Each point represents one genotype. Lower ranking values indicate
-greater stability. Therefore, genotypes in the lower-left region are
-classified as relatively stable by both approaches. The dotted identity
-line represents exact agreement between the two stability rankings,
-while the point fill represents the grain-yield ranking.</p>
-<pre class="r"><code>p_stability_concordance &lt;- ggplot(
-  dados_resultado,
-  aes(
-    x = Rank_ASV,
-    y = Rank_SHAP_Stb,
-    label = GEN
-  )
-) +
-  geom_vline(
-    xintercept = 5,
-    linetype = &quot;dashed&quot;,
-    color = &quot;gray60&quot;,
-    linewidth = 0.5
-  ) +
-  geom_hline(
-    yintercept = 5,
-    linetype = &quot;dashed&quot;,
-    color = &quot;gray60&quot;,
-    linewidth = 0.5
-  ) +
-  geom_abline(
-    slope = 1,
-    intercept = 0,
-    linetype = &quot;dotted&quot;,
-    color = &quot;red&quot;,
-    alpha = 0.6,
-    linewidth = 0.7
-  ) +
-  geom_point(
-    aes(fill = Rank_Prod),
-    size = 5.5,
-    shape = 21,
-    color = &quot;black&quot;,
-    stroke = 0.8
-  ) +
-  scale_fill_viridis_c(
-    option = &quot;mako&quot;,
-    direction = -1,
-    breaks = c(
-      1,
-      5,
-      9
-    ),
-    labels = c(
-      &quot;High (1)&quot;,
-      &quot;Medium (5)&quot;,
-      &quot;Low (9)&quot;
-    )
-  ) +
-  ggrepel::geom_text_repel(
-    fontface = &quot;bold&quot;,
-    size = 4,
-    box.padding = 0.4,
-    point.padding = 0.3
-  ) +
-  scale_x_continuous(
-    breaks = 1:9,
-    limits = c(
-      0.5,
-      9.5
-    )
-  ) +
-  scale_y_continuous(
-    breaks = 1:9,
-    limits = c(
-      0.5,
-      9.5
-    )
-  ) +
-  theme_classic(
-    base_size = 12
-  ) +
-  labs(
-    x = &quot;Linear Stability Ranking (Rank_ASV)&quot;,
-    y = &quot;Non-Linear Stability Ranking (Rank_SHAP_Stb)&quot;,
-    fill = &quot;Grain Yield&quot;
-  ) +
-  theme(
-    axis.line = element_line(
-      color = &quot;black&quot;,
-      linewidth = 0.5
-    ),
-    axis.text = element_text(
-      color = &quot;black&quot;
-    ),
-    legend.position = &quot;right&quot;,
-    legend.title = element_text(
-      face = &quot;bold&quot;,
-      size = 10
-    )
-  )
-
-print(p_stability_concordance)</code></pre>
-<p><img src="figure/analysis.Rmd/stability-concordance-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stability-concordance-1">
-Past versions of stability-concordance-1.png
-</button>
-</p>
-<div id="fig-stability-concordance-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/458c0027fb0b59815c6eec87132090b2bf152f33/docs/figure/analysis.Rmd/stability-concordance-1.png" target="_blank">458c002</a>
-</td>
-<td>
-WevertonGomesCosta
-</td>
-<td>
-2026-07-15
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/0105fbdad88366713cacf445a7b4776d133f93c7/docs/figure/analysis.Rmd/stability-concordance-1.png" target="_blank">0105fbd</a>
-</td>
-<td>
-WevertonGomesCosta
-</td>
-<td>
-2026-07-14
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/abd35e12cc15520fd69772167296b91164d41fb0/docs/figure/analysis.Rmd/stability-concordance-1.png" target="_blank">abd35e1</a>
-</td>
-<td>
-WevertonGomesCosta
-</td>
-<td>
-2026-07-14
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/02fb7fb8d3b7c75a26ceb8cab7aa7a072347cab8/docs/figure/analysis.Rmd/stability-concordance-1.png" target="_blank">02fb7fb</a>
-</td>
-<td>
-WevertonGomesCosta
-</td>
-<td>
-2026-07-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
 <div id="spearman-rank-correlation" class="section level1">
 <h1>Spearman rank correlation</h1>
 <p>Spearman rank correlations are calculated among the six
@@ -2823,7 +2775,9 @@ selection, and mean SHAP effect.</p>
   ) %&gt;%
   as.data.frame()
 
-colnames(colunas_rank) &lt;- c(
+colnames(
+  colunas_rank
+) &lt;- c(
   &quot;Yield&quot;,
   &quot;ASV (Linear)&quot;,
   &quot;SSI (Linear)&quot;,
@@ -2861,38 +2815,79 @@ SHAP Effect           1.00</code></pre>
 <p>The upper triangular correlation matrix represents the direction and
 magnitude of the Spearman associations. The numerical coefficients are
 displayed inside the corresponding cells.</p>
-<pre class="r"><code>rampa_customizada_artigo &lt;- colorRampPalette(
-  c(
-    &quot;#B2182B&quot;,
-    &quot;#E08214&quot;,
-    &quot;#FDB863&quot;,
-    &quot;#F7F7F7&quot;,
-    &quot;#B2ABD2&quot;,
-    &quot;#8073AC&quot;,
-    &quot;#542788&quot;
-  )
-)(200)
-
-corrplot::corrplot(
+<pre class="r"><code>figure_5 &lt;- ggcorrplot::ggcorrplot(
   matriz_corr,
-  method = &quot;color&quot;,
+  method = &quot;square&quot;,
+  lab = TRUE,
+  lab_size = 4,
+  show.diag = FALSE,
   type = &quot;upper&quot;,
-  col = rampa_customizada_artigo,
-  addCoef.col = &quot;black&quot;,
-  number.cex = 1.25,
-  tl.col = &quot;black&quot;,
-  tl.srt = 45,
-  tl.cex = 1.25,
-  cl.cex = 1.1,
-  diag = FALSE,
-  tl.pos = &quot;td&quot;,
-  mar = c(
-    1,
-    1,
-    4,
-    1
+  legend.title = &quot;Correlation&quot;,
+  colors = c(
+    &quot;#DB241F&quot;,
+    &quot;white&quot;,
+    &quot;#4ADC36&quot;
   )
-)</code></pre>
+) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;&quot;
+  ) +
+  theme(
+    strip.background = element_rect(
+      color = &quot;black&quot;,
+      fill = &quot;white&quot;
+    ),
+    panel.background = element_rect(
+      color = &quot;black&quot;,
+      fill = &quot;white&quot;
+    ),
+    panel.grid = element_blank(),
+    legend.position = &quot;right&quot;,
+    plot.margin = ggplot2::margin(
+      t = 0,
+      r = 0,
+      b = 0,
+      l = 0
+    ),
+    legend.text = element_text(
+      size = 12,
+      family = &quot;serif&quot;
+    ),
+    legend.title = element_text(
+      size = 14,
+      family = &quot;serif&quot;,
+      vjust = 0.5
+    ),
+    axis.line.x = element_blank(),
+    axis.line.y = element_line(
+      color = &quot;black&quot;
+    ),
+    axis.text.y = element_text(
+      size = 12,
+      angle = 0,
+      color = &quot;black&quot;,
+      family = &quot;serif&quot;
+    ),
+    axis.text.x = element_text(
+      size = 12,
+      angle = 90,
+      hjust = 0.5,
+      vjust = 0.5,
+      color = &quot;black&quot;,
+      family = &quot;serif&quot;
+    ),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+    legend.key = element_blank(),
+    strip.text = element_text(
+      size = 14,
+      family = &quot;serif&quot;,
+      color = &quot;black&quot;
+    )
+  )
+
+print(figure_5)</code></pre>
 <p><img src="figure/analysis.Rmd/spearman-correlation-plot-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-spearman-correlation-plot-1">
@@ -2981,27 +2976,27 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] pals_1.10            corrplot_0.95        ggrepel_0.9.6       
- [4] patchwork_1.3.2      iBreakDown_2.1.2     DALEX_2.5.3         
- [7] randomForest_4.7-1.2 tidyr_1.3.2          dplyr_1.2.1         
-[10] ggplot2_4.0.3        workflowr_1.7.2     
+ [1] ggcorrplot_0.2.0     ggh4x_0.3.1          pals_1.10           
+ [4] iBreakDown_2.1.2     DALEX_2.5.3          randomForest_4.7-1.2
+ [7] tidyr_1.3.2          dplyr_1.2.1          ggplot2_4.0.3       
+[10] workflowr_1.7.2     
 
 loaded via a namespace (and not attached):
  [1] utf8_1.2.6         sass_0.4.10        generics_0.1.4     stringi_1.8.7     
  [5] digest_0.6.39      magrittr_2.0.4     evaluate_1.0.5     grid_4.5.1        
- [9] RColorBrewer_1.1-3 maps_3.4.3         fastmap_1.2.0      rprojroot_2.1.1   
-[13] jsonlite_2.0.0     processx_3.8.6     whisker_0.4.1      ps_1.9.1          
-[17] promises_1.5.0     httr_1.4.7         purrr_1.2.1        viridisLite_0.4.2 
+ [9] RColorBrewer_1.1-3 maps_3.4.3         fastmap_1.2.0      plyr_1.8.9        
+[13] rprojroot_2.1.1    jsonlite_2.0.0     processx_3.8.6     whisker_0.4.1     
+[17] ps_1.9.1           promises_1.5.0     httr_1.4.7         purrr_1.2.1       
 [21] scales_1.4.0       jquerylib_0.1.4    cli_3.6.5          rlang_1.1.7       
 [25] withr_3.0.2        cachem_1.1.0       yaml_2.3.12        otel_0.2.0        
-[29] tools_4.5.1        colorspace_2.1-2   httpuv_1.6.16      mapproj_1.2.12    
-[33] vctrs_0.7.1        R6_2.6.1           lifecycle_1.0.5    git2r_0.36.2      
-[37] stringr_1.6.0      fs_1.6.6           pkgconfig_2.0.3    callr_3.7.6       
-[41] pillar_1.11.1      bslib_0.9.0        later_1.4.4        gtable_0.3.6      
-[45] glue_1.8.0         Rcpp_1.1.1         xfun_0.54          tibble_3.3.1      
-[49] tidyselect_1.2.1   rstudioapi_0.17.1  knitr_1.50         dichromat_2.0-0.1 
-[53] farver_2.1.2       htmltools_0.5.9    labeling_0.4.3     rmarkdown_2.30    
-[57] compiler_4.5.1     getPass_0.2-4      S7_0.2.1          </code></pre>
+[29] tools_4.5.1        reshape2_1.4.5     colorspace_2.1-2   httpuv_1.6.16     
+[33] mapproj_1.2.12     vctrs_0.7.1        R6_2.6.1           lifecycle_1.0.5   
+[37] git2r_0.36.2       stringr_1.6.0      fs_1.6.6           pkgconfig_2.0.3   
+[41] callr_3.7.6        pillar_1.11.1      bslib_0.9.0        later_1.4.4       
+[45] gtable_0.3.6       glue_1.8.0         Rcpp_1.1.1         xfun_0.54         
+[49] tibble_3.3.1       tidyselect_1.2.1   rstudioapi_0.17.1  knitr_1.50        
+[53] dichromat_2.0-0.1  farver_2.1.2       htmltools_0.5.9    labeling_0.4.3    
+[57] rmarkdown_2.30     compiler_4.5.1     getPass_0.2-4      S7_0.2.1          </code></pre>
 </div>
 </div>
 </div>
