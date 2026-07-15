@@ -34,10 +34,11 @@ The analysis includes:
 6. AMMI decomposition of genotype-by-environment interaction;
 7. calculation of the AMMI Stability Value;
 8. calculation of SHAP effect and stability measures;
-9. simultaneous selection and genotype ranking;
-10. visualization of genotype-rank dynamics;
-11. concordance between linear and non-linear stability rankings;
-12. Spearman rank correlation among selection criteria.
+9. calculation of classical and SHAP-based simultaneous selection indices;
+10. genotype ranking across six selection criteria;
+11. visualization of genotype-rank dynamics;
+12. concordance between linear and non-linear stability rankings;
+13. Spearman rank correlation among the six selection criteria.
 
 ## Data
 
@@ -157,7 +158,7 @@ The analysis requires:
 - `patchwork`;
 - `ggrepel`;
 - `corrplot`;
-- `viridisLite`.
+- `pals`.
 
 ## Reproducing the project
 
