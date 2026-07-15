@@ -528,15 +528,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree531f92848de904563cd6fecdf574687761736552targetblank531f928a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree42404fc557b8d958dc22670496aa4f335644d8f0targetblank42404fca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/531f92848de904563cd6fecdf574687761736552" target="_blank">531f928</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/42404fc557b8d958dc22670496aa4f335644d8f0" target="_blank">42404fc</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree531f92848de904563cd6fecdf574687761736552targetblank531f928a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree42404fc557b8d958dc22670496aa4f335644d8f0targetblank42404fca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -546,7 +546,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/531f92848de904563cd6fecdf574687761736552" target="_blank">531f928</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/42404fc557b8d958dc22670496aa4f335644d8f0" target="_blank">42404fc</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -611,6 +611,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/42404fc557b8d958dc22670496aa4f335644d8f0/analysis/analysis.Rmd" target="_blank">42404fc</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-15
+</td>
+<td>
+Update ranking dynamics and correlations for SHAP SSI
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/e34e85f20691f92d6cf0057e5040df4045dcf2ef/docs/analysis.html" target="_blank">e34e85f</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-15
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2250,6 +2284,7 @@ preferred position under every criterion.</p>
       Rank_ASV,
       Rank_SSI,
       Rank_SHAP_Stb,
+      Rank_SHAP_SSI,
       Rank_SHAP_Eff
     ),
     names_to = &quot;Metodologia&quot;,
@@ -2263,6 +2298,7 @@ preferred position under every criterion.</p>
         &quot;Rank_ASV&quot;,
         &quot;Rank_SSI&quot;,
         &quot;Rank_SHAP_Stb&quot;,
+        &quot;Rank_SHAP_SSI&quot;,
         &quot;Rank_SHAP_Eff&quot;
       ),
       labels = c(
@@ -2270,11 +2306,12 @@ preferred position under every criterion.</p>
         &quot;ASV (Linear)&quot;,
         &quot;SSI (Linear)&quot;,
         &quot;SHAP Stability&quot;,
+        &quot;SHAP SSI&quot;,
         &quot;SHAP Effect&quot;
       )
     )
   )</code></pre>
-<pre class="r"><code>ggplot(
+<pre class="r"><code>figure_3_bump &lt;- ggplot(
   dados_long,
   aes(
     x = Metodologia,
@@ -2313,8 +2350,10 @@ preferred position under every criterion.</p>
     fontface = &quot;bold&quot;,
     size = 4
   ) +
-  scale_color_viridis_d(
-    option = &quot;viridis&quot;
+  scale_color_manual(
+    values = as.vector(
+      pals::glasbey(9)
+    )
   ) +
   scale_y_reverse(
     breaks = 1:9
@@ -2324,8 +2363,7 @@ preferred position under every criterion.</p>
   ) +
   labs(
     x = &quot;Selection Framework&quot;,
-    y = &quot;Genotype Rank (1 = Best)&quot;,
-    title = &quot; &quot;
+    y = &quot;Genotype Rank (1 = Best)&quot;
   ) +
   theme(
     legend.position = &quot;none&quot;,
@@ -2337,8 +2375,7 @@ preferred position under every criterion.</p>
     ),
     panel.grid.major.x = element_line(
       color = &quot;gray95&quot;,
-      linewidth = 8,
-      alpha = 0.4
+      linewidth = 8
     ),
     plot.margin = ggplot2::margin(
       t = 10,
@@ -2346,7 +2383,9 @@ preferred position under every criterion.</p>
       b = 10,
       l = 25
     )
-  )</code></pre>
+  )
+
+print(figure_3_bump)</code></pre>
 <p><img src="figure/analysis.Rmd/rank-dynamics-plot-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-rank-dynamics-plot-1">
@@ -2553,12 +2592,13 @@ WevertonGomesCosta
 </div>
 <div id="spearman-rank-correlation" class="section level1">
 <h1>Spearman rank correlation</h1>
-<p>Spearman rank correlations are calculated among the five
+<p>Spearman rank correlations are calculated among the six
 genotype-selection criteria. Positive correlations indicate that two
 criteria tend to assign similar positions to the genotypes, whereas
 negative correlations indicate opposing ranking patterns.</p>
-<p>The comparison includes grain yield, AMMI stability, simultaneous
-selection, mean SHAP effect, and SHAP stability.</p>
+<p>The comparison includes grain yield, AMMI stability, classical
+simultaneous selection, SHAP stability, SHAP-based simultaneous
+selection, and mean SHAP effect.</p>
 <div id="correlation-matrix" class="section level2">
 <h2>Correlation matrix</h2>
 <pre class="r"><code>colunas_rank &lt;- dados_resultado %&gt;%
@@ -2566,8 +2606,9 @@ selection, mean SHAP effect, and SHAP stability.</p>
     Rank_Prod,
     Rank_ASV,
     Rank_SSI,
-    Rank_SHAP_Eff,
-    Rank_SHAP_Stb
+    Rank_SHAP_Stb,
+    Rank_SHAP_SSI,
+    Rank_SHAP_Eff
   ) %&gt;%
   as.data.frame()
 
@@ -2575,8 +2616,9 @@ colnames(colunas_rank) &lt;- c(
   &quot;Yield&quot;,
   &quot;ASV (Linear)&quot;,
   &quot;SSI (Linear)&quot;,
-  &quot;SHAP Effect&quot;,
-  &quot;SHAP Stability&quot;
+  &quot;SHAP Stability&quot;,
+  &quot;SHAP SSI&quot;,
+  &quot;SHAP Effect&quot;
 )
 
 matriz_corr &lt;- cor(
@@ -2588,31 +2630,49 @@ round(
   matriz_corr,
   2
 )</code></pre>
-<pre><code>               Yield ASV (Linear) SSI (Linear) SHAP Effect SHAP Stability
-Yield           1.00         0.02         0.70        0.98           0.23
-ASV (Linear)    0.02         1.00         0.68        0.08           0.48
-SSI (Linear)    0.70         0.68         1.00        0.73           0.57
-SHAP Effect     0.98         0.08         0.73        1.00           0.22
-SHAP Stability  0.23         0.48         0.57        0.22           1.00</code></pre>
+<pre><code>               Yield ASV (Linear) SSI (Linear) SHAP Stability SHAP SSI
+Yield           1.00         0.02         0.70           0.23     0.87
+ASV (Linear)    0.02         1.00         0.68           0.48     0.03
+SSI (Linear)    0.70         0.68         1.00           0.57     0.68
+SHAP Stability  0.23         0.48         0.57           1.00     0.58
+SHAP SSI        0.87         0.03         0.68           0.58     1.00
+SHAP Effect     0.98         0.08         0.73           0.22     0.85
+               SHAP Effect
+Yield                 0.98
+ASV (Linear)          0.08
+SSI (Linear)          0.73
+SHAP Stability        0.22
+SHAP SSI              0.85
+SHAP Effect           1.00</code></pre>
 </div>
 <div id="graphical-representation" class="section level2">
 <h2>Graphical representation</h2>
 <p>The upper triangular correlation matrix represents the direction and
 magnitude of the Spearman associations. The numerical coefficients are
 displayed inside the corresponding cells.</p>
-<pre class="r"><code>cores_viridis &lt;- viridisLite::viridis(
-  200
-)
+<pre class="r"><code>rampa_customizada_artigo &lt;- colorRampPalette(
+  c(
+    &quot;#B2182B&quot;,
+    &quot;#E08214&quot;,
+    &quot;#FDB863&quot;,
+    &quot;#F7F7F7&quot;,
+    &quot;#B2ABD2&quot;,
+    &quot;#8073AC&quot;,
+    &quot;#542788&quot;
+  )
+)(200)
 
 corrplot::corrplot(
   matriz_corr,
   method = &quot;color&quot;,
   type = &quot;upper&quot;,
-  col = cores_viridis,
+  col = rampa_customizada_artigo,
   addCoef.col = &quot;black&quot;,
-  number.cex = 0.9,
+  number.cex = 1.25,
   tl.col = &quot;black&quot;,
   tl.srt = 45,
+  tl.cex = 1.25,
+  cl.cex = 1.1,
   diag = FALSE,
   tl.pos = &quot;td&quot;,
   mar = c(
