@@ -4,15 +4,21 @@ This repository provides the reproducible analytical workflow associated with th
 
 ## Authors
 
-**Moyses Nascimento**  
-Associate Professor  
-Department of Statistics — Federal University of Viçosa  
-[moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
+**Moysés Nascimento¹\***  
+**Weverton Gomes da Costa¹**  
+**Ana Carolina Campana Nascimento¹**  
+**Noé Mitterhofer Eiterer Ponce de Leon da Costa²**  
+**Diego Jarquín³**
 
-**Weverton Gomes da Costa**  
-Postdoctoral Researcher  
-Department of Statistics — Federal University of Viçosa  
-[weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)
+\*Corresponding author: [moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
+
+### Affiliations
+
+¹ Laboratory of Computational Intelligence and Statistical Learning (LICAE), Department of Statistics, Federal University of Viçosa (UFV), Viçosa, Minas Gerais, Brazil.
+
+² Agronomy Department, Federal University of Tocantins (UFT), Gurupi, Tocantins, Brazil.
+
+³ Agronomy Department, University of Florida, Gainesville, Florida, USA.
 
 ## Overview
 
@@ -194,16 +200,23 @@ https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/license.html
 
 ## Suggested citation
 
-Nascimento, M. and Costa, W. G. (2026). *Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition*. Workflowr project website and analytical repository. Available at: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
+Nascimento, M., Costa, W. G., Nascimento, A. C. C., Costa, N. M. E. P. L., and Jarquín, D. (2026). *Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition*. Workflowr project website and analytical repository. Available at: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
 
 When scientific methods, results, or interpretations from the associated manuscript are reused, the final published manuscript should also be cited.
 
 ## Contact
 
-**Moyses Nascimento**  
+**Corresponding author**
+
+**Moysés Nascimento**  
+Laboratory of Computational Intelligence and Statistical Learning (LICAE)  
 Department of Statistics — Federal University of Viçosa  
 [moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
 
+**Repository contact**
+
 **Weverton Gomes da Costa**  
+Laboratory of Computational Intelligence and Statistical Learning (LICAE)  
 Department of Statistics — Federal University of Viçosa  
+[weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)
 [weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)
