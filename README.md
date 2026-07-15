@@ -33,18 +33,17 @@ The complete analytical workflow is presented in a single R Markdown document an
 The analysis includes:
 
 1. import and preparation of multi-environment trial data;
-2. visualization of phenotypic performance;
-3. calculation of the environmental index;
-4. Random Forest fitting and leave-one-environment-out validation;
-5. SHAP decomposition of model predictions;
-6. AMMI decomposition of genotype-by-environment interaction;
-7. calculation of the AMMI Stability Value;
-8. calculation of SHAP effect and stability measures;
+2. graphical representation of the leave-one-environment-out validation scheme;
+3. visualization of phenotypic performance;
+4. calculation of the environmental index;
+5. Random Forest fitting and leave-one-environment-out validation;
+6. SHAP decomposition of model predictions;
+7. AMMI decomposition of genotype-by-environment interaction;
+8. calculation of AMMI and SHAP stability measures;
 9. calculation of classical and SHAP-based simultaneous selection indices;
 10. genotype ranking across six selection criteria;
 11. visualization of genotype-rank dynamics;
-12. concordance between linear and non-linear stability rankings;
-13. Spearman rank correlation among the six selection criteria.
+12. Spearman rank correlation among the six selection criteria.
 
 ## Data
 
@@ -145,10 +144,9 @@ The analysis requires:
 - `randomForest`;
 - `DALEX`;
 - `iBreakDown`;
-- `patchwork`;
-- `ggrepel`;
-- `corrplot`;
-- `pals`.
+- `pals`;
+- `ggh4x`;
+- `ggcorrplot`.
 
 ## Reproducing the project
 
