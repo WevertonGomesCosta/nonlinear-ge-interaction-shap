@@ -375,7 +375,7 @@ id="fnref2"><sup>2</sup></a></h4>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -386,8 +386,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -400,9 +400,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -426,18 +426,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -528,15 +531,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree7c01fbf4d93de7d21bb013eaed2f630428c3fbe4targetblank7c01fbfa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreed16a8554670de8c24fcd113ae8be807173b1a0eftargetblankd16a855a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/7c01fbf4d93de7d21bb013eaed2f630428c3fbe4" target="_blank">7c01fbf</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/d16a8554670de8c24fcd113ae8be807173b1a0ef" target="_blank">d16a855</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree7c01fbf4d93de7d21bb013eaed2f630428c3fbe4targetblank7c01fbfa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptreed16a8554670de8c24fcd113ae8be807173b1a0eftargetblankd16a855a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -546,7 +549,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/7c01fbf4d93de7d21bb013eaed2f630428c3fbe4" target="_blank">7c01fbf</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/d16a8554670de8c24fcd113ae8be807173b1a0ef" target="_blank">d16a855</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -567,6 +570,10 @@ Ignored files:
     Ignored:    data/Artigo_Completo.pdf
     Ignored:    data/Manuscript_MN_NE_ACCN(Inglês) (1).docx
     Ignored:    data/Manuscript_MN_NE_ACCN.docx
+
+Unstaged changes:
+    Modified:   analysis/analysis.Rmd
+    Modified:   output/shap_results.rds
 
 </code></pre>
 <p>
@@ -611,6 +618,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/b5291bdaa9fc5a79936d8ee83e17c71bf5bd8d9c/docs/analysis.html" target="_blank">b5291bd</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-15
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1236,6 +1260,7 @@ library(dplyr)
 library(tidyr)
 library(randomForest)
 library(DALEX)
+library(iBreakDown)
 library(patchwork)
 library(ggrepel)
 library(corrplot)
@@ -1500,10 +1525,14 @@ cat(&quot;Starting leave-one-environment-out cross-validation...\n&quot;)
 for (env_teste in ambientes) {
   
   dados_treino &lt;- df_ml %&gt;%
-    filter(ENV != env_teste)
+    filter(
+      ENV != env_teste
+    )
   
   dados_teste &lt;- df_ml %&gt;%
-    filter(ENV == env_teste)
+    filter(
+      ENV == env_teste
+    )
   
   rf_fold &lt;- randomForest(
     GY ~ GEN + ENV_INDEX,
@@ -1520,7 +1549,26 @@ for (env_teste in ambientes) {
     predicoes_cv,
     dados_teste
   )
-}</code></pre>
+}
+
+predicoes_cv &lt;- predicoes_cv %&gt;%
+  arrange(
+    ENV,
+    GEN
+  )
+
+validation_file &lt;- &quot;output/random_forest_loeo_predictions.rds&quot;
+
+dir.create(
+  dirname(validation_file),
+  recursive = TRUE,
+  showWarnings = FALSE
+)
+
+saveRDS(
+  predicoes_cv,
+  validation_file
+)</code></pre>
 </div>
 <div id="predictive-metrics" class="section level2">
 <h2>Predictive metrics</h2>
@@ -1595,7 +1643,13 @@ genotype and environmental-index predictors. The response variable
 supplied to the explainer is the observed mean grain yield.</p>
 <pre class="r"><code>explainer_rf &lt;- explain(
   model = rf_model,
-  data = df_ml[, c(&quot;GEN&quot;, &quot;ENV_INDEX&quot;)],
+  data = df_ml[
+    ,
+    c(
+      &quot;GEN&quot;,
+      &quot;ENV_INDEX&quot;
+    )
+  ],
   y = df_ml$GY,
   label = &quot;Random Forest GxE (Continuous)&quot;
 )</code></pre>
@@ -1606,13 +1660,24 @@ supplied to the explainer is the observed mean grain yield.</p>
 observation. For each observation, the mean contribution associated with
 genotype and environmental index is extracted from the SHAP
 decomposition.</p>
-<pre class="r"><code>shap_list &lt;- list()
+<pre class="r"><code>set.seed(42)
+
+shap_list &lt;- vector(
+  mode = &quot;list&quot;,
+  length = nrow(df_ml)
+)
 
 cat(&quot;Starting SHAP contribution calculation...\n&quot;)
 
-for (i in 1:nrow(df_ml)) {
+for (i in seq_len(nrow(df_ml))) {
   
-  obs &lt;- df_ml[i, c(&quot;GEN&quot;, &quot;ENV_INDEX&quot;)]
+  obs &lt;- df_ml[
+    i,
+    c(
+      &quot;GEN&quot;,
+      &quot;ENV_INDEX&quot;
+    )
+  ]
   
   shap_obs &lt;- predict_parts(
     explainer = explainer_rf,
@@ -1622,14 +1687,24 @@ for (i in 1:nrow(df_ml)) {
   )
   
   val_gen &lt;- shap_obs %&gt;%
-    filter(variable_name == &quot;GEN&quot;) %&gt;%
-    summarise(mean(contribution)) %&gt;%
-    pull()
+    filter(
+      variable_name == &quot;GEN&quot;
+    ) %&gt;%
+    summarise(
+      SHAP_GEN = mean(contribution),
+      .groups = &quot;drop&quot;
+    ) %&gt;%
+    pull(SHAP_GEN)
   
   val_env &lt;- shap_obs %&gt;%
-    filter(variable_name == &quot;ENV_INDEX&quot;) %&gt;%
-    summarise(mean(contribution)) %&gt;%
-    pull()
+    filter(
+      variable_name == &quot;ENV_INDEX&quot;
+    ) %&gt;%
+    summarise(
+      SHAP_ENV = mean(contribution),
+      .groups = &quot;drop&quot;
+    ) %&gt;%
+    pull(SHAP_ENV)
   
   shap_list[[i]] &lt;- data.frame(
     SHAP_GEN = val_gen,
@@ -1637,22 +1712,41 @@ for (i in 1:nrow(df_ml)) {
   )
 }
 
-df_shap_final &lt;- bind_rows(shap_list)
-
-df_results &lt;- cbind(
-  df_ml,
-  df_shap_final
+df_shap_final &lt;- bind_rows(
+  shap_list
 )
 
-head(df_results)</code></pre>
+df_results &lt;- bind_cols(
+  df_ml,
+  df_shap_final
+) %&gt;%
+  arrange(
+    ENV,
+    GEN
+  )
+
+shap_file &lt;- &quot;output/shap_results.rds&quot;
+
+dir.create(
+  dirname(shap_file),
+  recursive = TRUE,
+  showWarnings = FALSE
+)
+
+saveRDS(
+  df_results,
+  shap_file
+)</code></pre>
 <pre class="r"><code>head(df_results)</code></pre>
-<pre><code>  GEN ENV       GY ENV_INDEX  SHAP_GEN    SHAP_ENV
-1   1   1 3621.550  3612.531 -151.5668 -1058.48148
-2   1   2 3728.325  4209.444 -201.7336  -539.92178
-3   1   3 5554.025  5104.919 -225.5393   267.99268
-4   1   4 4565.575  5229.997 -349.7975   237.71528
-5   1   5 4379.800  4955.231 -299.3879    21.53598
-6   1   6 6436.725  6305.306 -131.2397  1370.67649</code></pre>
+<pre><code># A tibble: 6 × 6
+  GEN   ENV      GY ENV_INDEX SHAP_GEN SHAP_ENV
+  &lt;fct&gt; &lt;fct&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 1     1     3622.     3613.   -131.    -1079.
+2 2     1     3426.     3613.   -101.    -1172.
+3 3     1     3446.     3613.    -12.1   -1161.
+4 4     1     3720.     3613.    147.    -1555.
+5 5     1     3165.     3613.    -27.5   -1349.
+6 6     1     4116.     3613.    321.    -1313.</code></pre>
 </div>
 <div id="genotype-response-profiles" class="section level2">
 <h2>Genotype response profiles</h2>
@@ -2206,15 +2300,15 @@ tab_shap</code></pre>
 <pre><code># A tibble: 9 × 4
   GEN   Media_GY SHAP_Medio SHAP_SD
   &lt;fct&gt;    &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
-1 1        4617.     -250.     99.7
-2 2        4603.     -242.    119. 
-3 3        4823.      -44.4    79.1
-4 4        5218.      338.    206. 
-5 5        5247.      375.    176. 
-6 6        5330.      444.     91.8
-7 7        4672.     -192.    135. 
-8 8        4283.     -505.    230. 
-9 9        4930.       69.3    84.3</code></pre>
+1 1        4617.     -250.    102. 
+2 2        4603.     -252.    102. 
+3 3        4823.      -43.0    70.3
+4 4        5218.      344.    198. 
+5 5        5247.      376.    205. 
+6 6        5330.      435.    113. 
+7 7        4672.     -187.    141. 
+8 8        4283.     -496.    253. 
+9 9        4930.       70.7    88.3</code></pre>
 </div>
 <div id="simultaneous-selection-indices" class="section level2">
 <h2>Simultaneous selection indices</h2>
@@ -2293,15 +2387,15 @@ corresponding criterion.</p>
 <pre><code># A tibble: 9 × 14
   GEN   Media_GY SHAP_Medio SHAP_SD   ASV Rank_Prod Rank_ASV Rank_SHAP_Eff
   &lt;fct&gt;    &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;int&gt;    &lt;int&gt;         &lt;int&gt;
-1 6        5330.      444.     91.8  78.6         1        4             1
-2 5        5247.      375.    176.   83.3         2        5             2
-3 4        5218.      338.    206.  147.          3        9             3
-4 9        4930.       69.3    84.3  92.8         4        6             4
-5 3        4823.      -44.4    79.1  47.9         5        2             5
-6 7        4672.     -192.    135.   40.0         6        1             6
-7 1        4617.     -250.     99.7 110.          7        7             8
-8 2        4603.     -242.    119.   73.0         8        3             7
-9 8        4283.     -505.    230.  142.          9        8             9
+1 6        5330.      435.    113.   78.6         1        4             1
+2 5        5247.      376.    205.   83.3         2        5             2
+3 4        5218.      344.    198.  147.          3        9             3
+4 9        4930.       70.7    88.3  92.8         4        6             4
+5 3        4823.      -43.0    70.3  47.9         5        2             5
+6 7        4672.     -187.    141.   40.0         6        1             6
+7 1        4617.     -250.    102.  110.          7        7             7
+8 2        4603.     -252.    102.   73.0         8        3             8
+9 8        4283.     -496.    253.  142.          9        8             9
 # ℹ 6 more variables: Rank_SHAP_Stb &lt;int&gt;, SHAP_Medio_scaled &lt;dbl&gt;,
 #   SHAP_SD_scaled &lt;dbl&gt;, SHAP_SSI &lt;dbl&gt;, Rank_SHAP_SSI &lt;int&gt;, Rank_SSI &lt;int&gt;</code></pre>
 </div>
@@ -2677,18 +2771,18 @@ round(
   2
 )</code></pre>
 <pre><code>               Yield ASV (Linear) SSI (Linear) SHAP Stability SHAP SSI
-Yield           1.00         0.02         0.70           0.23     0.87
-ASV (Linear)    0.02         1.00         0.68           0.48     0.03
-SSI (Linear)    0.70         0.68         1.00           0.57     0.68
-SHAP Stability  0.23         0.48         0.57           1.00     0.58
-SHAP SSI        0.87         0.03         0.68           0.58     1.00
-SHAP Effect     0.98         0.08         0.73           0.22     0.85
+Yield           1.00         0.02         0.70          -0.02     0.80
+ASV (Linear)    0.02         1.00         0.68           0.45     0.15
+SSI (Linear)    0.70         0.68         1.00           0.33     0.73
+SHAP Stability -0.02         0.45         0.33           1.00     0.48
+SHAP SSI        0.80         0.15         0.73           0.48     1.00
+SHAP Effect     1.00         0.02         0.70          -0.02     0.80
                SHAP Effect
-Yield                 0.98
-ASV (Linear)          0.08
-SSI (Linear)          0.73
-SHAP Stability        0.22
-SHAP SSI              0.85
+Yield                 1.00
+ASV (Linear)          0.02
+SSI (Linear)          0.70
+SHAP Stability       -0.02
+SHAP SSI              0.80
 SHAP Effect           1.00</code></pre>
 </div>
 <div id="graphical-representation" class="section level2">
@@ -2806,9 +2900,9 @@ attached base packages:
 
 other attached packages:
  [1] pals_1.10            corrplot_0.95        ggrepel_0.9.6       
- [4] patchwork_1.3.2      DALEX_2.5.3          randomForest_4.7-1.2
- [7] tidyr_1.3.2          dplyr_1.2.1          ggplot2_4.0.3       
-[10] workflowr_1.7.2     
+ [4] patchwork_1.3.2      iBreakDown_2.1.2     DALEX_2.5.3         
+ [7] randomForest_4.7-1.2 tidyr_1.3.2          dplyr_1.2.1         
+[10] ggplot2_4.0.3        workflowr_1.7.2     
 
 loaded via a namespace (and not attached):
  [1] utf8_1.2.6         sass_0.4.10        generics_0.1.4     stringi_1.8.7     

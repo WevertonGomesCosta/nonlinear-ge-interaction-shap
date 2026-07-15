@@ -45,6 +45,7 @@ library(dplyr)
 library(tidyr)
 library(randomForest)
 library(DALEX)
+library(iBreakDown)
 library(patchwork)
 library(ggrepel)
 library(corrplot)
@@ -257,10 +258,14 @@ cat("Starting leave-one-environment-out cross-validation...\n")
 for (env_teste in ambientes) {
   
   dados_treino <- df_ml %>%
-    filter(ENV != env_teste)
+    filter(
+      ENV != env_teste
+    )
   
   dados_teste <- df_ml %>%
-    filter(ENV == env_teste)
+    filter(
+      ENV == env_teste
+    )
   
   rf_fold <- randomForest(
     GY ~ GEN + ENV_INDEX,
@@ -278,18 +283,42 @@ for (env_teste in ambientes) {
     dados_teste
   )
 }
+
+predicoes_cv <- predicoes_cv %>%
+  arrange(
+    ENV,
+    GEN
+  )
+
+validation_file <- "output/random_forest_loeo_predictions.rds"
+
+dir.create(
+  dirname(validation_file),
+  recursive = TRUE,
+  showWarnings = FALSE
+)
+
+saveRDS(
+  predicoes_cv,
+  validation_file
+)
 ```
 
 ```{r load-random-forest-validation, include=FALSE}
 validation_file <- "output/random_forest_loeo_predictions.rds"
 
-stopifnot(
-  file.exists(validation_file)
-)
-
-predicoes_cv <- readRDS(
-  validation_file
-)
+if (!exists(
+  "predicoes_cv",
+  inherits = FALSE
+)) {
+  stopifnot(
+    file.exists(validation_file)
+  )
+  
+  predicoes_cv <- readRDS(
+    validation_file
+  )
+}
 
 stopifnot(
   identical(
@@ -384,7 +413,13 @@ The Random Forest model is connected to the DALEX framework using the genotype a
 ```{r dalex-explainer, eval=FALSE, message=FALSE, warning=FALSE}
 explainer_rf <- explain(
   model = rf_model,
-  data = df_ml[, c("GEN", "ENV_INDEX")],
+  data = df_ml[
+    ,
+    c(
+      "GEN",
+      "ENV_INDEX"
+    )
+  ],
   y = df_ml$GY,
   label = "Random Forest GxE (Continuous)"
 )
@@ -395,13 +430,24 @@ explainer_rf <- explain(
 SHAP contributions are calculated for every genotype-by-environment observation. For each observation, the mean contribution associated with genotype and environmental index is extracted from the SHAP decomposition.
 
 ```{r shap-contributions, eval=FALSE, message=FALSE, warning=FALSE}
-shap_list <- list()
+set.seed(42)
+
+shap_list <- vector(
+  mode = "list",
+  length = nrow(df_ml)
+)
 
 cat("Starting SHAP contribution calculation...\n")
 
-for (i in 1:nrow(df_ml)) {
+for (i in seq_len(nrow(df_ml))) {
   
-  obs <- df_ml[i, c("GEN", "ENV_INDEX")]
+  obs <- df_ml[
+    i,
+    c(
+      "GEN",
+      "ENV_INDEX"
+    )
+  ]
   
   shap_obs <- predict_parts(
     explainer = explainer_rf,
@@ -411,14 +457,24 @@ for (i in 1:nrow(df_ml)) {
   )
   
   val_gen <- shap_obs %>%
-    filter(variable_name == "GEN") %>%
-    summarise(mean(contribution)) %>%
-    pull()
+    filter(
+      variable_name == "GEN"
+    ) %>%
+    summarise(
+      SHAP_GEN = mean(contribution),
+      .groups = "drop"
+    ) %>%
+    pull(SHAP_GEN)
   
   val_env <- shap_obs %>%
-    filter(variable_name == "ENV_INDEX") %>%
-    summarise(mean(contribution)) %>%
-    pull()
+    filter(
+      variable_name == "ENV_INDEX"
+    ) %>%
+    summarise(
+      SHAP_ENV = mean(contribution),
+      .groups = "drop"
+    ) %>%
+    pull(SHAP_ENV)
   
   shap_list[[i]] <- data.frame(
     SHAP_GEN = val_gen,
@@ -426,26 +482,48 @@ for (i in 1:nrow(df_ml)) {
   )
 }
 
-df_shap_final <- bind_rows(shap_list)
-
-df_results <- cbind(
-  df_ml,
-  df_shap_final
+df_shap_final <- bind_rows(
+  shap_list
 )
 
-head(df_results)
+df_results <- bind_cols(
+  df_ml,
+  df_shap_final
+) %>%
+  arrange(
+    ENV,
+    GEN
+  )
+
+shap_file <- "output/shap_results.rds"
+
+dir.create(
+  dirname(shap_file),
+  recursive = TRUE,
+  showWarnings = FALSE
+)
+
+saveRDS(
+  df_results,
+  shap_file
+)
 ```
 
 ```{r load-shap-results, include=FALSE}
 shap_file <- "output/shap_results.rds"
 
-stopifnot(
-  file.exists(shap_file)
-)
-
-df_results <- readRDS(
-  shap_file
-)
+if (!exists(
+  "df_results",
+  inherits = FALSE
+)) {
+  stopifnot(
+    file.exists(shap_file)
+  )
+  
+  df_results <- readRDS(
+    shap_file
+  )
+}
 
 stopifnot(
   identical(
