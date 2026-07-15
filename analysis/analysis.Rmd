@@ -941,6 +941,7 @@ dados_long <- dados_resultado %>%
       Rank_ASV,
       Rank_SSI,
       Rank_SHAP_Stb,
+      Rank_SHAP_SSI,
       Rank_SHAP_Eff
     ),
     names_to = "Metodologia",
@@ -954,6 +955,7 @@ dados_long <- dados_resultado %>%
         "Rank_ASV",
         "Rank_SSI",
         "Rank_SHAP_Stb",
+        "Rank_SHAP_SSI",
         "Rank_SHAP_Eff"
       ),
       labels = c(
@@ -961,14 +963,15 @@ dados_long <- dados_resultado %>%
         "ASV (Linear)",
         "SSI (Linear)",
         "SHAP Stability",
+        "SHAP SSI",
         "SHAP Effect"
       )
     )
   )
 ```
 
-```{r rank-dynamics-plot, fig.width=11, fig.height=7, fig.align="center", warning=FALSE}
-ggplot(
+```{r rank-dynamics-plot, fig.width=12, fig.height=7, fig.align="center", warning=FALSE}
+figure_3_bump <- ggplot(
   dados_long,
   aes(
     x = Metodologia,
@@ -1007,8 +1010,10 @@ ggplot(
     fontface = "bold",
     size = 4
   ) +
-  scale_color_viridis_d(
-    option = "viridis"
+  scale_color_manual(
+    values = as.vector(
+      pals::glasbey(9)
+    )
   ) +
   scale_y_reverse(
     breaks = 1:9
@@ -1018,8 +1023,7 @@ ggplot(
   ) +
   labs(
     x = "Selection Framework",
-    y = "Genotype Rank (1 = Best)",
-    title = " "
+    y = "Genotype Rank (1 = Best)"
   ) +
   theme(
     legend.position = "none",
@@ -1031,8 +1035,7 @@ ggplot(
     ),
     panel.grid.major.x = element_line(
       color = "gray95",
-      linewidth = 8,
-      alpha = 0.4
+      linewidth = 8
     ),
     plot.margin = ggplot2::margin(
       t = 10,
@@ -1041,6 +1044,8 @@ ggplot(
       l = 25
     )
   )
+
+print(figure_3_bump)
 ```
 
 # Stability concordance
@@ -1147,9 +1152,9 @@ print(p_stability_concordance)
 
 # Spearman rank correlation
 
-Spearman rank correlations are calculated among the five genotype-selection criteria. Positive correlations indicate that two criteria tend to assign similar positions to the genotypes, whereas negative correlations indicate opposing ranking patterns.
+Spearman rank correlations are calculated among the six genotype-selection criteria. Positive correlations indicate that two criteria tend to assign similar positions to the genotypes, whereas negative correlations indicate opposing ranking patterns.
 
-The comparison includes grain yield, AMMI stability, simultaneous selection, mean SHAP effect, and SHAP stability.
+The comparison includes grain yield, AMMI stability, classical simultaneous selection, SHAP stability, SHAP-based simultaneous selection, and mean SHAP effect.
 
 ## Correlation matrix
 
@@ -1159,8 +1164,9 @@ colunas_rank <- dados_resultado %>%
     Rank_Prod,
     Rank_ASV,
     Rank_SSI,
-    Rank_SHAP_Eff,
-    Rank_SHAP_Stb
+    Rank_SHAP_Stb,
+    Rank_SHAP_SSI,
+    Rank_SHAP_Eff
   ) %>%
   as.data.frame()
 
@@ -1168,8 +1174,9 @@ colnames(colunas_rank) <- c(
   "Yield",
   "ASV (Linear)",
   "SSI (Linear)",
-  "SHAP Effect",
-  "SHAP Stability"
+  "SHAP Stability",
+  "SHAP SSI",
+  "SHAP Effect"
 )
 
 matriz_corr <- cor(
@@ -1187,20 +1194,30 @@ round(
 
 The upper triangular correlation matrix represents the direction and magnitude of the Spearman associations. The numerical coefficients are displayed inside the corresponding cells.
 
-```{r spearman-correlation-plot, fig.width=9, fig.height=8, fig.align="center", warning=FALSE}
-cores_viridis <- viridisLite::viridis(
-  200
-)
+```{r spearman-correlation-plot, fig.width=10, fig.height=8, fig.align="center", warning=FALSE}
+rampa_customizada_artigo <- colorRampPalette(
+  c(
+    "#B2182B",
+    "#E08214",
+    "#FDB863",
+    "#F7F7F7",
+    "#B2ABD2",
+    "#8073AC",
+    "#542788"
+  )
+)(200)
 
 corrplot::corrplot(
   matriz_corr,
   method = "color",
   type = "upper",
-  col = cores_viridis,
+  col = rampa_customizada_artigo,
   addCoef.col = "black",
-  number.cex = 0.9,
+  number.cex = 1.25,
   tl.col = "black",
   tl.srt = 45,
+  tl.cex = 1.25,
+  cl.cex = 1.1,
   diag = FALSE,
   tl.pos = "td",
   mar = c(
