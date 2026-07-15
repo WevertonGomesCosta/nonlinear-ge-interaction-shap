@@ -528,15 +528,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree2f739c5fed29ffb3aeb6da70733a7d63d4c7dcd7targetblank2f739c5a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree70b332dca081cfbdf9a562aeb2625fac0edb360ctargetblank70b332da">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/2f739c5fed29ffb3aeb6da70733a7d63d4c7dcd7" target="_blank">2f739c5</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/70b332dca081cfbdf9a562aeb2625fac0edb360c" target="_blank">70b332d</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree2f739c5fed29ffb3aeb6da70733a7d63d4c7dcd7targetblank2f739c5a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree70b332dca081cfbdf9a562aeb2625fac0edb360ctargetblank70b332da"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -546,7 +546,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/2f739c5fed29ffb3aeb6da70733a7d63d4c7dcd7" target="_blank">2f739c5</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/70b332dca081cfbdf9a562aeb2625fac0edb360c" target="_blank">70b332d</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -611,6 +611,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/70b332dca081cfbdf9a562aeb2625fac0edb360c/analysis/analysis.Rmd" target="_blank">70b332d</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-15
+</td>
+<td>
+Standardize AMMI and SHAP genotype colors
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/88f6ef426d8d31874b69348925434caf4032ea04/docs/analysis.html" target="_blank">88f6ef4</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-15
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1550,23 +1584,20 @@ p_shap &lt;- ggplot(
     size = 2,
     alpha = 0.9
   ) +
-  scale_color_viridis_d(
-    option = &quot;viridis&quot;
+  scale_color_manual(
+    values = as.vector(
+      pals::glasbey(9)
+    )
   ) +
   theme_classic(
     base_size = 12
   ) +
   labs(
-    title = &quot;&quot;,
-    subtitle = &quot;&quot;,
+    title = &quot; &quot;,
+    subtitle = &quot; &quot;,
     x = &quot;Environments&quot;,
-    y = expression(
-      paste(
-        &quot;Genotype SHAP Value (G&quot;,
-        times,
-        &quot;E Effect) in kg &quot;,
-        ha^-1
-      )
+    y = bquote(
+      &quot;Genotype SHAP Value (G&quot; %*% &quot;E Effect) in kg &quot; ~ ha^-1
     ),
     color = &quot;Genotypes&quot;
   ) +
@@ -1579,7 +1610,9 @@ p_shap &lt;- ggplot(
     plot.subtitle = element_text(
       size = 10,
       color = &quot;gray30&quot;,
-      margin = ggplot2::margin(b = 12)
+      margin = ggplot2::margin(
+        b = 12
+      )
     ),
     axis.title = element_text(
       face = &quot;plain&quot;,
@@ -1848,8 +1881,10 @@ each component.</p>
     size = 3.5,
     show.legend = FALSE
   ) +
-  scale_color_viridis_d(
-    option = &quot;viridis&quot;
+  scale_color_manual(
+    values = as.vector(
+      pals::glasbey(9)
+    )
   ) +
   theme_classic(
     base_size = 12
