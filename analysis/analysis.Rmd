@@ -48,7 +48,7 @@ library(DALEX)
 library(patchwork)
 library(ggrepel)
 library(corrplot)
-library(viridisLite)
+library(pals)
 ```
 
 # Data import
@@ -82,75 +82,138 @@ df_ml$GEN <- as.factor(df_ml$GEN)
 
 # Phenotypic performance
 
-## Grain yield across environments
+The distribution of mean grain yield is represented jointly across environments and genotypes.
 
-The distribution of mean grain yield is represented for each environment. Each point corresponds to the mean performance of one genotype within an environment.
+Panel A displays the environmental distributions. Each jittered point represents the mean performance of one genotype within an environment. Panel B displays the marginal genotype distributions, with each point corresponding to the mean performance of one genotype in one environment.
 
-```{r grain-yield-environments, fig.width=10, fig.height=6, fig.align="center", warning=FALSE}
-ggplot(df_ml, aes(x = ENV, y = GY, fill = ENV)) +
+The boxplot outliers are not displayed separately because all genotype-by-environment means are already represented by the jittered points.
+
+```{r phenotypic-performance-figure, fig.width=12, fig.height=6, fig.align="center", warning=FALSE}
+p_env <- ggplot(
+  df_ml,
+  aes(
+    x = ENV,
+    y = GY,
+    fill = ENV
+  )
+) +
   geom_boxplot(
-    alpha = 0.7,
-    show.legend = FALSE
+    alpha = 0.75,
+    outlier.shape = NA,
+    linewidth = 0.4
   ) +
   geom_jitter(
-    width = 0.2,
-    alpha = 0.5,
-    color = "black"
+    width = 0.15,
+    alpha = 0.4,
+    color = "black",
+    size = 1.2
+  ) +
+  scale_fill_manual(
+    values = as.vector(
+      pals::glasbey(20)
+    )
+  ) +
+  theme_classic(
+    base_size = 12
   ) +
   labs(
-    title = "",
-    x = "Environment (ENV)",
-    y = "Grain Yield (GY)"
+    x = "Environments",
+    y = expression(
+      paste(
+        "Grain Yield (GY) in kg ",
+        ha^-1
+      )
+    )
   ) +
-  theme_minimal() +
-  scale_fill_viridis_d() +
   theme(
-    legend.position = "none"
+    legend.position = "none",
+    axis.line = element_line(
+      color = "black",
+      linewidth = 0.5
+    ),
+    axis.text.x = element_text(
+      color = "black",
+      size = 9
+    ),
+    axis.text.y = element_text(
+      color = "black",
+      size = 9
+    ),
+    axis.title = element_text(
+      size = 11
+    )
   )
-```
 
-## Grain yield across genotypes
-
-The distribution of mean grain yield is represented for each genotype. Each point corresponds to the mean performance of one genotype within an environment.
-
-```{r grain-yield-genotypes, fig.width=10, fig.height=6, fig.align="center", warning=FALSE}
-ggplot(df_ml, aes(x = GEN, y = GY, fill = GEN)) +
+p_gen <- ggplot(
+  df_ml,
+  aes(
+    x = GEN,
+    y = GY,
+    fill = GEN
+  )
+) +
   geom_boxplot(
-    alpha = 0.7
+    alpha = 0.75,
+    outlier.shape = NA,
+    linewidth = 0.4
   ) +
   geom_jitter(
-    width = 0.2,
-    alpha = 0.5,
-    color = "black"
+    width = 0.15,
+    alpha = 0.4,
+    color = "black",
+    size = 1.2
+  ) +
+  scale_fill_manual(
+    values = as.vector(
+      pals::glasbey(9)
+    )
+  ) +
+  theme_classic(
+    base_size = 12
   ) +
   labs(
-    title = "",
-    x = "Genotype (GEN)",
-    y = "Grain Yield (GY)"
+    x = "Genotypes",
+    y = expression(
+      paste(
+        "Grain Yield (GY) in kg ",
+        ha^-1
+      )
+    )
   ) +
-  theme_minimal() +
-  scale_fill_viridis_d() +
   theme(
-    legend.position = "none"
+    legend.position = "none",
+    axis.line = element_line(
+      color = "black",
+      linewidth = 0.5
+    ),
+    axis.text.x = element_text(
+      color = "black",
+      size = 9
+    ),
+    axis.text.y = element_text(
+      color = "black",
+      size = 9
+    ),
+    axis.title = element_text(
+      size = 11
+    )
   )
-```
 
-# Environmental index
-
-The environmental index is calculated as the mean grain yield of all genotypes evaluated within each environment. This continuous variable represents the productive potential of each environment.
-
-```{r environmental-index}
-env_indices <- df_ml %>%
-  group_by(ENV) %>%
-  summarise(
-    ENV_INDEX = mean(GY, na.rm = TRUE),
-    .groups = "drop"
+figure_1 <- (
+  p_env |
+    p_gen
+) +
+  patchwork::plot_layout(
+    widths = c(
+      1.5,
+      1
+    )
+  ) +
+  patchwork::plot_annotation(
+    tag_levels = "A"
   )
 
-df_ml <- df_ml %>%
-  left_join(env_indices, by = "ENV")
-
-head(env_indices)
+print(figure_1)
 ```
 
 # Random Forest modeling
