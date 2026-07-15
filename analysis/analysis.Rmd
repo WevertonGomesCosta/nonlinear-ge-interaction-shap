@@ -931,7 +931,7 @@ print(dados_resultado)
 
 # Rank dynamics
 
-The rank-dynamics plot represents how the relative position of each genotype changes across grain yield, AMMI stability, simultaneous selection, SHAP stability, and SHAP effect. Rank 1 represents the preferred position under every criterion.
+The rank-dynamics plot represents how the relative position of each genotype changes across grain yield, AMMI stability, classical simultaneous selection, SHAP stability, SHAP-based simultaneous selection, and mean SHAP effect. Rank 1 represents the preferred position under every criterion.
 
 ```{r rank-dynamics-data}
 dados_long <- dados_resultado %>%
