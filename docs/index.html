@@ -12,7 +12,7 @@
 <meta name="author" content="Nascimento, M." />
 <meta name="author" content="Costa, W. G." />
 
-<meta name="date" content="2026-07-14" />
+<meta name="date" content="2026-07-15" />
 
 <title>Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition</title>
 
@@ -293,7 +293,7 @@ Decomposition</h1>
 id="fnref1"><sup>1</sup></a></h4>
 <h4 class="author">Costa, W. G.<a href="#fn2" class="footnote-ref"
 id="fnref2"><sup>2</sup></a></h4>
-<h4 class="date">2026-07-14</h4>
+<h4 class="date">2026-07-15</h4>
 
 </div>
 
@@ -322,7 +322,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-07-14
+<strong>Last updated:</strong> 2026-07-15
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -454,15 +454,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree20f644652a77bc743a27009c41d6b6dd03cbce16targetblank20f6446a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree82bd83f628497ba4743fb6b7c00db77c18d1d3bftargetblank82bd83fa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/20f644652a77bc743a27009c41d6b6dd03cbce16" target="_blank">20f6446</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/82bd83f628497ba4743fb6b7c00db77c18d1d3bf" target="_blank">82bd83f</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree20f644652a77bc743a27009c41d6b6dd03cbce16targetblank20f6446a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree82bd83f628497ba4743fb6b7c00db77c18d1d3bftargetblank82bd83fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -472,7 +472,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/20f644652a77bc743a27009c41d6b6dd03cbce16" target="_blank">20f6446</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/82bd83f628497ba4743fb6b7c00db77c18d1d3bf" target="_blank">82bd83f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -489,7 +489,13 @@ were generated:
 Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    code/Codigo_SHAP_GE_10_07_23.txt
+    Ignored:    code/Codigo_SHAP_GE_15_07_23.txt
+    Ignored:    data/Artigo_Completo.pdf
+    Ignored:    data/Manuscript_MN_NE_ACCN(Inglês) (1).docx
     Ignored:    data/Manuscript_MN_NE_ACCN.docx
+
+Unstaged changes:
+    Modified:   README.md
 
 </code></pre>
 <p>
@@ -533,6 +539,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/82bd83f628497ba4743fb6b7c00db77c18d1d3bf/analysis/index.Rmd" target="_blank">82bd83f</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-15
+</td>
+<td>
+Update project documentation for SHAP SSI
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/86b4bbc012ad177946edd7484ebb58a7990787ed/docs/index.html" target="_blank">86b4bbc</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -633,8 +673,9 @@ associated with the study <strong>“Non-Linear Modeling of Genotype ×
 Environment Interaction via Tree-Based Learning Algorithms and Shapley
 Decomposition.”</strong></p>
 <p>The project integrates Random Forest modeling, Shapley Additive
-Explanations, AMMI decomposition, stability indices, simultaneous
-selection, and genotype-rank comparison in multi-environment trials.</p>
+Explanations, AMMI decomposition, stability indices, classical and
+SHAP-based simultaneous selection, and genotype-rank comparison in
+multi-environment trials.</p>
 <div id="scientific-scope" class="section level2">
 <h2>Scientific scope</h2>
 <p>Genotype-by-environment interaction occurs when genotypes present
@@ -660,10 +701,12 @@ unified and reproducible workflow.</p>
 <li>SHAP decomposition of model predictions;</li>
 <li>AMMI decomposition of genotype-by-environment interaction;</li>
 <li>calculation of AMMI and SHAP stability measures;</li>
-<li>simultaneous selection and genotype ranking;</li>
-<li>visualization of rank dynamics;</li>
+<li>calculation of classical and SHAP-based simultaneous selection
+indices;</li>
+<li>genotype ranking across six selection criteria;</li>
+<li>visualization of genotype-rank dynamics;</li>
 <li>concordance between linear and non-linear stability rankings;</li>
-<li>Spearman rank correlation among selection criteria.</li>
+<li>Spearman rank correlation among the six selection criteria.</li>
 </ol>
 <p>The full analytical code, outputs, tables, and figures are available
 on the <a href="analysis.html">Reproducible Analysis</a> page.</p>
