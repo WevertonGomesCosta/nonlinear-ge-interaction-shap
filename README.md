@@ -97,22 +97,17 @@ analysis/analysis.Rmd
 
 All analytical code is displayed directly in the analysis page.
 
-The computationally intensive Random Forest validation and SHAP calculations are preserved as visible code with `eval = FALSE`. Their previously calculated and validated results are stored as version-controlled R objects:
+Computationally intensive stages are retained in the R Markdown document with `eval = FALSE` during routine website builds. These stages include:
+
+- leave-one-environment-out Random Forest validation;
+- fitting of the final Random Forest model;
+- construction of the DALEX explainer;
+- calculation of SHAP contributions.
 
 ```text
 output/random_forest_loeo_predictions.rds
 output/shap_results.rds
 ```
-
-Hidden loading chunks read these objects during routine website construction. This structure preserves the complete analytical procedure while avoiding repeated execution of computationally intensive steps.
-
-The loaded objects are checked for:
-
-- file availability;
-- expected dimensions;
-- expected variable names;
-- genotype and environment factor levels;
-- absence of missing values.
 
 ## Website
 
@@ -155,6 +150,7 @@ The analysis requires:
 - `tidyr`;
 - `randomForest`;
 - `DALEX`;
+- `iBreakDown`;
 - `patchwork`;
 - `ggrepel`;
 - `corrplot`;
