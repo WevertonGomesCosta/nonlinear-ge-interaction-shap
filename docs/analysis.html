@@ -528,15 +528,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree4c77fe8a5dc7f61d2b1f299dc76f9b2a3d36eb7ftargetblank4c77fe8a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree2f739c5fed29ffb3aeb6da70733a7d63d4c7dcd7targetblank2f739c5a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/4c77fe8a5dc7f61d2b1f299dc76f9b2a3d36eb7f" target="_blank">4c77fe8</a>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/2f739c5fed29ffb3aeb6da70733a7d63d4c7dcd7" target="_blank">2f739c5</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree4c77fe8a5dc7f61d2b1f299dc76f9b2a3d36eb7ftargetblank4c77fe8a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomWevertonGomesCostanonlineargeinteractionshaptree2f739c5fed29ffb3aeb6da70733a7d63d4c7dcd7targetblank2f739c5a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -546,7 +546,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/4c77fe8a5dc7f61d2b1f299dc76f9b2a3d36eb7f" target="_blank">4c77fe8</a>.
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/tree/2f739c5fed29ffb3aeb6da70733a7d63d4c7dcd7" target="_blank">2f739c5</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -611,6 +611,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/2f739c5fed29ffb3aeb6da70733a7d63d4c7dcd7/analysis/analysis.Rmd" target="_blank">2f739c5</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-15
+</td>
+<td>
+Restore environmental index calculation
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/272d87a2253442818bb7d1979383231e8482fd5b/docs/analysis.html" target="_blank">272d87a</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-15
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1242,6 +1276,75 @@ figure_1 &lt;- (
 
 print(figure_1)</code></pre>
 <p><img src="figure/analysis.Rmd/phenotypic-performance-figure-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-phenotypic-performance-figure-1">
+Past versions of phenotypic-performance-figure-1.png
+</button>
+</p>
+<div id="fig-phenotypic-performance-figure-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/WevertonGomesCosta/nonlinear-ge-interaction-shap/blob/272d87a2253442818bb7d1979383231e8482fd5b/docs/figure/analysis.Rmd/phenotypic-performance-figure-1.png" target="_blank">272d87a</a>
+</td>
+<td>
+WevertonGomesCosta
+</td>
+<td>
+2026-07-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="environmental-index" class="section level1">
+<h1>Environmental index</h1>
+<p>The environmental index is calculated as the mean grain yield of all
+genotypes evaluated within each environment. This continuous variable
+represents the productive potential of each environment.</p>
+<pre class="r"><code>env_indices &lt;- df_ml %&gt;%
+  group_by(ENV) %&gt;%
+  summarise(
+    ENV_INDEX = mean(
+      GY,
+      na.rm = TRUE
+    ),
+    .groups = &quot;drop&quot;
+  )
+
+df_ml &lt;- df_ml %&gt;%
+  left_join(
+    env_indices,
+    by = &quot;ENV&quot;
+  )
+
+head(env_indices)</code></pre>
+<pre><code># A tibble: 6 × 2
+  ENV   ENV_INDEX
+  &lt;fct&gt;     &lt;dbl&gt;
+1 1         3613.
+2 2         4209.
+3 3         5105.
+4 4         5230.
+5 5         4955.
+6 6         6305.</code></pre>
 </div>
 <div id="random-forest-modeling" class="section level1">
 <h1>Random Forest modeling</h1>
