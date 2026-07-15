@@ -91,7 +91,7 @@ The complete pipeline is presented in a single sequential analysis page containi
 14. stability-concordance analysis;
 15. Spearman rank-correlation analysis.
 
-All executable analytical code is displayed directly in the R Markdown document. Computationally intensive results may be loaded from versioned output objects after their original calculation has been documented and validated.
+The complete analytical workflow is documented directly in the R Markdown analysis.
 
 ## Reproducibility framework
 
