@@ -95,19 +95,7 @@ The complete analytical pipeline is available in:
 analysis/analysis.Rmd
 ```
 
-All analytical code is displayed directly in the analysis page.
-
-Computationally intensive stages are retained in the R Markdown document with `eval = FALSE` during routine website builds. These stages include:
-
-- leave-one-environment-out Random Forest validation;
-- fitting of the final Random Forest model;
-- construction of the DALEX explainer;
-- calculation of SHAP contributions.
-
-```text
-output/random_forest_loeo_predictions.rds
-output/shap_results.rds
-```
+All analytical code, outputs, tables, and figures are presented on the analysis page.
 
 ## Website
 
