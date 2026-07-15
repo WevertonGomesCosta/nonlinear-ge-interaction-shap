@@ -84,6 +84,24 @@ Each published page is connected to a specific Git commit, allowing the analytic
 
 This work is developed in connection with the [LICAE Laboratory](https://www.licae.ufv.br/) and the Department of Statistics at the Federal University of Viçosa.
 
+## Study authors
+
+**Moysés Nascimento¹\***  
+**Weverton Gomes da Costa¹**  
+**Ana Carolina Campana Nascimento¹**  
+**Noé Mitterhofer Eiterer Ponce de Leon da Costa²**  
+**Diego Jarquín³**
+
+\*Corresponding author: [moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
+
+### Affiliations
+
+¹ Laboratory of Computational Intelligence and Statistical Learning (LICAE), Department of Statistics, Federal University of Viçosa (UFV), Viçosa, Minas Gerais, Brazil.
+
+² Agronomy Department, Federal University of Tocantins (UFT), Gurupi, Tocantins, Brazil.
+
+³ Agronomy Department, University of Florida, Gainesville, Florida, USA.
+
 ## Repository
 
 Official repository:  

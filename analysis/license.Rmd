@@ -52,7 +52,7 @@ The official legal text is available at:
 
 ## Suggested citation
 
-Nascimento, M. and Costa, W. G. (2026). *Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition*. Workflowr project website and analytical repository. Available at: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
+Nascimento, M., Costa, W. G., Nascimento, A. C. C., Costa, N. M. E. P. L., and Jarquín, D. (2026). *Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition*. Workflowr project website and analytical repository. Available at: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
 
 When scientific methods, results, or interpretations from the associated manuscript are reused, the manuscript should also be cited using its final bibliographic information.
 
@@ -66,10 +66,16 @@ The analytical materials are provided for research, teaching, and reproducibilit
 
 ## Contact
 
-**Moyses Nascimento**  
-Associate Professor — Department of Statistics — Federal University of Viçosa  
+**Corresponding author**
+
+**Moysés Nascimento**  
+Laboratory of Computational Intelligence and Statistical Learning (LICAE)  
+Department of Statistics — Federal University of Viçosa  
 [moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
 
+**Repository contact**
+
 **Weverton Gomes da Costa**  
-Postdoctoral Researcher — Department of Statistics — Federal University of Viçosa  
+Laboratory of Computational Intelligence and Statistical Learning (LICAE)  
+Department of Statistics — Federal University of Viçosa  
 [weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)
