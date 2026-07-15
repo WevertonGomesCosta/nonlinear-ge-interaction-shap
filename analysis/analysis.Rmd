@@ -857,11 +857,18 @@ tab_shap <- df_results %>%
 tab_shap
 ```
 
-## Simultaneous Selection Index
+## Simultaneous selection indices
 
-The Simultaneous Selection Index combines the grain-yield ranking and the AMMI Stability Value ranking. The consolidated data set also includes rankings based on mean SHAP contribution and SHAP variation.
+The classical Simultaneous Selection Index combines the grain-yield ranking and the AMMI Stability Value ranking through their rank sum.
+
+A SHAP-based Simultaneous Selection Index is also calculated. Mean genotype SHAP contribution and SHAP stability are first transformed to a common scale ranging from 0 to 100. Higher standardized values indicate more favorable performance.
+
+The SHAP-based index assigns a weight of 60% to the standardized mean SHAP contribution and 40% to the standardized SHAP stability component.
 
 ```{r simultaneous-selection-index}
+theta1 <- 60
+theta2 <- 40
+
 tabela_comparativa <- left_join(
   tab_shap,
   asv_gen,
@@ -878,16 +885,36 @@ dados_resultado <- tabela_comparativa %>%
       ASV,
       ties.method = "first"
     ),
-    Rank_SSI = rank(
-      Rank_Prod + Rank_ASV,
-      ties.method = "first"
-    ),
     Rank_SHAP_Eff = rank(
       -SHAP_Medio,
       ties.method = "first"
     ),
     Rank_SHAP_Stb = rank(
       SHAP_SD,
+      ties.method = "first"
+    ),
+    SHAP_Medio_scaled = 100 * (
+      SHAP_Medio - min(SHAP_Medio)
+    ) / (
+      max(SHAP_Medio) - min(SHAP_Medio)
+    ),
+    SHAP_SD_scaled = 100 * (
+      max(SHAP_SD) - SHAP_SD
+    ) / (
+      max(SHAP_SD) - min(SHAP_SD)
+    ),
+    SHAP_SSI = (
+      SHAP_Medio_scaled * theta1 +
+        SHAP_SD_scaled * theta2
+    ) / (
+      theta1 + theta2
+    ),
+    Rank_SHAP_SSI = rank(
+      -SHAP_SSI,
+      ties.method = "first"
+    ),
+    Rank_SSI = rank(
+      Rank_Prod + Rank_ASV,
       ties.method = "first"
     )
   ) %>%
@@ -896,7 +923,7 @@ dados_resultado <- tabela_comparativa %>%
 
 # Genotype ranking
 
-Genotypes are compared according to grain yield, AMMI stability, simultaneous selection, mean SHAP contribution, and SHAP stability. In every ranking, position 1 represents the preferred genotype according to the corresponding criterion.
+Genotypes are compared according to grain yield, AMMI stability, the classical simultaneous selection index, mean SHAP contribution, SHAP stability, and the SHAP-based simultaneous selection index. In every ranking, position 1 represents the preferred genotype according to the corresponding criterion.
 
 ```{r genotype-ranking}
 print(dados_resultado)
