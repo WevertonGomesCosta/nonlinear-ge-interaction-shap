@@ -5,20 +5,21 @@ This repository provides the reproducible analytical workflow associated with th
 ## Authors
 
 **Moysés Nascimento¹\***  
-**Weverton Gomes da Costa¹**  
-**Ana Carolina Campana Nascimento¹**  
 **Noé Mitterhofer Eiterer Ponce de Leon da Costa²**  
+**Ana Carolina Campana Nascimento¹**  
+**Weverton Gomes da Costa¹**  
+**Wanessa Alves Lima Paiva¹**  
 **Diego Jarquín³**
 
 \*Corresponding author: [moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
 
 ### Affiliations
 
-¹ Laboratory of Computational Intelligence and Statistical Learning (LICAE), Department of Statistics, Federal University of Viçosa (UFV), Viçosa, Minas Gerais, Brazil.
+¹ Department of Statistics, Federal University of Viçosa, Viçosa 36570-900, MG, Brazil; [ana.campana@ufv.br](mailto:ana.campana@ufv.br) (A.C.C.N.); [weverton.costa@ufv.br](mailto:weverton.costa@ufv.br) (W.G.C.); [wanessa.a.lima@ufv.br](mailto:wanessa.a.lima@ufv.br) (W.A.L.P.).
 
-² Agronomy Department, Federal University of Tocantins (UFT), Gurupi, Tocantins, Brazil.
+² Graduate Program in Plant Production, Federal University of Tocantins, Gurupi 77410-530, TO, Brazil; [noe.eiterer@uft.edu.br](mailto:noe.eiterer@uft.edu.br).
 
-³ Agronomy Department, University of Florida, Gainesville, Florida, USA.
+³ Department of Agronomy, University of Florida, Gainesville, FL 32611, USA; [jhernandezjarqui@ufl.edu](mailto:jhernandezjarqui@ufl.edu).
 
 ## Overview
 
@@ -198,7 +199,7 @@ https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/license.html
 
 ## Suggested citation
 
-Nascimento, M., Costa, W. G., Nascimento, A. C. C., Costa, N. M. E. P. L., and Jarquín, D. (2026). *Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition*. Workflowr project website and analytical repository. Available at: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
+Nascimento, M., Costa, N. M. E. P. L., Nascimento, A. C. C., Costa, W. G., Paiva, W. A. L., and Jarquín, D. (2026). *Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition*. Workflowr project website and analytical repository. Available at: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
 
 When scientific methods, results, or interpretations from the associated manuscript are reused, the final published manuscript should also be cited.
 

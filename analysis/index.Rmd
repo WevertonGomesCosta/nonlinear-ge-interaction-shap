@@ -1,8 +1,12 @@
 ---
 title: "Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition"
 author:
-  - Nascimento, M.^[Moyses Nascimento, Associate Professor, Department of Statistics - Federal University of Viçosa, moysesnascim@ufv.br]
-  - Costa, W. G.^[Weverton Gomes da Costa, Postdoctoral Researcher, Department of Statistics - Federal University of Viçosa, weverton.costa@ufv.br]
+  - Moysés Nascimento^[Department of Statistics - Federal University of Viçosa, Viçosa 36570-900, MG, Brazil; corresponding author, moysesnascim@ufv.br]
+  - Noé Mitterhofer Eiterer Ponce de Leon da Costa^[Graduate Program in Plant Production - Federal University of Tocantins, Gurupi 77410-530, TO, Brazil; noe.eiterer@uft.edu.br]
+  - Ana Carolina Campana Nascimento^[Department of Statistics - Federal University of Viçosa, Viçosa 36570-900, MG, Brazil; ana.campana@ufv.br]
+  - Weverton Gomes da Costa^[Department of Statistics - Federal University of Viçosa, Viçosa 36570-900, MG, Brazil; weverton.costa@ufv.br]
+  - Wanessa Alves Lima Paiva^[Department of Statistics - Federal University of Viçosa, Viçosa 36570-900, MG, Brazil; wanessa.a.lima@ufv.br]
+  - Diego Jarquín^[Department of Agronomy - University of Florida, Gainesville, FL 32611, USA; jhernandezjarqui@ufl.edu]
 date: "`r Sys.Date()`"
 site: workflowr::wflow_site
 url: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
@@ -87,20 +91,21 @@ This work is developed in connection with the [LICAE Laboratory](https://www.lic
 ## Study authors
 
 **Moysés Nascimento¹\***  
-**Weverton Gomes da Costa¹**  
-**Ana Carolina Campana Nascimento¹**  
 **Noé Mitterhofer Eiterer Ponce de Leon da Costa²**  
+**Ana Carolina Campana Nascimento¹**  
+**Weverton Gomes da Costa¹**  
+**Wanessa Alves Lima Paiva¹**  
 **Diego Jarquín³**
 
 \*Corresponding author: [moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
 
 ### Affiliations
 
-¹ Laboratory of Computational Intelligence and Statistical Learning (LICAE), Department of Statistics, Federal University of Viçosa (UFV), Viçosa, Minas Gerais, Brazil.
+¹ Department of Statistics, Federal University of Viçosa, Viçosa 36570-900, MG, Brazil; [ana.campana@ufv.br](mailto:ana.campana@ufv.br) (A.C.C.N.); [weverton.costa@ufv.br](mailto:weverton.costa@ufv.br) (W.G.C.); [wanessa.a.lima@ufv.br](mailto:wanessa.a.lima@ufv.br) (W.A.L.P.).
 
-² Agronomy Department, Federal University of Tocantins (UFT), Gurupi, Tocantins, Brazil.
+² Graduate Program in Plant Production, Federal University of Tocantins, Gurupi 77410-530, TO, Brazil; [noe.eiterer@uft.edu.br](mailto:noe.eiterer@uft.edu.br).
 
-³ Agronomy Department, University of Florida, Gainesville, Florida, USA.
+³ Department of Agronomy, University of Florida, Gainesville, FL 32611, USA; [jhernandezjarqui@ufl.edu](mailto:jhernandezjarqui@ufl.edu).
 
 ## Repository
 
@@ -109,10 +114,16 @@ Official repository:
 
 ## Contact
 
-**Moyses Nascimento**  
-Associate Professor — Department of Statistics — Federal University of Viçosa  
+**Corresponding author**
+
+**Moysés Nascimento**  
+Laboratory of Computational Intelligence and Statistical Learning (LICAE)  
+Department of Statistics — Federal University of Viçosa  
 [moysesnascim@ufv.br](mailto:moysesnascim@ufv.br)
 
+**Repository contact**
+
 **Weverton Gomes da Costa**  
-Postdoctoral Researcher — Department of Statistics — Federal University of Viçosa  
+Laboratory of Computational Intelligence and Statistical Learning (LICAE)  
+Department of Statistics — Federal University of Viçosa  
 [weverton.costa@ufv.br](mailto:weverton.costa@ufv.br)
