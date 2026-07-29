@@ -1,8 +1,12 @@
 ---
 title: "Reproducible Analysis"
 author:
-  - Nascimento, M.^[Moyses Nascimento, Associate Professor, Department of Statistics - Federal University of Viçosa, moysesnascim@ufv.br]
-  - Costa, W. G.^[Weverton Gomes da Costa, Postdoctoral Researcher, Department of Statistics - Federal University of Viçosa, weverton.costa@ufv.br]
+  - Moysés Nascimento^[Department of Statistics - Federal University of Viçosa, Viçosa 36570-900, MG, Brazil; corresponding author, moysesnascim@ufv.br]
+  - Noé Mitterhofer Eiterer Ponce de Leon da Costa^[Graduate Program in Plant Production - Federal University of Tocantins, Gurupi 77410-530, TO, Brazil; noe.eiterer@uft.edu.br]
+  - Ana Carolina Campana Nascimento^[Department of Statistics - Federal University of Viçosa, Viçosa 36570-900, MG, Brazil; ana.campana@ufv.br]
+  - Weverton Gomes da Costa^[Department of Statistics - Federal University of Viçosa, Viçosa 36570-900, MG, Brazil; weverton.costa@ufv.br]
+  - Wanessa Alves Lima Paiva^[Department of Statistics - Federal University of Viçosa, Viçosa 36570-900, MG, Brazil; wanessa.a.lima@ufv.br]
+  - Diego Jarquín^[Department of Agronomy - University of Florida, Gainesville, FL 32611, USA; jhernandezjarqui@ufl.edu]
 date: "`r Sys.Date()`"
 site: workflowr::wflow_site
 url: https://wevertongomescosta.github.io/nonlinear-ge-interaction-shap/
