@@ -23,7 +23,7 @@ github-repo: wevertongomescosta/nonlinear-ge-interaction-shap
 
 This page presents the complete reproducible analytical workflow associated with the study **“Non-Linear Modeling of Genotype × Environment Interaction via Tree-Based Learning Algorithms and Shapley Decomposition.”**
 
-The workflow combines phenotypic evaluation, Random Forest modeling, Shapley Additive Explanations, AMMI decomposition, stability indices, genotype ranking, and rank correlation.
+The workflow combines phenotypic evaluation, Random Forest modeling, Shapley Additive Explanations, SHAP dependence visualization, AMMI decomposition, stability indices, genotype ranking, and rank correlation.
 
 All analytical code is presented directly in this R Markdown document and follows the order required to reproduce the analysis.
 
@@ -1066,6 +1066,116 @@ figure_3 <- ggplot() +
 print(figure_3)
 ```
 
+# SHAP dependence plot
+
+The SHAP dependence plot relates the genotype-specific SHAP contribution to the environmental index.
+Points represent genotype-by-environment observations, while genotype-specific LOESS curves summarize nonlinear response patterns across the environmental gradient.
+
+```{r shap-dependence-loess, fig.width=8, fig.height=6, fig.align="center", warning=FALSE}
+shap_dependence_data <- df_results %>%
+  mutate(
+    GEN = as.factor(GEN)
+  )
+
+figure_4 <- ggplot(
+  shap_dependence_data,
+  aes(
+    x = ENV_INDEX,
+    y = SHAP_GEN,
+    color = GEN,
+    group = GEN
+  )
+) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed",
+    color = "gray60",
+    linewidth = 0.4
+  ) +
+  geom_point(
+    size = 1.8,
+    alpha = 0.4
+  ) +
+  geom_smooth(
+    method = "loess",
+    formula = y ~ x,
+    se = FALSE,
+    linewidth = 1.2,
+    alpha = 0.9
+  ) +
+  scale_color_manual(
+    values = as.vector(
+      pals::glasbey(9)
+    )
+  ) +
+  labs(
+    x = "Environmental Index",
+    y = expression(
+      paste(
+        "Genotype SHAP Value (G × E Effect) in kg ",
+        ha^-1
+      )
+    ),
+    color = "Genotype"
+  ) +
+  theme_classic(
+    base_size = 12
+  ) +
+  theme(
+    panel.background = element_rect(
+      color = "black",
+      fill = "white"
+    ),
+    panel.grid = element_blank(),
+    legend.position = "right",
+    plot.margin = ggplot2::margin(
+      t = 0,
+      r = 0,
+      b = 0,
+      l = 0
+    ),
+    legend.text = element_text(
+      size = 8,
+      family = "serif"
+    ),
+    legend.title = element_text(
+      size = 9,
+      family = "serif",
+      vjust = 0.5
+    ),
+    axis.line.x = element_blank(),
+    axis.line.y = element_line(
+      color = "black"
+    ),
+    axis.text.y = element_text(
+      size = 10,
+      angle = 0,
+      color = "black",
+      family = "serif"
+    ),
+    axis.text.x = element_text(
+      size = 10,
+      angle = 0,
+      color = "black",
+      family = "serif"
+    ),
+    axis.title.y = element_text(
+      size = 11,
+      color = "black",
+      family = "serif"
+    ),
+    axis.title.x = element_text(
+      size = 11,
+      color = "black",
+      family = "serif"
+    ),
+    axis.ticks = element_blank(),
+    legend.key = element_blank()
+  )
+
+print(figure_4)
+```
+
 # Stability and selection indices
 
 ## AMMI Stability Value
@@ -1222,7 +1332,7 @@ dados_long <- dados_resultado %>%
 ```
 
 ```{r rank-dynamics-plot, fig.width=8, fig.height=6, fig.align="center", warning=FALSE}
-figure_4 <- ggplot(
+figure_5 <- ggplot(
   dados_long,
   aes(
     x = Metodologia,
@@ -1328,7 +1438,7 @@ figure_4 <- ggplot(
     axis.ticks = element_blank()
   )
 
-print(figure_4)
+print(figure_5)
 ```
 
 # Spearman rank correlation
@@ -1378,7 +1488,7 @@ round(
 The upper triangular correlation matrix represents the direction and magnitude of the Spearman associations. The numerical coefficients are displayed inside the corresponding cells.
 
 ```{r spearman-correlation-plot, fig.width=8, fig.height=7, fig.align="center", warning=FALSE}
-figure_5 <- ggcorrplot::ggcorrplot(
+figure_6 <- ggcorrplot::ggcorrplot(
   matriz_corr,
   method = "square",
   lab = TRUE,
@@ -1450,5 +1560,5 @@ figure_5 <- ggcorrplot::ggcorrplot(
     )
   )
 
-print(figure_5)
+print(figure_6)
 ```
