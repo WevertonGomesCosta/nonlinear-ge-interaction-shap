@@ -41,7 +41,7 @@ knitr::opts_chunk$set(
 
 # Required packages
 
-The following packages are used for data manipulation, graphical visualization, Random Forest modeling, SHAP decomposition, faceted scale control, genotype-rank visualization, and rank-correlation analysis.
+The following packages are used for data manipulation, graphical visualization, Random Forest modeling, SHAP decomposition, faceted scale control, SHAP dependence visualization, and rank-correlation inference.
 
 ```{r required-packages, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -52,7 +52,7 @@ library(DALEX)
 library(iBreakDown)
 library(pals)
 library(ggh4x)
-library(ggcorrplot)
+library(mcradds)
 ```
 
 # Data import
@@ -504,6 +504,8 @@ rf_model <- randomForest(
   data = df_ml,
   ntree = 500
 )
+
+rf_model$mtry
 ```
 
 # SHAP decomposition
@@ -1109,14 +1111,11 @@ figure_4 <- ggplot(
     )
   ) +
   labs(
-    x = "Environmental Index",
-    y = expression(
-      paste(
-        "Genotype SHAP Value (G × E Effect) in kg ",
-        ha^-1
-      )
+    x = "Environmental Index (ENV_INDEX)",
+    y = bquote(
+      "SHAP Value for Genotype Effect in kg " ~ ha^-1
     ),
-    color = "Genotype"
+    color = "Genotypes"
   ) +
   theme_classic(
     base_size = 12
@@ -1290,157 +1289,6 @@ print(
 )
 ```
 
-# Rank dynamics
-
-The rank-dynamics plot represents how the relative position of each genotype changes across grain yield, AMMI stability, classical simultaneous selection, SHAP stability, SHAP-based simultaneous selection, and mean SHAP effect. Rank 1 represents the preferred position under every criterion.
-
-```{r rank-dynamics-data}
-dados_long <- dados_resultado %>%
-  pivot_longer(
-    cols = c(
-      Rank_Prod,
-      Rank_ASV,
-      Rank_SSI,
-      Rank_SHAP_Stb,
-      Rank_SHAP_SSI,
-      Rank_SHAP_Eff
-    ),
-    names_to = "Metodologia",
-    values_to = "Posicao"
-  ) %>%
-  mutate(
-    Metodologia = factor(
-      Metodologia,
-      levels = c(
-        "Rank_Prod",
-        "Rank_ASV",
-        "Rank_SSI",
-        "Rank_SHAP_Stb",
-        "Rank_SHAP_SSI",
-        "Rank_SHAP_Eff"
-      ),
-      labels = c(
-        "Grain Yield",
-        "ASV (Linear)",
-        "SSI (Linear)",
-        "SHAP Stability",
-        "SHAP SSI",
-        "SHAP Effect"
-      )
-    )
-  )
-```
-
-```{r rank-dynamics-plot, fig.width=8, fig.height=6, fig.align="center", warning=FALSE}
-figure_5 <- ggplot(
-  dados_long,
-  aes(
-    x = Metodologia,
-    y = Posicao,
-    group = GEN,
-    color = GEN
-  )
-) +
-  geom_line(
-    linewidth = 1,
-    alpha = 0.8
-  ) +
-  geom_point(
-    size = 2,
-    shape = 21,
-    fill = "white",
-    stroke = 1.5
-  ) +
-  geom_text(
-    data = subset(
-      dados_long,
-      Metodologia == "Grain Yield"
-    ),
-    aes(
-      label = GEN
-    ),
-    hjust = 2,
-    fontface = "bold",
-    size = 4,
-    family = "serif"
-  ) +
-  geom_text(
-    data = subset(
-      dados_long,
-      Metodologia == "SHAP Effect"
-    ),
-    aes(
-      label = GEN
-    ),
-    hjust = -1,
-    fontface = "bold",
-    size = 4,
-    family = "serif"
-  ) +
-  scale_color_manual(
-    values = as.vector(
-      pals::glasbey(9)
-    )
-  ) +
-  scale_y_reverse(
-    breaks = 1:9
-  ) +
-  coord_cartesian(
-    clip = "off"
-  ) +
-  labs(
-    x = "Selection Framework",
-    y = "Genotype Rank (1 = Best)"
-  ) +
-  theme_classic(
-    base_size = 13
-  ) +
-  theme(
-    strip.background = element_blank(),
-    panel.background = element_rect(
-      color = "black",
-      fill = "white"
-    ),
-    panel.grid = element_blank(),
-    legend.position = "none",
-    plot.margin = ggplot2::margin(
-      t = 2,
-      r = 18,
-      b = 2,
-      l = 18
-    ),
-    axis.line.x = element_blank(),
-    axis.line.y = element_line(
-      color = "black"
-    ),
-    axis.text.y = element_text(
-      size = 10,
-      angle = 0,
-      color = "black",
-      family = "serif"
-    ),
-    axis.text.x = element_text(
-      size = 10,
-      angle = 0,
-      color = "black",
-      family = "serif"
-    ),
-    axis.title.y = element_text(
-      size = 12,
-      color = "black",
-      family = "serif"
-    ),
-    axis.title.x = element_text(
-      size = 10,
-      color = "black",
-      family = "serif"
-    ),
-    axis.ticks = element_blank()
-  )
-
-print(figure_5)
-```
-
 # Spearman rank correlation
 
 Spearman rank correlations are calculated among the six genotype-selection criteria. Positive correlations indicate that two criteria tend to assign similar positions to the genotypes, whereas negative correlations indicate opposing ranking patterns.
@@ -1483,25 +1331,165 @@ round(
 )
 ```
 
+## Pairwise Spearman inference
+
+For each pair of selection criteria, the two-sided Spearman test is used to obtain the correlation estimate, its confidence interval, and the corresponding p-value for the null hypothesis of zero rank correlation.
+
+```{r spearman-pairwise-inference}
+r_long <- as.data.frame(
+  as.table(matriz_corr)
+)
+
+names(r_long) <- c(
+  "Var1",
+  "Var2",
+  "r"
+)
+
+r_long$Var1_num <- as.integer(
+  r_long$Var1
+)
+
+r_long$Var2_num <- as.integer(
+  r_long$Var2
+)
+
+r_long <- r_long[
+  r_long$Var1_num > r_long$Var2_num,
+]
+
+r_long$Var1_num <- NULL
+r_long$Var2_num <- NULL
+
+r_long$pval <- NA
+r_long$low <- NA
+r_long$upper <- NA
+
+for (i in seq_len(nrow(r_long))) {
+  var1 <- as.character(
+    r_long$Var1[i]
+  )
+
+  var2 <- as.character(
+    r_long$Var2[i]
+  )
+
+  teste <- mcradds::spearmanTest(
+    colunas_rank[[var1]],
+    colunas_rank[[var2]],
+    h0 = 0.0,
+    alternative = "two.sided"
+  )
+
+  r_long$pval[i] <- sprintf(
+    "%0.4f",
+    teste$stat[5]
+  )
+
+  r_long$low[i] <- sprintf(
+    "%0.2f",
+    teste$stat[2]
+  )
+
+  r_long$upper[i] <- sprintf(
+    "%0.2f",
+    teste$stat[3]
+  )
+}
+
+r_long$r <- sprintf(
+  "%.2f",
+  r_long$r
+)
+
+r_long$pval <- paste0(
+  "italic(p)~'='~",
+  sprintf(
+    "%.4f",
+    as.numeric(r_long$pval)
+  )
+)
+
+r_long[5, 4] <- "italic(p)~'<'~0.0001"
+
+r_long$r <- as.numeric(
+  r_long$r
+)
+
+r_long$ci <- paste0(
+  "[",
+  r_long$low,
+  ", ",
+  r_long$upper,
+  "]"
+)
+
+options(
+  scipen = 999
+)
+
+r_long
+```
+
 ## Graphical representation
 
-The upper triangular correlation matrix represents the direction and magnitude of the Spearman associations. The numerical coefficients are displayed inside the corresponding cells.
+The lower triangular correlation matrix displays the Spearman correlation coefficient, the two-sided p-value, and the confidence interval for each pair of selection criteria.
 
 ```{r spearman-correlation-plot, fig.width=8, fig.height=7, fig.align="center", warning=FALSE}
-figure_6 <- ggcorrplot::ggcorrplot(
-  matriz_corr,
-  method = "square",
-  lab = TRUE,
-  lab_size = 4,
-  show.diag = FALSE,
-  type = "upper",
-  legend.title = "Correlation",
-  colors = c(
-    "#DB241F",
-    "white",
-    "#4ADC36"
-  )
-) +
+figure_5 <- ggplot() +
+  geom_tile(
+    data = r_long,
+    aes(
+      x = Var2,
+      y = Var1,
+      fill = r
+    ),
+    color = "white",
+    linewidth = 0.5
+  ) +
+  scale_fill_gradient2(
+    name = "Correlation",
+    breaks = c(-1, 0, 1),
+    limits = c(-1, 1),
+    low = "#DB241F",
+    mid = "white",
+    high = "#4ADC36"
+  ) +
+  geom_text(
+    data = r_long,
+    aes(
+      x = Var2,
+      y = Var1,
+      label = r
+    ),
+    family = "serif",
+    vjust = -0.5,
+    size = 3
+  ) +
+  geom_text(
+    data = r_long,
+    aes(
+      x = Var2,
+      y = Var1,
+      label = pval
+    ),
+    family = "serif",
+    parse = TRUE,
+    vjust = 1.5,
+    size = 2.5
+  ) +
+  geom_text(
+    data = r_long,
+    aes(
+      x = Var2,
+      y = Var1,
+      label = ci
+    ),
+    family = "serif",
+    parse = FALSE,
+    vjust = 4.5,
+    size = 2.5
+  ) +
   labs(
     x = "",
     y = ""
@@ -1540,7 +1528,10 @@ figure_6 <- ggcorrplot::ggcorrplot(
       size = 12,
       angle = 0,
       color = "black",
-      family = "serif"
+      family = "serif",
+      margin = ggplot2::margin(
+        r = 3
+      )
     ),
     axis.text.x = element_text(
       size = 12,
@@ -1548,9 +1539,21 @@ figure_6 <- ggcorrplot::ggcorrplot(
       hjust = 0.5,
       vjust = 0.5,
       color = "black",
+      family = "serif",
+      margin = ggplot2::margin(
+        t = 3
+      )
+    ),
+    axis.title.y = element_text(
+      size = 15,
+      color = "black",
       family = "serif"
     ),
-    axis.title = element_blank(),
+    axis.title.x = element_text(
+      size = 15,
+      color = "black",
+      family = "serif"
+    ),
     axis.ticks = element_blank(),
     legend.key = element_blank(),
     strip.text = element_text(
@@ -1560,5 +1563,5 @@ figure_6 <- ggcorrplot::ggcorrplot(
     )
   )
 
-print(figure_6)
+print(figure_5)
 ```
