@@ -40,11 +40,11 @@ The analysis includes:
 5. Random Forest fitting and leave-one-environment-out validation;
 6. SHAP decomposition of model predictions;
 7. AMMI decomposition of genotype-by-environment interaction;
-8. calculation of AMMI and SHAP stability measures;
-9. calculation of classical and SHAP-based simultaneous selection indices;
-10. genotype ranking across six selection criteria;
-11. visualization of genotype-rank dynamics;
-12. Spearman rank correlation among the six selection criteria.
+8. joint AMMI and SHAP representation;
+9. SHAP dependence visualization with genotype-specific LOESS curves;
+10. calculation of AMMI and SHAP stability measures;
+11. calculation of classical and SHAP-based simultaneous selection indices and genotype rankings;
+12. Spearman rank-correlation inference among the six selection criteria.
 
 ## Data
 
@@ -147,7 +147,7 @@ The analysis requires:
 - `iBreakDown`;
 - `pals`;
 - `ggh4x`;
-- `ggcorrplot`.
+- `mcradds`.
 
 ## Reproducing the project
 
