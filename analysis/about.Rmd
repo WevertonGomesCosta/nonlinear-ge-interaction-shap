@@ -50,7 +50,7 @@ The objective of this project is to provide a reproducible analytical workflow f
 - SHAP effect and stability measures;
 - classical Simultaneous Selection Index;
 - SHAP-based Simultaneous Selection Index;
-- genotype-rank dynamics;
+- SHAP dependence visualization with genotype-specific LOESS curves;
 - Spearman rank correlation.
 
 The analytical sequence follows the methods and results considered in the associated manuscript.
@@ -88,11 +88,12 @@ The complete pipeline is presented in a single sequential analysis page containi
 8. DALEX model explanation;
 9. SHAP contribution calculation;
 10. AMMI interaction decomposition;
-11. AMMI and SHAP stability measures;
-12. classical and SHAP-based simultaneous selection indices;
-13. genotype rankings across six selection criteria;
-14. rank-dynamics visualization;
-15. Spearman rank-correlation analysis.
+11. joint AMMI and SHAP representation;
+12. SHAP dependence visualization with genotype-specific LOESS curves;
+13. AMMI and SHAP stability measures;
+14. classical and SHAP-based simultaneous selection indices;
+15. genotype rankings across six selection criteria;
+16. Spearman rank-correlation inference and visualization.
 
 The complete analytical workflow is documented directly in the R Markdown analysis.
 
